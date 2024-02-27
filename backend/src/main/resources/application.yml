@@ -1,0 +1,41 @@
+# 端口配置
+server:
+  port: 8080
+
+# 数据库配置
+spring:
+  profiles:
+    active: dev
+
+## mybatis-plus配置
+mybatis-plus:
+  global-config:
+    db-config:
+      # 主键ID类型
+      id-type: ASSIGN_ID
+      table-prefix: tb_
+  # Mybatis Mapper所对应的XML位置
+  mapper-locations: classpath*:/mapper/**.xml
+  # 别名包扫描路径 实体类
+  type-aliases-package: com.yunqi.backend.model.entity
+  # 是否开启自动驼峰命名规则（camel case）映射
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# token配置
+token:
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌密钥
+  secret: liyunqi666
+  # 令牌有效期（默认300分钟）
+  expireTime: 300
+
+captcha:
+  # 类型: Line(线段),Circle(圆圈),Shear(扭曲)
+  type: Shear
+  # 有效时间(默认5分钟)
+  expireTime: 5
+  # 验证码字符数量(默认为4)
+  codeCount: 4
