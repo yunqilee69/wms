@@ -2,7 +2,7 @@ package com.yunqi.backend.core.service;
 
 import cn.hutool.core.util.IdUtil;
 import com.yunqi.backend.common.constant.CacheConstants;
-import com.yunqi.backend.common.constant.Constants;
+import com.yunqi.backend.common.constant.SystemConstants;
 import com.yunqi.backend.common.util.RedisCache;
 import com.yunqi.backend.model.dto.LoginUserDTO;
 import io.jsonwebtoken.Claims;
@@ -62,7 +62,7 @@ public class TokenService {
             try {
                 Claims claims = parseToken(token);
                 // 解析对应的权限以及用户信息
-                String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
+                String uuid = (String) claims.get(SystemConstants.LOGIN_USER_KEY);
                 String userKey = getTokenKey(uuid);
                 LoginUserDTO user = redisCache.getCacheObject(userKey);
                 return user;
@@ -104,7 +104,7 @@ public class TokenService {
         refreshToken(loginUserDTO);
 
         Map<String, Object> claims = new HashMap<>();
-        claims.put(Constants.LOGIN_USER_KEY, token);
+        claims.put(SystemConstants.LOGIN_USER_KEY, token);
         return createToken(claims);
     }
 
@@ -179,8 +179,8 @@ public class TokenService {
      */
     private String getToken(HttpServletRequest request) {
         String token = request.getHeader(header);
-        if (StringUtils.isNotEmpty(token) && token.startsWith(Constants.TOKEN_PREFIX)) {
-            token = token.replace(Constants.TOKEN_PREFIX, "");
+        if (StringUtils.isNotEmpty(token) && token.startsWith(SystemConstants.TOKEN_PREFIX)) {
+            token = token.replace(SystemConstants.TOKEN_PREFIX, "");
         }
         return token;
     }

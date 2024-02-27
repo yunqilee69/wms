@@ -95,7 +95,7 @@ public class CaptchaController {
 //            image = captchaProducer.createImage(capStr);
 //        }
 //
-//        redisCache.setCacheObject(verifyKey, code, Constants.CAPTCHA_EXPIRATION, TimeUnit.MINUTES);
+//        redisCache.setCacheObject(verifyKey, code, SystemConstants.CAPTCHA_EXPIRATION, TimeUnit.MINUTES);
 //        // 转换流信息写出
 //        FastByteArrayOutputStream os = new FastByteArrayOutputStream();
 //        try {

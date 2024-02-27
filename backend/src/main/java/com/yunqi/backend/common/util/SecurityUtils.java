@@ -2,8 +2,7 @@ package com.yunqi.backend.common.util;
 
 import java.util.Collection;
 
-import com.yunqi.backend.common.constant.Constants;
-import com.yunqi.backend.exception.BizException;
+import com.yunqi.backend.common.constant.SystemConstants;
 import com.yunqi.backend.model.dto.LoginUserDTO;
 import com.yunqi.backend.model.entity.User;
 import org.springframework.security.core.Authentication;
@@ -92,7 +91,7 @@ public class SecurityUtils {
      */
     public static boolean hasPermi(Collection<String> authorities, String permission) {
         return authorities.stream().filter(StringUtils::hasText)
-                .anyMatch(x -> Constants.ALL_PERMISSION.equals(x) || PatternMatchUtils.simpleMatch(x, permission));
+                .anyMatch(x -> SystemConstants.ALL_PERMISSION.equals(x) || PatternMatchUtils.simpleMatch(x, permission));
     }
 
 }

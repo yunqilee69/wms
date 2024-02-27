@@ -20,7 +20,15 @@ public class MenuConstants {
      */
     public static final String TYPE_BTN = "B";
 
+    /**
+     * 路由组件为Layout
+     */
     public static final String LAYOUT = "Layout";
+
+    /**
+     * 根目录，为虚拟id，数据库中并不存在
+     */
+    public static final Long ROOT_ID = 0L;
 
 
 }

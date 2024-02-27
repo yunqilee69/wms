@@ -109,12 +109,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      * @return
      */
     String getRouterName(Menu menu) {
-        String routerName = StringUtils.capitalize(menu.getRouterPath());
-        // 非外链并且是一级目录（类型为目录）
-//        if (isMenuFrame(menu)) {
-//            routerName = StringUtils.EMPTY;
-//        }
-        return routerName;
+        // 使用路由路径当作路由名称
+        return StringUtils.capitalize(menu.getRouterPath());
     }
 
     /**

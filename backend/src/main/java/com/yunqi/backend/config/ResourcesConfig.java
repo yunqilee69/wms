@@ -1,6 +1,6 @@
 //package com.yunqi.backend.config;
 //
-//import com.yunqi.backend.common.constant.Constants;
+//import com.yunqi.backend.common.constant.SystemConstants;
 //import com.yunqi.backend.interceptor.RepeatSubmitInterceptor;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.context.annotation.Bean;
@@ -29,7 +29,7 @@
 //    @Override
 //    public void addResourceHandlers(ResourceHandlerRegistry registry) {
 //        /** 本地文件上传路径 */
-//        registry.addResourceHandler(Constants.RESOURCE_PREFIX + "/**");
+//        registry.addResourceHandler(SystemConstants.RESOURCE_PREFIX + "/**");
 //
 //        /** swagger配置 */
 //        registry.addResourceHandler("/swagger-ui/**")
