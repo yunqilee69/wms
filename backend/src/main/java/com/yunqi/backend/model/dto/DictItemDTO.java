@@ -1,15 +1,15 @@
-package com.yunqi.backend.model.entity;
+package com.yunqi.backend.model.dto;
 
-import com.yunqi.backend.common.base.BaseEntity;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+
 /**
- * 字典项表
+ * 字典项DTO
  * @author liyunqi
  */
 @Data
-public class DictItem extends BaseEntity {
-
+public class DictItemDTO {
     /**
      * 主键
      */
@@ -18,21 +18,25 @@ public class DictItem extends BaseEntity {
     /**
      * 字典编码
      */
+    @NotNull(message = "字典编码不能为空")
     private String typeCode;
 
     /**
      * 标签（显示的名称）
      */
+    @NotNull(message = "字典标签不能为空")
     private String label;
 
     /**
      * 字典项值
      */
+    @NotNull(message = "字典键值不能为空")
     private String value;
 
     /**
      * 排序
      */
+    @NotNull(message = "字典排序不能为空")
     private int orderNum;
 
     /**

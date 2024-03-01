@@ -25,7 +25,7 @@ public class CacheConstants
     /**
      * 字典管理 cache key
      */
-    public static final String SYS_DICT_KEY = "sys_dict:";
+    public static final String SYS_DICT_CODE = "sys_dict:";
 
     /**
      * 防重提交 redis key

@@ -117,16 +117,16 @@ export const dynamicRoutes = [
     ]
   },
   {
-    path: '/system/dict-data',
+    path: '/system/dict-item',
     component: Layout,
     hidden: true,
     permissions: ['system:dict:list'],
     children: [
       {
         path: 'index/:dictId(\\d+)',
-        component: () => import('@/views/system/dict/data'),
+        component: () => import('@/views/system/dict/item'),
         name: 'Data',
-        meta: { title: '字典数据', activeMenu: '/system/dict' }
+        meta: { title: '字典项管理', activeMenu: '/system/dict' }
       }
     ]
   },

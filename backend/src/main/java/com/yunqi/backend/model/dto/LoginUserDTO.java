@@ -1,5 +1,6 @@
 package com.yunqi.backend.model.dto;
 
+import com.yunqi.backend.model.entity.Role;
 import com.yunqi.backend.model.entity.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,6 +37,11 @@ public class LoginUserDTO implements UserDetails {
      * 过期时间
      */
     private Long expireTime;
+
+    /**
+     * 角色权限字符
+     */
+    private Set<String> roles;
 
     /**
      * 权限列表

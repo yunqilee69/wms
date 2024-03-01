@@ -62,7 +62,7 @@ public class Menu extends BaseEntity {
     /**
      * 菜单状态（0正常 1停用）
      */
-    private Integer status;
+    private String status;
 
     /**
      * 权限字符串

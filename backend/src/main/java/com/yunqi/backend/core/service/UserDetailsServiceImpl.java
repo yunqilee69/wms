@@ -4,6 +4,7 @@ import com.yunqi.backend.exception.BizException;
 import com.yunqi.backend.exception.message.UserError;
 import com.yunqi.backend.model.dto.LoginUserDTO;
 import com.yunqi.backend.model.entity.User;
+import com.yunqi.backend.service.RoleService;
 import com.yunqi.backend.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.Set;
 
 /**
  * 用户验证处理
@@ -28,6 +32,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private PermissionService permissionService;
 
+    @Resource
+    RoleService roleService;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userService.selectUserByUsername(username);
@@ -37,7 +44,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return createLoginUser(user);
     }
 
-    public UserDetails createLoginUser(User user) {
-        return new LoginUserDTO(user, permissionService.getMenuPermission(user));
+        public UserDetails createLoginUser(User user) {
+        // 设置LoginUserDTO的值
+        LoginUserDTO loginUserDTO = new LoginUserDTO();
+
+        Set<String> roles = roleService.getRolePermission(user);
+        Set<String> menuPermission = permissionService.getMenuPermission(user);
+
+        loginUserDTO.setUserId(user.getId());
+        loginUserDTO.setRoles(roles);
+        loginUserDTO.setPermissions(menuPermission);
+        loginUserDTO.setUser(user);
+        return loginUserDTO;
     }
 }

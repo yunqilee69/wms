@@ -1,16 +1,14 @@
 package com.yunqi.backend;
 
-import cn.hutool.core.util.IdUtil;
 import com.yunqi.backend.common.constant.CacheConstants;
 import com.yunqi.backend.common.util.RedisCache;
 import com.yunqi.backend.common.util.SecurityUtils;
 import com.yunqi.backend.core.service.LoginService;
 import com.yunqi.backend.mapper.MenuMapper;
-import com.yunqi.backend.model.dto.RegisterUserDTO;
-import com.yunqi.backend.model.entity.DictCode;
+import com.yunqi.backend.model.entity.DictType;
 import com.yunqi.backend.model.entity.Menu;
 import com.yunqi.backend.model.request.RegisterRequest;
-import com.yunqi.backend.service.DictCodeService;
+import com.yunqi.backend.service.DictTypeService;
 import com.yunqi.backend.service.DictItemService;
 import com.yunqi.backend.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -33,7 +31,7 @@ class BackendApplicationTests {
     LoginService loginService;
 
     @Autowired
-    DictCodeService dictCodeService;
+    DictTypeService dictTypeService;
 
     @Autowired
     DictItemService dictItemService;
@@ -80,14 +78,14 @@ class BackendApplicationTests {
 
     @Test
     void serviceTest() {
-        DictCode dictCode = new DictCode();
-        dictCode.setCode("test_code");
-        dictCode.setName("测试");
-        dictCode.setRemark("测试备注");
-        dictCode.setOrderNum(1);
-        dictCode.setStatus(1);
+        DictType dictType = new DictType();
+        dictType.setCode("test_code");
+        dictType.setName("测试");
+        dictType.setRemark("测试备注");
+        dictType.setOrderNum(1);
+        dictType.setStatus(1);
 
-        dictCodeService.save(dictCode);
+        dictTypeService.save(dictType);
     }
 
     @Test

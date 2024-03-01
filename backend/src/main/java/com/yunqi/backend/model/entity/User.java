@@ -1,5 +1,6 @@
 package com.yunqi.backend.model.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.yunqi.backend.common.base.BaseEntity;
 import lombok.Data;
@@ -16,11 +17,6 @@ public class User extends BaseEntity {
      * 主键
      */
     private Long id;
-
-    /**
-     * 角色ID
-     */
-    private Long roleId;
 
     /*
      * 账号

@@ -14,5 +14,4 @@ public interface UserService extends IService<User> {
 
     Long registerUser(RegisterRequest registerRequest);
 
-    User getUserByUsername(String username);
 }

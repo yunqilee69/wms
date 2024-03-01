@@ -94,10 +94,10 @@
       <!-- 表格数据 -->
       <el-table v-loading="loading" :data="roleList" @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="55" align="center" />
-         <el-table-column label="角色编号" prop="roleId" width="120" />
-         <el-table-column label="角色名称" prop="roleName" :show-overflow-tooltip="true" width="150" />
+         <el-table-column label="角色编号" prop="id" width="120" />
+         <el-table-column label="角色名称" prop="name" :show-overflow-tooltip="true" width="150" />
          <el-table-column label="权限字符" prop="roleKey" :show-overflow-tooltip="true" width="150" />
-         <el-table-column label="显示顺序" prop="roleSort" width="100" />
+         <el-table-column label="显示顺序" prop="orderNum" width="100" />
          <el-table-column label="状态" align="center" width="100">
             <template #default="scope">
                <el-switch
@@ -341,7 +341,7 @@ function handleSelectionChange(selection) {
 /** 角色状态修改 */
 function handleStatusChange(row) {
   let text = row.status === "0" ? "启用" : "停用";
-  proxy.$modal.confirm('确认要"' + text + '""' + row.roleName + '"角色吗?').then(function () {
+  proxy.$modal.confirm('确认要' + text + row.name + '角色吗?').then(function () {
     return changeRoleStatus(row.roleId, row.status);
   }).then(() => {
     proxy.$modal.msgSuccess(text + "成功");
@@ -364,7 +364,7 @@ function handleCommand(command, row) {
 }
 /** 分配用户 */
 function handleAuthUser(row) {
-  router.push("/system/role-auth/user/" + row.roleId);
+  router.push("/system/role-auth/user/" + row.id);
 }
 /** 查询菜单树结构 */
 function getMenuTreeselect() {

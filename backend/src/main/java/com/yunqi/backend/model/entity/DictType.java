@@ -4,11 +4,11 @@ import com.yunqi.backend.common.base.BaseEntity;
 import lombok.Data;
 
 /**
- * 字典项表
+ * 字典表
  * @author liyunqi
  */
 @Data
-public class DictItem extends BaseEntity {
+public class DictType extends BaseEntity {
 
     /**
      * 主键
@@ -16,19 +16,19 @@ public class DictItem extends BaseEntity {
     private Long id;
 
     /**
+     * 字典名称
+     */
+    private String name;
+
+    /**
      * 字典编码
      */
-    private String typeCode;
+    private String code;
 
     /**
-     * 标签（显示的名称）
+     * 备注
      */
-    private String label;
-
-    /**
-     * 字典项值
-     */
-    private String value;
+    private String remark;
 
     /**
      * 排序
@@ -40,13 +40,4 @@ public class DictItem extends BaseEntity {
      */
     private String status;
 
-    /**
-     * 备注
-     */
-    private String remark;
-
-    /**
-     * 表格回显格式
-     */
-    private String listClass;
 }

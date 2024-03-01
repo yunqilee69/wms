@@ -1,8 +1,6 @@
 package com.yunqi.backend.core.security.handle;
 
-import com.alibaba.fastjson2.JSON;
 import com.yunqi.backend.common.result.Result;
-import com.yunqi.backend.common.util.ServletUtils;
 import com.yunqi.backend.core.service.TokenService;
 import com.yunqi.backend.model.dto.LoginUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +37,11 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
             // 删除用户缓存记录
             tokenService.delLoginUser(loginUser.getToken());
         }
-        ServletUtils.renderString(response, JSON.toJSONString(Result.success("账号退出成功")));
+
+        // 设置返回数据
+        response.setStatus(200);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+        response.getWriter().print(Result.success("账号退出成功"));
     }
 }

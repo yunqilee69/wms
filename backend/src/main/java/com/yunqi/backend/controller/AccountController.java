@@ -4,6 +4,7 @@ import com.yunqi.backend.common.result.Result;
 import com.yunqi.backend.common.util.SecurityUtils;
 import com.yunqi.backend.core.service.LoginService;
 import com.yunqi.backend.core.service.PermissionService;
+import com.yunqi.backend.model.dto.LoginUserDTO;
 import com.yunqi.backend.model.entity.Menu;
 import com.yunqi.backend.model.entity.User;
 import com.yunqi.backend.model.request.LoginRequest;
@@ -51,13 +52,11 @@ public class AccountController {
      */
     @GetMapping("getInfo")
     public Result<Map> getInfo() {
-        User user = SecurityUtils.getLoginUser().getUser();
-        // 权限集合
-        Set<String> permissions = permissionService.getMenuPermission(user);
-
+        LoginUserDTO loginUserDTO = SecurityUtils.getLoginUser();
         HashMap<String, Object> map = new HashMap<>();
-        map.put("user", user);
-        map.put("permissions", permissions);
+        map.put("user", loginUserDTO.getUser());
+        map.put("permissions", loginUserDTO.getPermissions());
+        map.put("roles", loginUserDTO.getRoles());
         return Result.success(map);
     }
 

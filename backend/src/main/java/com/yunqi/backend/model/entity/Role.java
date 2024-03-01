@@ -24,6 +24,11 @@ public class Role extends BaseEntity {
     private String name;
 
     /**
+     * 角色权限字符串
+     */
+    private String roleKey;
+
+    /**
      * 显示顺序
      */
     private Integer orderNum;
@@ -31,6 +36,6 @@ public class Role extends BaseEntity {
     /**
      * 角色状态（0正常 1停用）
      */
-    private Integer status;
+    private String status;
 
 }

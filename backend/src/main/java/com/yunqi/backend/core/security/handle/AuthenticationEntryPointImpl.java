@@ -1,8 +1,6 @@
 package com.yunqi.backend.core.security.handle;
 
-import com.alibaba.fastjson2.JSON;
 import com.yunqi.backend.common.result.Result;
-import com.yunqi.backend.common.util.ServletUtils;
 import com.yunqi.backend.exception.message.SystemError;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -27,6 +25,12 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint, S
             throws IOException {
         int code = SystemError.PERMS_DENIED.getCode();
         String msg = SystemError.PERMS_DENIED.getErrorMsg();
-        ServletUtils.renderString(response, JSON.toJSONString(Result.fail(code, msg)));
+
+        // 设置返回数据
+        response.setStatus(200);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+        response.getWriter().print(Result.fail(code, msg));
+
     }
 }

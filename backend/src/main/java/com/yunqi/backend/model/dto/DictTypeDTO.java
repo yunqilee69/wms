@@ -1,28 +1,28 @@
-package com.yunqi.backend.model.entity;
+package com.yunqi.backend.model.dto;
 
-import com.yunqi.backend.common.base.BaseEntity;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+
 /**
- * 字典表
+ * 字典类型DTO
  * @author liyunqi
  */
 @Data
-public class DictCode extends BaseEntity {
+public class DictTypeDTO {
 
-    /**
-     * 主键
-     */
     private Long id;
 
     /**
      * 字典名称
      */
+    @NotNull(message = "字典名称不能为空")
     private String name;
 
     /**
      * 字典编码
      */
+    @NotNull(message = "字典名称不能为空")
     private String code;
 
     /**
@@ -38,6 +38,6 @@ public class DictCode extends BaseEntity {
     /**
      * 状态
      */
-    private int status;
-
+    //@NotNull(message = "状态不能为空")
+    private String status;
 }

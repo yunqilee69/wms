@@ -30,12 +30,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     RedisCache redisCache;
 
-
-
     @Autowired
     private TokenService tokenService;
-
-
 
     /**
      * 根据username进行查找
@@ -73,7 +69,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         // 校验数据库中是否存在该用户
-        if (getUserByUsername(username) != null) {
+        if (selectUserByUsername(username) != null) {
             throw new BizException(UserError.USERNAME_ALREADY_EXISTS);
         }
 
@@ -87,10 +83,4 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return user.getId();
     }
 
-    @Override
-    public User getUserByUsername(String username) {
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getUsername, username);
-        return  userMapper.selectOne(wrapper);
-    }
 }
