@@ -1,19 +1,13 @@
-package com.yunqi.backend.model.entity;
+package com.yunqi.backend.model.dto;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.yunqi.backend.common.base.BaseEntity;
 import lombok.Data;
 
-
 /**
- * 菜单权限表 sys_menu
- *
- * @author ruoyi
+ * 菜单DTO
+ * @author liyunqi
  */
 @Data
-public class Menu extends BaseEntity {
-    private static final long serialVersionUID = 1L;
-
+public class MenuDTO {
     /**
      * 菜单ID
      */
@@ -55,7 +49,7 @@ public class Menu extends BaseEntity {
     private String queryParams;
 
     /**
-     * 类型（D目录 M菜单 B按钮）
+     * 类型（M目录 C菜单 F按钮）
      */
     private String menuType;
 

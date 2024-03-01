@@ -1,9 +1,9 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" v-show="showSearch" :inline="true" label-width="68px">
-         <el-form-item label="角色名称" prop="roleName">
+         <el-form-item label="角色名称" prop="name">
             <el-input
-               v-model="queryParams.roleName"
+               v-model="queryParams.name"
                placeholder="请输入角色名称"
                clearable
                style="width: 240px"
@@ -34,7 +34,7 @@
                />
             </el-select>
          </el-form-item>
-         <el-form-item label="创建时间" style="width: 308px">
+         <!-- <el-form-item label="创建时间" style="width: 308px">
             <el-date-picker
                v-model="dateRange"
                value-format="YYYY-MM-DD"
@@ -43,7 +43,7 @@
                start-placeholder="开始日期"
                end-placeholder="结束日期"
             ></el-date-picker>
-         </el-form-item>
+         </el-form-item> -->
          <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -79,7 +79,7 @@
                v-hasPermi="['system:role:remove']"
             >删除</el-button>
          </el-col>
-         <el-col :span="1.5">
+         <!-- <el-col :span="1.5">
             <el-button
                type="warning"
                plain
@@ -87,14 +87,13 @@
                @click="handleExport"
                v-hasPermi="['system:role:export']"
             >导出</el-button>
-         </el-col>
+         </el-col> -->
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
       <!-- 表格数据 -->
       <el-table v-loading="loading" :data="roleList" @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="55" align="center" />
-         <el-table-column label="角色编号" prop="id" width="120" />
          <el-table-column label="角色名称" prop="name" :show-overflow-tooltip="true" width="150" />
          <el-table-column label="权限字符" prop="roleKey" :show-overflow-tooltip="true" width="150" />
          <el-table-column label="显示顺序" prop="orderNum" width="100" />
@@ -142,8 +141,8 @@
       <!-- 添加或修改角色配置对话框 -->
       <el-dialog :title="title" v-model="open" width="500px" append-to-body>
          <el-form ref="roleRef" :model="form" :rules="rules" label-width="100px">
-            <el-form-item label="角色名称" prop="roleName">
-               <el-input v-model="form.roleName" placeholder="请输入角色名称" />
+            <el-form-item label="角色名称" prop="name">
+               <el-input v-model="form.name" placeholder="请输入角色名称" />
             </el-form-item>
             <el-form-item prop="roleKey">
                <template #label>
@@ -156,8 +155,8 @@
                </template>
                <el-input v-model="form.roleKey" placeholder="请输入权限字符" />
             </el-form-item>
-            <el-form-item label="角色顺序" prop="roleSort">
-               <el-input-number v-model="form.roleSort" controls-position="right" :min="0" />
+            <el-form-item label="角色顺序" prop="orderNum">
+               <el-input-number v-model="form.orderNum" controls-position="right" :min="1" />
             </el-form-item>
             <el-form-item label="状态">
                <el-radio-group v-model="form.status">
@@ -199,7 +198,7 @@
       <el-dialog :title="title" v-model="openDataScope" width="500px" append-to-body>
          <el-form :model="form" label-width="80px">
             <el-form-item label="角色名称">
-               <el-input v-model="form.roleName" :disabled="true" />
+               <el-input v-model="form.name" :disabled="true" />
             </el-form-item>
             <el-form-item label="权限字符">
                <el-input v-model="form.roleKey" :disabled="true" />
@@ -283,14 +282,14 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
-    roleName: undefined,
+    name: undefined,
     roleKey: undefined,
     status: undefined
   },
   rules: {
-    roleName: [{ required: true, message: "角色名称不能为空", trigger: "blur" }],
+    name: [{ required: true, message: "角色名称不能为空", trigger: "blur" }],
     roleKey: [{ required: true, message: "权限字符不能为空", trigger: "blur" }],
-    roleSort: [{ required: true, message: "角色顺序不能为空", trigger: "blur" }]
+    orderNum: [{ required: true, message: "角色顺序不能为空", trigger: "blur" }]
   },
 });
 
@@ -319,7 +318,7 @@ function resetQuery() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const roleIds = row.roleId || ids.value;
-  proxy.$modal.confirm('是否确认删除角色编号为"' + roleIds + '"的数据项?').then(function () {
+  proxy.$modal.confirm('是否确认删除').then(function () {
     return delRole(roleIds);
   }).then(() => {
     getList();
@@ -342,7 +341,7 @@ function handleSelectionChange(selection) {
 function handleStatusChange(row) {
   let text = row.status === "0" ? "启用" : "停用";
   proxy.$modal.confirm('确认要' + text + row.name + '角色吗?').then(function () {
-    return changeRoleStatus(row.roleId, row.status);
+    return changeRoleStatus(row.id, row.status);
   }).then(() => {
     proxy.$modal.msgSuccess(text + "成功");
   }).catch(function () {
@@ -369,7 +368,7 @@ function handleAuthUser(row) {
 /** 查询菜单树结构 */
 function getMenuTreeselect() {
   menuTreeselect().then(response => {
-    menuOptions.value = response.data;
+    menuOptions.value = response;
   });
 }
 /** 所有部门节点数据 */
@@ -392,9 +391,9 @@ function reset() {
   deptNodeAll.value = false;
   form.value = {
     roleId: undefined,
-    roleName: undefined,
+    name: undefined,
     roleKey: undefined,
-    roleSort: 0,
+    orderNum: 0,
     status: "0",
     menuIds: [],
     deptIds: [],
@@ -418,7 +417,7 @@ function handleUpdate(row) {
   const roleMenu = getRoleMenuTreeselect(roleId);
   getRole(roleId).then(response => {
     form.value = response.data;
-    form.value.roleSort = Number(form.value.roleSort);
+    form.value.orderNum = Number(form.value.orderNum);
     open.value = true;
     nextTick(() => {
       roleMenu.then((res) => {

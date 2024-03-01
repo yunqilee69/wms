@@ -1,6 +1,7 @@
 package com.yunqi.backend.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.yunqi.backend.model.dto.MenuDTO;
 import com.yunqi.backend.model.entity.Menu;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -20,4 +21,11 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @return
      */
     public List<Menu> getMenuChildren(String pathCode);
+
+    /**
+     * 根据userId查找菜单
+     * @param userId
+     * @return
+     */
+    List<Menu> selectMenuListByUserId(MenuDTO menuDTO, Long userId);
 }

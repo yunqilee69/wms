@@ -6,11 +6,13 @@ import com.yunqi.backend.common.constant.MenuConstants;
 import com.yunqi.backend.common.constant.UserConstants;
 import com.yunqi.backend.common.util.SecurityUtils;
 import com.yunqi.backend.mapper.MenuMapper;
+import com.yunqi.backend.model.dto.MenuDTO;
 import com.yunqi.backend.model.dto.MetaDTO;
 import com.yunqi.backend.model.dto.RouterDTO;
 import com.yunqi.backend.model.entity.Menu;
 import com.yunqi.backend.service.MenuService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -38,7 +40,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         if (SecurityUtils.getLoginUser().getUsername().equals("admin")) {
             menuList = menuMapper.selectMenuTreeAll();
         } else {
-
+            // TODO 完成普通用户的返回菜单
         }
 
         return getChildPerms(menuList, 0L);
@@ -89,6 +91,52 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             routers.add(router);
         }
         return routers;
+    }
+
+    /**
+     * 根据用户id获取该用户所能才查看的菜单
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<Menu> selectMenuList(MenuDTO menuDTO, Long userId) {
+        List<Menu> menuList = null;
+        // 管理员显示所有菜单信息
+        if (SecurityUtils.isAdmin(userId)) {
+            LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper<>();
+            wrapper.like(menuDTO.getName() != null, Menu::getName, menuDTO.getName());
+            wrapper.eq(menuDTO.getStatus() != null, Menu::getStatus, menuDTO.getStatus());
+            // 查找全部的菜单
+            menuList = menuMapper.selectList(wrapper);
+        } else {
+            // 根据用户id去查找
+            menuList = menuMapper.selectMenuListByUserId(menuDTO, userId);
+        }
+        return menuList;
+    }
+
+    @Override
+    public void saveMenu(MenuDTO menuDTO) {
+        Menu menu = new Menu();
+        BeanUtils.copyProperties(menuDTO, menu);
+        // TODO  完成校验，路由名称必须是唯一的
+
+        save(menu);
+
+    }
+
+    @Override
+    public void updateMenu(MenuDTO menuDTO) {
+        Menu menu = new Menu();
+        BeanUtils.copyProperties(menuDTO, menu);
+        // TODO  完成校验，路由名称必须是唯一的
+
+        updateById(menu);
+    }
+
+    @Override
+    public void deleteMenu(List<Long> menuIds) {
+        removeBatchByIds(menuIds);
     }
 
     /**

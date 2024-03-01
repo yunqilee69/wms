@@ -47,7 +47,7 @@ export function dataScope(data) {
 // 角色状态修改
 export function changeRoleStatus(roleId, status) {
   const data = {
-    roleId,
+    id: roleId,
     status
   }
   return request({

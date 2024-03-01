@@ -1,6 +1,5 @@
 package com.yunqi.backend.model.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.yunqi.backend.common.base.BaseEntity;
 import lombok.Data;
 

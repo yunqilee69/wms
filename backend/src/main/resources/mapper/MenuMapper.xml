@@ -5,6 +5,7 @@
     <select id="selectMenuTreeAll" resultType="Menu">
         select * from tb_menu t1
         where t1.menu_type in ('D', 'M')
+        and t1.status = '0'
         order by t1.order_num
     </select>
 
@@ -12,6 +13,20 @@
         select * from tb_menu t1
         where t1.path_code like concat(#{pathCode}, '-%')
         and t1.menu_type &lt;&gt; 'B'
+        and t1.status = '0'
+    </select>
+    <select id="selectMenuListByUserId" resultType="Menu">
+        select tm.* from tb_menu tm
+        left join tb_role_menu trm on trm.menu_id = tm.id
+        left join tb_user_role tur on tur.role_id = trm.role_id
+        where tur.user_id = #{userId}
+        <if test="name != null and name != ''">
+            AND tm.name like concat('%', #{name}, '%')
+        </if>
+        <if test="status != null and status != ''">
+            AND tm.status = #{status}
+        </if>
+        order by tm.parent_id, tm.order_num
     </select>
 
 </mapper>

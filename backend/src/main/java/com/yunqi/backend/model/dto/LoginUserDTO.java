@@ -1,6 +1,5 @@
 package com.yunqi.backend.model.dto;
 
-import com.yunqi.backend.model.entity.Role;
 import com.yunqi.backend.model.entity.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;

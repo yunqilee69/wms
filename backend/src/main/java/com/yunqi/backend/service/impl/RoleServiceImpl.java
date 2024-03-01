@@ -1,18 +1,23 @@
 package com.yunqi.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunqi.backend.common.util.PageUtils;
+import com.yunqi.backend.exception.BizException;
+import com.yunqi.backend.exception.message.RoleError;
 import com.yunqi.backend.mapper.RoleMapper;
+import com.yunqi.backend.model.dto.RoleDTO;
 import com.yunqi.backend.model.entity.Role;
 import com.yunqi.backend.model.entity.User;
 import com.yunqi.backend.service.RoleService;
-import jdk.nashorn.internal.ir.annotations.Reference;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -25,11 +30,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     RoleMapper roleMapper;
 
     @Override
-    public Page<Role> getPage(Role role) {
+    public Page<Role> getRolePage(RoleDTO roleDTO) {
         Page<Role> page = PageUtils.getPage();
         LambdaQueryWrapper<Role> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(role.getName() != null, Role::getName, role.getName());
-        wrapper.eq(role.getStatus() != null, Role::getStatus, role.getStatus());
+        wrapper.like(roleDTO.getName() != null, Role::getName, roleDTO.getName());
+        wrapper.like(roleDTO.getRoleKey() != null, Role::getRoleKey, roleDTO.getRoleKey());
+        wrapper.eq(roleDTO.getStatus() != null, Role::getStatus, roleDTO.getStatus());
         return roleMapper.selectPage(page, wrapper);
     }
 
@@ -43,5 +49,40 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             result.addAll(roleMapper.getRolePermissionByUserId(user.getId()));
         }
         return result;
+    }
+
+    @Override
+    public void saveRole(RoleDTO roleDTO) {
+        Role role = new Role();
+        BeanUtils.copyProperties(roleDTO, role);
+        // TODO 完成校验规则
+
+        save(role);
+    }
+
+    @Override
+    public void updateRole(RoleDTO roleDTO) {
+        Role role = new Role();
+        BeanUtils.copyProperties(roleDTO, role);
+        // TODO 完成校验规则
+
+        updateById(role);
+    }
+
+    @Override
+    public void deleteRoleByIds(List<Long> roleIds) {
+        removeByIds(roleIds);
+    }
+
+    @Override
+    public void changeStatus(RoleDTO roleDTO) {
+        if (roleDTO.getId() == null) {
+            throw new BizException(RoleError.ID_IS_EMPTY);
+        }
+
+        LambdaUpdateWrapper<Role> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(Role::getId, roleDTO.getId());
+        wrapper.set(roleDTO.getStatus() != null, Role::getStatus, roleDTO.getStatus());
+        roleMapper.update(wrapper);
     }
 }
