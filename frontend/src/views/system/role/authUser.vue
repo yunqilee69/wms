@@ -2,18 +2,27 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" v-show="showSearch" :inline="true">
-         <el-form-item label="用户名称" prop="userName">
+         <el-form-item label="账号" prop="username">
             <el-input
-               v-model="queryParams.userName"
-               placeholder="请输入用户名称"
+               v-model="queryParams.username"
+               placeholder="请输入账号"
                clearable
                style="width: 240px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="手机号码" prop="phonenumber">
+         <el-form-item label="用户呢称" prop="nickname">
             <el-input
-               v-model="queryParams.phonenumber"
+               v-model="queryParams.nickname"
+               placeholder="请输入用户呢称"
+               clearable
+               style="width: 240px"
+               @keyup.enter="handleQuery"
+            />
+         </el-form-item>
+         <el-form-item label="手机号码" prop="phone">
+            <el-input
+               v-model="queryParams.phone"
                placeholder="请输入手机号码"
                clearable
                style="width: 240px"
@@ -59,10 +68,10 @@
 
       <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="55" align="center" />
-         <el-table-column label="用户名称" prop="userName" :show-overflow-tooltip="true" />
-         <el-table-column label="用户昵称" prop="nickName" :show-overflow-tooltip="true" />
+         <el-table-column label="账号" prop="username" :show-overflow-tooltip="true" />
+         <el-table-column label="用户昵称" prop="nickname" :show-overflow-tooltip="true" />
          <el-table-column label="邮箱" prop="email" :show-overflow-tooltip="true" />
-         <el-table-column label="手机" prop="phonenumber" :show-overflow-tooltip="true" />
+         <el-table-column label="手机" prop="phone" :show-overflow-tooltip="true" />
          <el-table-column label="状态" align="center" prop="status">
             <template #default="scope">
                <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
@@ -110,8 +119,8 @@ const queryParams = reactive({
   pageNum: 1,
   pageSize: 10,
   roleId: route.params.roleId,
-  userName: undefined,
-  phonenumber: undefined,
+  username: undefined,
+  phone: undefined,
 });
 
 /** 查询授权用户列表 */
@@ -140,7 +149,7 @@ function resetQuery() {
 }
 // 多选框选中数据
 function handleSelectionChange(selection) {
-  userIds.value = selection.map(item => item.userId);
+  userIds.value = selection.map(item => item.id);
   multiple.value = !selection.length;
 }
 /** 打开授权用户表弹窗 */
@@ -149,8 +158,8 @@ function openSelectUser() {
 }
 /** 取消授权按钮操作 */
 function cancelAuthUser(row) {
-  proxy.$modal.confirm('确认要取消该用户"' + row.userName + '"角色吗？').then(function () {
-    return authUserCancel({ userId: row.userId, roleId: queryParams.roleId });
+  proxy.$modal.confirm('确认要取消该用户"' + row.username + '"角色吗？').then(function () {
+    return authUserCancel({ userId: row.id, roleId: queryParams.roleId });
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("取消授权成功");

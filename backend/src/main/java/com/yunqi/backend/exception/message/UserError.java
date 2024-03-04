@@ -13,8 +13,8 @@ public enum UserError implements BaseError {
     PASSWORD_NOT_MATCH(10004, "两次输入的密码不一致"),
     PHONE_NUMBER_ERROR(10005,"请检查手机号后重试"),
     USERNAME_NOT_EXISTS(10006, "账号不存在"),
-    USERNAME_ALREADY_EXISTS(10007, "该账号已存在")
-    ;
+    USERNAME_ALREADY_EXISTS(10007, "该账号已存在"),
+    USER_ROLE_ID_NULL(10008, "用户或角色不存在");
 
     int code;
     String msg;

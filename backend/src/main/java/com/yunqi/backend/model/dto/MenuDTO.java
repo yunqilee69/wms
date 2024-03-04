@@ -2,6 +2,8 @@ package com.yunqi.backend.model.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * 菜单DTO
  * @author liyunqi
@@ -67,5 +69,10 @@ public class MenuDTO {
      * 菜单图标
      */
     private String icon;
+
+    /**
+     * 子菜单
+     */
+    private List<MenuDTO> children;
 
 }

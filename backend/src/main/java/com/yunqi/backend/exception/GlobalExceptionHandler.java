@@ -37,4 +37,11 @@ public class GlobalExceptionHandler {
         log.error("用户id：{}，出现了业务异常：{}", SecurityUtils.getLoginUser().getUserId(),e.getMsg());
         return Result.fail(e.getCode(), e.getMsg());
     }
+
+    @ExceptionHandler({Exception.class})
+    public Result<String> handleException(Exception e) {
+        log.error("出现了系统异常：{}", e.getMessage());
+        e.printStackTrace();
+        return Result.fail("系统错误，请联系管理员");
+    }
 }

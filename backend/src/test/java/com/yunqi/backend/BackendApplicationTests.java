@@ -5,6 +5,7 @@ import com.yunqi.backend.common.util.RedisCache;
 import com.yunqi.backend.common.util.SecurityUtils;
 import com.yunqi.backend.core.service.LoginService;
 import com.yunqi.backend.mapper.MenuMapper;
+import com.yunqi.backend.mapper.RoleMapper;
 import com.yunqi.backend.model.entity.DictType;
 import com.yunqi.backend.model.entity.Menu;
 import com.yunqi.backend.model.request.RegisterRequest;
@@ -16,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 @SpringBootTest
@@ -38,6 +42,9 @@ class BackendApplicationTests {
 
     @Autowired
     private MenuMapper menuMapper;
+
+    @Resource
+    RoleMapper roleMapper;
 
     @Test
     void registerTest() {
@@ -83,7 +90,6 @@ class BackendApplicationTests {
         dictType.setName("测试");
         dictType.setRemark("测试备注");
         dictType.setOrderNum(1);
-        dictType.setStatus(1);
 
         dictTypeService.save(dictType);
     }
@@ -92,5 +98,15 @@ class BackendApplicationTests {
     void menuMapperTest() {
         List<Menu> menuChildren = menuMapper.getMenuChildren("0-1-2");
         System.out.println(menuChildren.size());
+    }
+
+    @Test
+    void roleMenuTest() {
+        List<Long> menuList = Arrays.asList(1L,2L,3L,4L,5L);
+        Long roleId = 1000L;
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("menuIds", menuList);
+        params.put("roleId", roleId);
+        roleMapper.insertMenuIdsWithRoleId(params);
     }
 }

@@ -11,6 +11,7 @@ import com.yunqi.backend.model.entity.DictType;
 import com.yunqi.backend.service.DictTypeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
  * @author liyunqi
  */
 @Service
+@Transactional
 public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, DictType> implements DictTypeService {
 
     @Resource

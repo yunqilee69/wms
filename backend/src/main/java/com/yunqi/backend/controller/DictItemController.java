@@ -37,12 +37,22 @@ public class DictItemController {
         return Result.success(PageUtils.convertPageResult(dictItemPage));
     }
 
+    /**
+     * 根据字典项id获取字典项
+     * @param itemId
+     * @return
+     */
     @GetMapping("/{itemId}")
     public Result getDictItemByItemId(@PathVariable Long itemId) {
         DictItem dictItem = dictItemService.getById(itemId);
         return Result.success(dictItem);
     }
 
+    /**
+     * 保存字典项
+     * @param dictItemDTO
+     * @return
+     */
     @PostMapping
     public Result save(@Validated @RequestBody DictItemDTO dictItemDTO) {
         dictItemService.saveDictItem(dictItemDTO);
@@ -50,14 +60,23 @@ public class DictItemController {
         return Result.success();
     }
 
+    /**
+     * 更新字典项
+     * @param dictItemDTO
+     * @return
+     */
     @PutMapping
     public Result updateDictItem(@Validated @RequestBody DictItemDTO dictItemDTO) {
-        // TODO 前端没有传值id，导致全部更新。需要查看前端提交的方法（submitForm）
         dictItemService.updateDictItem(dictItemDTO);
         DictUtils.refreshCache(dictItemDTO.getTypeCode());
         return Result.success();
     }
 
+    /**
+     * 删除字典项
+     * @param dictItemIds
+     * @return
+     */
     @DeleteMapping("/{dictItemIds}")
     public Result delete(@PathVariable List<Long> dictItemIds) {
         dictItemService.deleteDictItem(dictItemIds);
@@ -65,6 +84,11 @@ public class DictItemController {
         return Result.success();
     }
 
+    /**
+     * 根据字典code，获取字典项
+     * @param code
+     * @return
+     */
     @GetMapping("/code/{code}")
     public Result getDictItemByCode(@PathVariable String code) {
         List<DictItem> dictItemCache = DictUtils.getDictItemCache(code);

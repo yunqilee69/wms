@@ -1,8 +1,10 @@
 package com.yunqi.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunqi.backend.common.util.CheckUtils;
+import com.yunqi.backend.common.util.PageUtils;
 import com.yunqi.backend.common.util.RedisCache;
 import com.yunqi.backend.common.util.SecurityUtils;
 import com.yunqi.backend.core.service.TokenService;
@@ -10,6 +12,7 @@ import com.yunqi.backend.exception.BizException;
 import com.yunqi.backend.exception.message.UserError;
 import com.yunqi.backend.mapper.UserMapper;
 import com.yunqi.backend.model.dto.RegisterUserDTO;
+import com.yunqi.backend.model.dto.UserDTO;
 import com.yunqi.backend.model.entity.User;
 import com.yunqi.backend.model.request.RegisterRequest;
 import com.yunqi.backend.service.UserService;
@@ -17,11 +20,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author liyunqi
  */
 @Service
+@Transactional
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Autowired
@@ -81,6 +89,36 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userMapper.insert(user);
 
         return user.getId();
+    }
+
+    /**
+     * 获取所有已分配角色的用户
+     * @param nickname
+     * @param phone
+     * @return
+     */
+    @Override
+    public Page<User> selectAllocatedList(UserDTO userDTO, Long roleId) {
+        Page<User> page = PageUtils.getPage();
+        List<User> userList = userMapper.selectAllocatedList(userDTO, roleId);
+        if (userList == null) {
+            userList = new ArrayList<>();
+        }
+        page.setRecords(PageUtils.handlePageList(userList, page));
+        page.setTotal(userList.size());
+        return page;
+    }
+
+    @Override
+    public Page<User> selectUnallocatedList(UserDTO userDTO) {
+        Page<User> page = PageUtils.getPage();
+        List<User> userList = userMapper.selectUnallocatedList(userDTO);
+        if (userList == null) {
+            userList = new ArrayList<>();
+        }
+        page.setRecords(PageUtils.handlePageList(userList, page));
+        page.setTotal(userList.size());
+        return page;
     }
 
 }

@@ -2,18 +2,27 @@
    <!-- 授权用户 -->
    <el-dialog title="选择用户" v-model="visible" width="800px" top="5vh" append-to-body>
       <el-form :model="queryParams" ref="queryRef" :inline="true">
-         <el-form-item label="用户名称" prop="userName">
+         <el-form-item label="账号" prop="username">
             <el-input
-               v-model="queryParams.userName"
-               placeholder="请输入用户名称"
+               v-model="queryParams.username"
+               placeholder="请输入账号"
                clearable
                style="width: 200px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="手机号码" prop="phonenumber">
+         <el-form-item label="用户呢称" prop="nickname">
             <el-input
-               v-model="queryParams.phonenumber"
+               v-model="queryParams.nickname"
+               placeholder="请输入用户呢称"
+               clearable
+               style="width: 200px"
+               @keyup.enter="handleQuery"
+            />
+         </el-form-item>
+         <el-form-item label="手机号码" prop="phone">
+            <el-input
+               v-model="queryParams.phone"
                placeholder="请输入手机号码"
                clearable
                style="width: 200px"
@@ -28,10 +37,10 @@
       <el-row>
          <el-table @row-click="clickRow" ref="refTable" :data="userList" @selection-change="handleSelectionChange" height="260px">
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column label="用户名称" prop="userName" :show-overflow-tooltip="true" />
-            <el-table-column label="用户昵称" prop="nickName" :show-overflow-tooltip="true" />
+            <el-table-column label="账号" prop="username" :show-overflow-tooltip="true" />
+            <el-table-column label="用户昵称" prop="nickname" :show-overflow-tooltip="true" />
             <el-table-column label="邮箱" prop="email" :show-overflow-tooltip="true" />
-            <el-table-column label="手机" prop="phonenumber" :show-overflow-tooltip="true" />
+            <el-table-column label="手机" prop="phone" :show-overflow-tooltip="true" />
             <el-table-column label="状态" align="center" prop="status">
                <template #default="scope">
                   <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
@@ -97,7 +106,7 @@ function clickRow(row) {
 }
 // 多选框选中数据
 function handleSelectionChange(selection) {
-  userIds.value = selection.map(item => item.userId);
+  userIds.value = selection.map(item => item.id);
 }
 // 查询表数据
 function getList() {
@@ -126,11 +135,9 @@ function handleSelectUser() {
     return;
   }
   authUserSelectAll({ roleId: roleId, userIds: uIds }).then(res => {
-    proxy.$modal.msgSuccess(res.msg);
-    if (res.code === 200) {
-      visible.value = false;
-      emit("ok");
-    }
+   proxy.$modal.msgSuccess("添加成功");
+   visible.value = false;
+   emit("ok");
   });
 }
 

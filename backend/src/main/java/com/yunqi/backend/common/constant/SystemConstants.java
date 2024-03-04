@@ -12,12 +12,12 @@ public class SystemConstants {
     /**
      * 状态：有效
      */
-    public static final int STATUS_VALID = 0;
+    public static final String STATUS_VALID = "0";
 
     /**
      * 状态：无效
      */
-    public static final int STATUS_INVALID = 1;
+    public static final String STATUS_INVALID = "1";
 
     /**
      * UTF-8 字符集

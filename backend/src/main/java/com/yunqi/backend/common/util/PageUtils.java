@@ -12,6 +12,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,11 +57,27 @@ public class PageUtils {
      */
     public static PageResult convertPageResult(Page page) {
         PageResult pageResult = new PageResult();
-        pageResult.setPageNum((int) page.getPages());
+        pageResult.setPageNum((int) page.getCurrent());
         pageResult.setPageSize((int) page.getSize());
         pageResult.setTotal((int) page.getTotal());
         pageResult.setRows(page.getRecords());
         return pageResult;
+    }
+
+    /**
+     * 根据page信息设置分页查询结果
+     * @return
+     */
+    public static List handlePageList(List list, Page page) {
+        int beginIndex = (int) ((page.getCurrent() - 1) * page.getSize());
+        if (beginIndex > list.size()) {
+            return null;
+        }
+        int endIndex = (int)page.getCurrent()*(int)page.getSize();
+        if (endIndex > list.size()) {
+            endIndex = list.size();
+        }
+        return list.subList(beginIndex, endIndex);
     }
 
 }

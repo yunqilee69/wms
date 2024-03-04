@@ -13,6 +13,7 @@ import com.yunqi.backend.service.DictItemService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
  * @author liyunqi
  */
 @Service
+@Transactional
 public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> implements DictItemService {
 
     @Resource

@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * 角色DTO
@@ -41,4 +42,8 @@ public class RoleDTO {
     @NotNull(message = "角色状态不能为空")
     private String status;
 
+    /**
+     * 角色关联的菜单id
+     */
+    private List<Long> menuIds;
 }

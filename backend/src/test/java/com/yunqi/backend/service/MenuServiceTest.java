@@ -212,7 +212,7 @@ public class MenuServiceTest {
         saleOrder.setComponent("sale/order/index");
         saleOrder.setQueryParams("");
         saleOrder.setMenuType(MenuConstants.TYPE_MENU);
-        saleOrder.setStatus(0);
+        saleOrder.setStatus("0");
         saleOrder.setPerms("sale:order:list");
         saleOrder.setIcon("暂定");
         menuMapper.insert(saleOrder);
@@ -229,7 +229,7 @@ public class MenuServiceTest {
         sendManage.setComponent("sale/send/index");
         sendManage.setQueryParams("");
         sendManage.setMenuType(MenuConstants.TYPE_MENU);
-        sendManage.setStatus(0);
+        sendManage.setStatus("0");
         sendManage.setPerms("sale:send:list");
         sendManage.setIcon("");
         menuMapper.insert(sendManage);
@@ -246,7 +246,7 @@ public class MenuServiceTest {
         saleSettleManage.setComponent("sale/settlement/index");
         saleSettleManage.setQueryParams("");
         saleSettleManage.setMenuType(MenuConstants.TYPE_MENU);
-        saleSettleManage.setStatus(0);
+        saleSettleManage.setStatus("0");
         saleSettleManage.setPerms("sale:settlement:list");
         saleSettleManage.setIcon("");
         menuMapper.insert(saleSettleManage);
@@ -269,7 +269,7 @@ public class MenuServiceTest {
         inventoryManage.setComponent("");
         inventoryManage.setQueryParams("");
         inventoryManage.setMenuType(MenuConstants.TYPE_DIR);
-        inventoryManage.setStatus(0);
+        inventoryManage.setStatus("0");
         inventoryManage.setPerms("");
         inventoryManage.setIcon("暂定");
         menuMapper.insert(inventoryManage);
@@ -286,7 +286,7 @@ public class MenuServiceTest {
         waresInfo.setComponent("inventory/waresInfo/index");
         waresInfo.setQueryParams("");
         waresInfo.setMenuType(MenuConstants.TYPE_MENU);
-        waresInfo.setStatus(0);
+        waresInfo.setStatus("0");
         waresInfo.setPerms("inventory:waresInfo:list");
         menuMapper.insert(waresInfo);
         waresInfo.setPathCode(inventoryManage.getPathCode() + "-" + waresInfo.getId());
@@ -302,7 +302,7 @@ public class MenuServiceTest {
         inventoryRecord.setComponent("inventory/record/index");
         inventoryRecord.setQueryParams("");
         inventoryRecord.setMenuType(MenuConstants.TYPE_MENU);
-        inventoryRecord.setStatus(0);
+        inventoryRecord.setStatus("0");
         inventoryRecord.setPerms("inventory:record:list");
         menuMapper.insert(inventoryRecord);
         inventoryRecord.setPathCode(inventoryManage.getPathCode() + "-" + inventoryRecord.getId());
@@ -318,7 +318,7 @@ public class MenuServiceTest {
         waresPosition.setComponent("inventory/waresPosition/index");
         waresPosition.setQueryParams("");
         waresPosition.setMenuType(MenuConstants.TYPE_MENU);
-        waresPosition.setStatus(0);
+        waresPosition.setStatus("0");
         waresPosition.setPerms("inventory:waresPosition:list");
         menuMapper.insert(waresPosition);
         waresPosition.setPathCode(inventoryManage.getPathCode() + "-" + waresPosition.getId());
@@ -334,7 +334,7 @@ public class MenuServiceTest {
         inventoryCheck.setComponent("inventory/check/index");
         inventoryCheck.setQueryParams("");
         inventoryCheck.setMenuType(MenuConstants.TYPE_MENU);
-        inventoryCheck.setStatus(0);
+        inventoryCheck.setStatus("0");
         inventoryCheck.setPerms("inventory:check:list");
         menuMapper.insert(inventoryCheck);
         inventoryCheck.setPathCode(inventoryManage.getPathCode() + "-" + inventoryCheck.getId());
@@ -355,7 +355,7 @@ public class MenuServiceTest {
         dataBoard.setComponent("");
         dataBoard.setQueryParams("");
         dataBoard.setMenuType(MenuConstants.TYPE_DIR);
-        dataBoard.setStatus(0);
+        dataBoard.setStatus("0");
         menuMapper.insert(dataBoard);
         dataBoard.setPathCode("0-" + dataBoard.getId());
         menuMapper.updateById(dataBoard);
@@ -370,7 +370,7 @@ public class MenuServiceTest {
         inventory.setComponent("dataBoard/inventory/index");
         inventory.setQueryParams("");
         inventory.setMenuType(MenuConstants.TYPE_MENU);
-        inventory.setStatus(0);
+        inventory.setStatus("0");
         inventory.setPerms("dataBoard:inventory:list");
         menuMapper.insert(inventory);
         inventory.setPathCode(dataBoard.getPathCode() + "-" + inventory.getId());
@@ -391,7 +391,7 @@ public class MenuServiceTest {
         system.setComponent("");
         system.setQueryParams("");
         system.setMenuType(MenuConstants.TYPE_DIR);
-        system.setStatus(0);
+        system.setStatus("0");
         system.setIcon("system");
         menuMapper.insert(system);
         system.setPathCode("0-" + system.getId());
@@ -407,7 +407,7 @@ public class MenuServiceTest {
         role.setComponent("system/role/index");
         role.setQueryParams("");
         role.setMenuType(MenuConstants.TYPE_MENU);
-        role.setStatus(0);
+        role.setStatus("0");
         role.setPerms("system:role:list");
         role.setIcon("peoples");
         menuMapper.insert(role);
@@ -424,7 +424,7 @@ public class MenuServiceTest {
         menu.setComponent("system/menu/index");
         menu.setQueryParams("");
         menu.setMenuType(MenuConstants.TYPE_MENU);
-        menu.setStatus(0);
+        menu.setStatus("0");
         menu.setPerms("system:menu:list");
         menu.setIcon("tree-table");
         menuMapper.insert(menu);
@@ -441,7 +441,7 @@ public class MenuServiceTest {
         dict.setComponent("system/dict/index");
         dict.setQueryParams("");
         dict.setMenuType(MenuConstants.TYPE_MENU);
-        dict.setStatus(0);
+        dict.setStatus("0");
         dict.setPerms("system:dict:list");
         dict.setIcon("dict");
         menuMapper.insert(dict);

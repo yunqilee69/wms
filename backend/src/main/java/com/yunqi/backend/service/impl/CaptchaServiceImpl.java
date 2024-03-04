@@ -5,6 +5,7 @@ import cn.hutool.captcha.CaptchaUtil;
 import com.yunqi.backend.config.properties.CaptchaProperties;
 import com.yunqi.backend.service.CaptchaService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -13,6 +14,7 @@ import javax.annotation.Resource;
  * @author liyunqi
  */
 @Service
+@Transactional
 public class CaptchaServiceImpl implements CaptchaService {
 
     @Resource

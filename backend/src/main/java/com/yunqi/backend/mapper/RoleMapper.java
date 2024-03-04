@@ -3,7 +3,10 @@ package com.yunqi.backend.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yunqi.backend.model.entity.Role;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -18,4 +21,8 @@ public interface RoleMapper extends BaseMapper<Role> {
      * @return
      */
     Set<String> getRolePermissionByUserId(Long userId);
+
+    Role selectByName(String name);
+
+    Role selectByRoleKey(String roleKey);
 }

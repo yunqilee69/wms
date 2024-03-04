@@ -1,8 +1,11 @@
 package com.yunqi.backend.model.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.yunqi.backend.common.base.BaseEntity;
 import lombok.Data;
+
+import java.util.List;
 
 
 /**
@@ -74,4 +77,9 @@ public class Menu extends BaseEntity {
      */
     private String icon;
 
+    /**
+     * 子节点，数据库中不存在
+     */
+    @TableField(exist = false)
+    private List<Menu> children;
 }

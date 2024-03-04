@@ -6,14 +6,20 @@ import com.yunqi.backend.common.constant.MenuConstants;
 import com.yunqi.backend.common.constant.UserConstants;
 import com.yunqi.backend.common.util.SecurityUtils;
 import com.yunqi.backend.mapper.MenuMapper;
+import com.yunqi.backend.mapper.RoleMenuMapper;
 import com.yunqi.backend.model.dto.MenuDTO;
 import com.yunqi.backend.model.dto.MetaDTO;
 import com.yunqi.backend.model.dto.RouterDTO;
+import com.yunqi.backend.model.dto.TreeSelectDTO;
 import com.yunqi.backend.model.entity.Menu;
+import com.yunqi.backend.model.entity.Role;
+import com.yunqi.backend.model.entity.RoleMenu;
 import com.yunqi.backend.service.MenuService;
+import com.yunqi.backend.service.RoleMenuService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -23,10 +29,14 @@ import java.util.stream.Collectors;
  * @author liyunqi
  */
 @Service
+@Transactional
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
 
     @Resource
     MenuMapper menuMapper;
+
+    @Resource
+    RoleMenuMapper roleMenuMapper;
 
     @Override
     public Set<String> selectMenuPermsByUserId(Long userId) {
@@ -44,6 +54,14 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         }
 
         return getChildPerms(menuList, 0L);
+    }
+
+    @Override
+    public List<Long> selectMenuListByRoleId(Long roleId) {
+        LambdaQueryWrapper<RoleMenu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(RoleMenu::getRoleId, roleId);
+        List<RoleMenu> roleMenuList = roleMenuMapper.selectList(wrapper);
+        return roleMenuList.stream().map(RoleMenu::getMenuId).collect(Collectors.toList());
     }
 
     @Override
@@ -93,8 +111,14 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         return routers;
     }
 
+    @Override
+    public List<Menu> selectMenuList(Long userId) {
+        return selectMenuList(new MenuDTO(), userId);
+    }
+
     /**
      * 根据用户id获取该用户所能才查看的菜单
+     *
      * @param userId
      * @return
      */
@@ -137,6 +161,61 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Override
     public void deleteMenu(List<Long> menuIds) {
         removeBatchByIds(menuIds);
+    }
+
+    @Override
+    public List<Menu> buildMenuTree(List<Menu> menuList) {
+        List<Menu> returnList = new ArrayList<>();
+        List<Long> tempList = menuList.stream().map(Menu::getId).collect(Collectors.toList());
+        for (Iterator<Menu> iterator = menuList.iterator(); iterator.hasNext(); ) {
+            Menu menu = (Menu) iterator.next();
+            // 如果是顶级节点, 遍历该父节点的所有子节点
+            if (!tempList.contains(menu.getParentId())) {
+                recursionFn(menuList, menu);
+
+                returnList.add(menu);
+            }
+        }
+        if (returnList.isEmpty()) {
+            returnList = menuList;
+        }
+        return returnList;
+    }
+
+    /**
+     * 递归列表
+     *
+     * @param list 分类表
+     * @param t    子节点
+     */
+    private void recursionFn(List<Menu> list, Menu t) {
+        // 得到子节点列表
+        List<Menu> childList = getChildList(list, t);
+        t.setChildren(childList);
+        for (Menu tChild : childList) {
+            recursionFn(list, tChild);
+        }
+    }
+
+    /**
+     * 得到子节点列表
+     */
+    private List<Menu> getChildList(List<Menu> list, Menu t) {
+        List<Menu> tlist = new ArrayList<>();
+        Iterator<Menu> it = list.iterator();
+        while (it.hasNext()) {
+            Menu n = (Menu) it.next();
+            if (n.getParentId().longValue() == t.getId().longValue()) {
+                tlist.add(n);
+            }
+        }
+        return tlist;
+    }
+
+    @Override
+    public List<TreeSelectDTO> buildMenuTreeSelect(List<Menu> menuList) {
+        List<Menu> menuTrees = buildMenuTree(menuList);
+        return menuTrees.stream().map(TreeSelectDTO::new).collect(Collectors.toList());
     }
 
     /**
