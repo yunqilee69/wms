@@ -18,8 +18,10 @@
 
 <script setup>
 import { updateUserPwd } from "@/api/system/user";
+import useUserStore from '@/store/modules/user'
 
 const { proxy } = getCurrentInstance();
+const userStore = useUserStore();
 
 const user = reactive({
   oldPassword: undefined,
@@ -44,8 +46,14 @@ const rules = ref({
 function submit() {
   proxy.$refs.pwdRef.validate(valid => {
     if (valid) {
-      updateUserPwd(user.oldPassword, user.newPassword).then(response => {
-        proxy.$modal.msgSuccess("修改成功");
+      updateUserPwd(user.oldPassword, user.newPassword, user.confirmPassword).then(response => {
+        proxy.$modal.msgSuccess("修改成功,两秒后自动退出登录");
+        setTimeout(() => {
+          userStore.logOut().then(() => {
+            location.href = '/index';
+          });
+        }, 2000);
+          
       });
     }
   });

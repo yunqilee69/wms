@@ -21,7 +21,19 @@ public interface RoleService extends IService<Role> {
      */
     Page<Role> getRolePage(RoleDTO roleDTO);
 
-    Set<String> getRolePermission(User user);
+    /**
+     * 根据用户获取用户的角色名称
+     * @param user
+     * @return
+     */
+    Set<String> getRoleName(User user);
+
+    /**
+     * 根据用户获取用户的角色权限字符
+     * @param user
+     * @return
+     */
+    Set<String> getRoleKey(User user);
 
     void saveRole(RoleDTO roleDTO);
 
@@ -34,4 +46,6 @@ public interface RoleService extends IService<Role> {
      * @param roleDTO
      */
     void changeStatus(RoleDTO roleDTO);
+
+
 }

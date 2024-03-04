@@ -63,7 +63,7 @@ public interface MenuService extends IService<Menu> {
      */
     void updateMenu(MenuDTO menuDTO);
 
-    void deleteMenu(List<Long> menuIds);
+    void deleteMenu(Long menuId);
 
     /**
      * 将菜单转化为DTO中的上下级关系，

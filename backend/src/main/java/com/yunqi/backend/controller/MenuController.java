@@ -5,6 +5,7 @@ import com.yunqi.backend.common.util.SecurityUtils;
 import com.yunqi.backend.model.dto.MenuDTO;
 import com.yunqi.backend.model.entity.Menu;
 import com.yunqi.backend.service.MenuService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ import java.util.Map;
 
 /**
  * 菜单控制器
+ *
  * @author liyunqi
  */
 @RestController
@@ -26,6 +28,7 @@ public class MenuController {
 
     /**
      * 获取所有的菜单
+     *
      * @param menuDTO
      * @return
      */
@@ -38,6 +41,7 @@ public class MenuController {
 
     /**
      * 新增菜单
+     *
      * @param menuDTO
      * @return
      */
@@ -49,6 +53,7 @@ public class MenuController {
 
     /**
      * 更新菜单
+     *
      * @param menuDTO
      * @return
      */
@@ -60,17 +65,16 @@ public class MenuController {
 
     /**
      * 删除菜单
-     * @param menuIds
-     * @return
      */
-    @DeleteMapping
-    public Result deleteMenu(@RequestBody List<Long> menuIds) {
-        menuService.deleteMenu(menuIds);
+    @DeleteMapping("/{menuId}")
+    public Result remove(@PathVariable Long menuId) {
+        menuService.deleteMenu(menuId);
         return Result.success();
     }
 
     /**
      * 根据菜单id获取菜单信息
+     *
      * @param menuId
      * @return
      */
@@ -82,6 +86,7 @@ public class MenuController {
 
     /**
      * 生成菜单的树选择器
+     *
      * @param menuDTO
      * @return
      */

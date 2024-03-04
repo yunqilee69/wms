@@ -56,7 +56,7 @@ public class AccountController {
         HashMap<String, Object> map = new HashMap<>();
         map.put("user", loginUserDTO.getUser());
         map.put("permissions", loginUserDTO.getPermissions());
-        map.put("roles", loginUserDTO.getRoles());
+        map.put("roleKeys", loginUserDTO.getRoleKeys());
         return Result.success(map);
     }
 

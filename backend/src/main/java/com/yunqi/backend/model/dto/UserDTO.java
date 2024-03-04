@@ -25,6 +25,21 @@ public class UserDTO {
     private String password;
 
     /**
+     * 旧密码
+     */
+    private String oldPassword;
+
+    /**
+     * 新密码
+     */
+    private String newPassword;
+
+    /**
+     * 二次密码
+     */
+    private String confirmPassword;
+
+    /**
      * 昵称
      */
     private String nickname;

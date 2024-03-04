@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunqi.backend.common.util.PageUtils;
+import com.yunqi.backend.exception.BizException;
+import com.yunqi.backend.exception.message.DictError;
 import com.yunqi.backend.mapper.DictItemMapper;
 import com.yunqi.backend.model.dto.DictItemDTO;
 import com.yunqi.backend.model.entity.DictItem;
@@ -48,6 +50,17 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> i
 
     @Override
     public void saveDictItem(DictItemDTO dictItemDTO) {
+        String typeCode = dictItemDTO.getTypeCode();
+        String label = dictItemDTO.getLabel();
+        String value = dictItemDTO.getValue();
+        int orderNum = dictItemDTO.getOrderNum();
+        String status = dictItemDTO.getStatus();
+        String remark = dictItemDTO.getRemark();
+        String listClass = dictItemDTO.getListClass();
+        if (StringUtils.isAnyEmpty(typeCode, label, value, status, listClass) || orderNum <= 0) {
+            throw new BizException(DictError.PARAM_IS_EMPTY);
+        }
+
         DictItem dictItem = new DictItem();
         BeanUtils.copyProperties(dictItemDTO, dictItem);
 
@@ -75,5 +88,30 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> i
     @Override
     public void deleteDictItem(List<Long> dictItemIds) {
         removeByIds(dictItemIds);
+    }
+
+    /**
+     * 校验字典项标签是否唯一
+     * @return
+     */
+    private boolean checkDictItemLabelUnique(String typeCode, String label) {
+//        LambdaQueryWrapper<DictItem> wrapper = new LambdaQueryWrapper<>();
+//        wrapper.eq(StringUtils.isNotEmpty(label),  DictItem::getLabel, label);
+//        List<DictItem> dictItemList = dictItemMapper.selectList(wrapper);
+//        if ( dictItemList == null) {
+//            return true;
+//        }
+//        if (dictItemList.size() == 1) {
+//            return dictItemList.get(0).getLabel());
+//        }
+        return false;
+    }
+
+    /**
+     * 校验字典项值是否唯一
+     * @return
+     */
+    private boolean checkDictItemValueUnique(String typeCode, String value) {
+        return false;
     }
 }

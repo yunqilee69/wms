@@ -36,6 +36,6 @@ captcha:
   # 类型: Line(线段),Circle(圆圈),Shear(扭曲)
   type: Shear
   # 有效时间(默认5分钟)
-  expireTime: 5
+  expireTime: 10
   # 验证码字符数量(默认为4)
   codeCount: 4

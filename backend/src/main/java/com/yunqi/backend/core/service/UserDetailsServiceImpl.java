@@ -44,15 +44,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return createLoginUser(user);
     }
 
-        public UserDetails createLoginUser(User user) {
+    public UserDetails createLoginUser(User user) {
         // 设置LoginUserDTO的值
         LoginUserDTO loginUserDTO = new LoginUserDTO();
 
-        Set<String> roles = roleService.getRolePermission(user);
+        Set<String> roleNames = roleService.getRoleName(user);
+        Set<String> roleKeys = roleService.getRoleKey(user);
         Set<String> menuPermission = permissionService.getMenuPermission(user);
 
         loginUserDTO.setUserId(user.getId());
-        loginUserDTO.setRoles(roles);
+        loginUserDTO.setRoleNames(roleNames);
+        loginUserDTO.setRoleKeys(roleKeys);
         loginUserDTO.setPermissions(menuPermission);
         loginUserDTO.setUser(user);
         return loginUserDTO;

@@ -28,4 +28,11 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @return
      */
     List<Menu> selectMenuListByUserId(MenuDTO menuDTO, Long userId);
+
+    /**
+     * 根据用户id获取该用户的树形菜单
+     * @param userId
+     * @return
+     */
+    List<Menu> selectMenuTreeByUserId(Long userId);
 }

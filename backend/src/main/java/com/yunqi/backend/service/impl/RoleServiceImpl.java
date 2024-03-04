@@ -8,7 +8,6 @@ import com.yunqi.backend.common.util.PageUtils;
 import com.yunqi.backend.exception.BizException;
 import com.yunqi.backend.exception.message.RoleError;
 import com.yunqi.backend.mapper.RoleMapper;
-import com.yunqi.backend.mapper.RoleMenuMapper;
 import com.yunqi.backend.model.dto.RoleDTO;
 import com.yunqi.backend.model.entity.Role;
 import com.yunqi.backend.model.entity.RoleMenu;
@@ -50,13 +49,25 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public Set<String> getRolePermission(User user) {
+    public Set<String> getRoleName(User user) {
+        String username = user.getUsername();
+        HashSet<String> result = new HashSet<>();
+        if (username.equals("admin")) {
+            result.add("管理员");
+        } else {
+            result.addAll(roleMapper.getRoleNameByUserId(user.getId()));
+        }
+        return result;
+    }
+
+    @Override
+    public Set<String> getRoleKey(User user) {
         String username = user.getUsername();
         HashSet<String> result = new HashSet<>();
         if (username.equals("admin")) {
             result.add("admin");
         } else {
-            result.addAll(roleMapper.getRolePermissionByUserId(user.getId()));
+            result.addAll(roleMapper.getRoleKeyByUserId(user.getId()));
         }
         return result;
     }
@@ -115,10 +126,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         if (roleDTO.getOrderNum() <= 0) {
             throw new BizException(RoleError.ORDER_NUM_GT_ZERO);
         }
-        if (roleMapper.selectByName(roleDTO.getName()) != null) {
+        if (!checkRoleNameUnique(roleDTO.getName(), roleDTO.getId())) {
             throw new BizException(RoleError.NAME_ALERTER_EXIST);
         }
-        if (roleMapper.selectByRoleKey(roleDTO.getRoleKey()) != null) {
+        if (!checkRoleKeyUnique(roleDTO.getRoleKey(), roleDTO.getId())) {
             throw new BizException(RoleError.ROLE_KEY_ALERTER_EXIST);
         }
 
@@ -127,22 +138,21 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         BeanUtils.copyProperties(roleDTO, role);
         updateById(role);
 
-        if (roleDTO.getMenuIds() != null && roleDTO.getMenuIds().size() > 0) {
-            Long roleId = role.getId();
-            // 更新角色菜单
-            LambdaQueryWrapper<RoleMenu> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(RoleMenu::getRoleId, role.getId());
-            roleMenuService.remove(queryWrapper);
+        Long roleId = role.getId();
+        // 更新角色菜单
+        LambdaQueryWrapper<RoleMenu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(RoleMenu::getRoleId, roleId);
+        roleMenuService.remove(queryWrapper);
 
-            List<RoleMenu> roleMenuList = new ArrayList<>();
-            for (Long menuId : roleDTO.getMenuIds()) {
-                RoleMenu t = new RoleMenu();
-                t.setRoleId(roleId);
-                t.setMenuId(menuId);
-                roleMenuList.add(t);
-            }
-            roleMenuService.saveBatch(roleMenuList);
+        List<RoleMenu> roleMenuList = new ArrayList<>();
+        for (Long menuId : roleDTO.getMenuIds()) {
+            RoleMenu t = new RoleMenu();
+            t.setRoleId(roleId);
+            t.setMenuId(menuId);
+            roleMenuList.add(t);
         }
+        roleMenuService.saveBatch(roleMenuList);
+
     }
 
     @Override
@@ -160,5 +170,50 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         wrapper.eq(Role::getId, roleDTO.getId());
         wrapper.set(roleDTO.getStatus() != null, Role::getStatus, roleDTO.getStatus());
         roleMapper.update(wrapper);
+    }
+
+    /**
+     * 校验角色名是否唯一
+     * @param roleName
+     * @return
+     */
+    private boolean checkRoleNameUnique(String roleName, Long roleId) {
+        if (StringUtils.isEmpty(roleName)) {
+            return false;
+        }
+        LambdaQueryWrapper<Role> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Role::getName, roleName);
+        List<Role> roleList = roleMapper.selectList(wrapper);
+        if (roleList.size() == 0) {
+            return true;
+        } else if (roleList.size() == 1) {
+            Role role = roleList.get(0);
+            if (role.getName().equals(roleName) && role.getId().equals(roleId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 校验权限字符是否唯一
+     * @return
+     */
+    private boolean checkRoleKeyUnique(String roleKey, Long roleId) {
+        if (StringUtils.isEmpty(roleKey)) {
+            return false;
+        }
+        LambdaQueryWrapper<Role> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Role::getRoleKey, roleKey);
+        List<Role> roleList = roleMapper.selectList(wrapper);
+        if (roleList.size() == 0) {
+            return true;
+        } else if (roleList.size() == 1) {
+            Role role = roleList.get(0);
+            if (role.getRoleKey().equals(roleKey) && role.getId().equals(roleId)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -128,6 +128,7 @@ function handleLogin() {
         router.push({ path: redirect.value || "/", query: otherQueryParams });
       }).catch(() => {
         loading.value = false;
+        loginForm.value.code = "";
         // 重新获取验证码
         if (captchaEnabled.value) {
           getCode();

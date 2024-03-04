@@ -33,7 +33,11 @@ public class PermissionService {
         if (user.getUsername().equals("admin")) {
             perms.add("*:*:*");
         } else {
-            perms.addAll(menuService.selectMenuPermsByUserId(user.getId()));
+            Set<String> set = menuService.selectMenuPermsByUserId(user.getId());
+            if (set == null) {
+                set = new HashSet<>();
+            }
+            perms.addAll(set);
         }
         return perms;
     }

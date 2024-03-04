@@ -37,6 +37,17 @@
           <template #prefix><svg-icon icon-class="password" class="el-input__icon input-icon" /></template>
         </el-input>
       </el-form-item>
+      <el-form-item prop="phone">
+        <el-input
+          v-model="registerForm.phone"
+          type="text"
+          size="large" 
+          auto-complete="off"
+          placeholder="手机号"
+        >
+          <template #prefix><svg-icon icon-class="phone" class="el-input__icon input-icon" /></template>
+        </el-input>
+      </el-form-item>
       <el-form-item prop="code" v-if="captchaEnabled">
         <el-input
           size="large" 
@@ -86,6 +97,7 @@ const registerForm = ref({
   username: "",
   password: "",
   confirmPassword: "",
+  phone: "",
   code: "",
   uuid: ""
 });
@@ -111,6 +123,7 @@ const registerRules = {
     { required: true, trigger: "blur", message: "请再次输入您的密码" },
     { required: true, validator: equalToPassword, trigger: "blur" }
   ],
+  phone: [{ required: true, trigger: "blur", message: "请输入您的手机号码" }],
   code: [{ required: true, trigger: "change", message: "请输入验证码" }]
 };
 

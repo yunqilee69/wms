@@ -21,4 +21,16 @@ public interface UserService extends IService<User> {
     Page<User> selectAllocatedList(UserDTO userDTO, Long roleId);
 
     Page<User> selectUnallocatedList(UserDTO userDTO);
+
+    /**
+     * 更新密码
+     * @param userDTO
+     */
+    void updatePassword(UserDTO userDTO);
+
+    /**
+     * 更新用户信息
+     * @param userDTO
+     */
+    void updateProfile(UserDTO userDTO);
 }

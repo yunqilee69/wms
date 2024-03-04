@@ -45,12 +45,12 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public List<Menu> selectMenuTreeByUserId(Long userId) {
-        List<Menu> menuList = null;
+        List<Menu> menuList = new ArrayList<>();
         // 管理员直接返回全部菜单
         if (SecurityUtils.getLoginUser().getUsername().equals("admin")) {
             menuList = menuMapper.selectMenuTreeAll();
         } else {
-            // TODO 完成普通用户的返回菜单
+            menuList = menuMapper.selectMenuTreeByUserId(userId);
         }
 
         return getChildPerms(menuList, 0L);
@@ -75,24 +75,12 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             router.setComponent(getComponent(menu));
             router.setQueryParams(menu.getQueryParams());
             router.setMeta(new MetaDTO(menu.getName(), menu.getIcon()));
-            List<Menu> menuChildren = menuMapper.getMenuChildren(menu.getPathCode());
-            if (menuChildren.size() > 0 && MenuConstants.TYPE_DIR.equals(menu.getMenuType())) {
+            List<Menu> menuChildren = menu.getChildren();
+            if (menuChildren != null && menuChildren.size() > 0 && MenuConstants.TYPE_DIR.equals(menu.getMenuType())) {
                 // 目录
                 router.setAlwaysShow(true);
                 router.setRedirect("noRedirect");
                 router.setChildren(buildMenus(menuChildren));
-
-//            } else if (isMenuFrame(menu)) {
-//                router.setMeta(null);
-//                List<RouterVo> childrenList = new ArrayList<RouterVo>();
-//                RouterVo children = new RouterVo();
-//                children.setPath(menu.getPath());
-//                children.setComponent(menu.getComponent());
-//                children.setName(StringUtils.capitalize(menu.getPath()));
-//                children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), StringUtils.equals("1", menu.getIsCache()), menu.getPath()));
-//                children.setQuery(menu.getQuery());
-//                childrenList.add(children);
-//                router.setChildren(childrenList);
             } else if (menu.getParentId().intValue() == 0) {
                 router.setMeta(new MetaDTO(menu.getName(), menu.getIcon()));
                 router.setPath("/");
@@ -159,8 +147,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
-    public void deleteMenu(List<Long> menuIds) {
-        removeBatchByIds(menuIds);
+    public void deleteMenu(Long menuId) {
+        removeById(menuId);
     }
 
     @Override
@@ -226,7 +214,16 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      * @return String
      */
     public List<Menu> getChildPerms(List<Menu> list, Long parentId) {
-        return list.stream().filter(menu -> menu.getParentId().equals(parentId)).collect(Collectors.toList());
+        List<Menu> returnList = new ArrayList<>();
+        for (Iterator<Menu> iterator = list.iterator(); iterator.hasNext(); ) {
+            Menu t = (Menu) iterator.next();
+            // 一、根据传入的某个父节点ID,遍历该父节点的所有子节点
+            if (t.getParentId().longValue() == parentId) {
+                recursionFn(list, t);
+                returnList.add(t);
+            }
+        }
+        return returnList;
     }
 
     /**

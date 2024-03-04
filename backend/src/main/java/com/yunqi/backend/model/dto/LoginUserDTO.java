@@ -40,7 +40,12 @@ public class LoginUserDTO implements UserDetails {
     /**
      * 角色权限字符
      */
-    private Set<String> roles;
+    private Set<String> roleKeys;
+
+    /**
+     * 角色名称
+     */
+    private Set<String> roleNames;
 
     /**
      * 权限列表

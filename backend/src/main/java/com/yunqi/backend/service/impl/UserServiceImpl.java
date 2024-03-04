@@ -1,8 +1,10 @@
 package com.yunqi.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yunqi.backend.common.constant.SystemConstants;
 import com.yunqi.backend.common.util.CheckUtils;
 import com.yunqi.backend.common.util.PageUtils;
 import com.yunqi.backend.common.util.RedisCache;
@@ -16,6 +18,7 @@ import com.yunqi.backend.model.dto.UserDTO;
 import com.yunqi.backend.model.entity.User;
 import com.yunqi.backend.model.request.RegisterRequest;
 import com.yunqi.backend.service.UserService;
+import io.netty.handler.codec.compression.Bzip2Decoder;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author liyunqi
@@ -86,6 +90,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         BeanUtils.copyProperties(registerRequest, user);
         String encryptPassword = SecurityUtils.encryptPassword(user.getPassword());
         user.setPassword(encryptPassword);
+        user.setStatus(SystemConstants.STATUS_VALID);
         userMapper.insert(user);
 
         return user.getId();
@@ -119,6 +124,47 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         page.setRecords(PageUtils.handlePageList(userList, page));
         page.setTotal(userList.size());
         return page;
+    }
+
+    @Override
+    public void updatePassword(UserDTO userDTO) {
+        String oldPassword = userDTO.getOldPassword();
+        String newPassword = userDTO.getNewPassword();
+        String confirmPassword = userDTO.getConfirmPassword();
+
+        if (StringUtils.isAnyEmpty(oldPassword, newPassword, confirmPassword)) {
+            throw new BizException(UserError.USERNAME_OR_PASSWORD_EMPTY);
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            throw new BizException(UserError.PASSWORD_NOT_MATCH);
+        }
+
+        Long userId = SecurityUtils.getLoginUser().getUserId();
+        String password = userMapper.selectById(userId).getPassword();
+        if (!SecurityUtils.matchesPassword(oldPassword, password)) {
+            throw new BizException(UserError.OLD_PASSWORD_ERROR);
+        }
+
+        String encryptPassword = SecurityUtils.encryptPassword(newPassword);
+        LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(User::getId, userId);
+        wrapper.set(User::getPassword, encryptPassword);
+        userMapper.update(wrapper);
+    }
+
+    @Override
+    public void updateProfile(UserDTO userDTO) {
+        Long userId = SecurityUtils.getLoginUser().getUserId();
+
+        LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(User::getId, userId);
+        wrapper.set(userDTO.getEmail() != null,  User::getEmail, userDTO.getEmail());
+        wrapper.set(userDTO.getNickname() != null,  User::getNickname, userDTO.getNickname());
+        wrapper.set(userDTO.getPhone() != null,  User::getPhone, userDTO.getPhone());
+        wrapper.set(userDTO.getGender() != null,  User::getGender, userDTO.getGender());
+
+        userMapper.update(wrapper);
     }
 
 }

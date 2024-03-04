@@ -14,24 +14,28 @@
                   </div>
                   <ul class="list-group list-group-striped">
                      <li class="list-group-item">
-                        <svg-icon icon-class="user" />用户名称
-                        <div class="pull-right">{{ state.user.userName }}</div>
+                        <svg-icon icon-class="user" />账号
+                        <div class="pull-right">{{ state.user.username }}</div>
+                     </li>
+                     <li class="list-group-item">
+                        <svg-icon icon-class="user" />用户昵称
+                        <div class="pull-right">{{ state.user.nickname }}</div>
                      </li>
                      <li class="list-group-item">
                         <svg-icon icon-class="phone" />手机号码
-                        <div class="pull-right">{{ state.user.phonenumber }}</div>
+                        <div class="pull-right">{{ state.user.phone }}</div>
                      </li>
                      <li class="list-group-item">
                         <svg-icon icon-class="email" />用户邮箱
                         <div class="pull-right">{{ state.user.email }}</div>
                      </li>
                      <li class="list-group-item">
-                        <svg-icon icon-class="tree" />所属部门
-                        <div class="pull-right" v-if="state.user.dept">{{ state.user.dept.deptName }} / {{ state.postGroup }}</div>
+                        <svg-icon icon-class="user" />性别
+                        <div class="pull-right">{{ genderStr }}</div>
                      </li>
                      <li class="list-group-item">
                         <svg-icon icon-class="peoples" />所属角色
-                        <div class="pull-right">{{ state.roleGroup }}</div>
+                        <div class="pull-right">{{ state.roles }}</div>
                      </li>
                      <li class="list-group-item">
                         <svg-icon icon-class="date" />创建日期
@@ -45,7 +49,7 @@
             <el-card>
                <template v-slot:header>
                  <div class="clearfix">
-                   <span>基本资料</span>
+                   <span>基础设置</span>
                  </div>
                </template>
                <el-tabs v-model="activeTab">
@@ -68,18 +72,32 @@ import userInfo from "./userInfo";
 import resetPwd from "./resetPwd";
 import { getUserProfile } from "@/api/system/user";
 
+
+const { proxy } = getCurrentInstance();
+const { sys_gender } = proxy.useDict("sys_gender");
+
 const activeTab = ref("userinfo");
+const genderStr = ref("");
 const state = reactive({
   user: {},
-  roleGroup: {},
-  postGroup: {}
+  roles: {}
 });
+
 
 function getUser() {
   getUserProfile().then(response => {
-    state.user = response.data;
-    state.roleGroup = response.roleGroup;
-    state.postGroup = response.postGroup;
+    state.user = response.user;
+    let rolesString = Array.from(response.roles).join("、 ");
+    state.roles = rolesString;
+    watch(()=>state.user.gender,()=>{
+      sys_gender.value.forEach(obj => {
+        if (obj.value == state.user.gender) {
+          genderStr.value = obj.label;
+        }
+      });
+    });
+
+    genderStr.value = sys_gender.value.find(obj => obj.value == state.user.gender).label; 
   });
 };
 
