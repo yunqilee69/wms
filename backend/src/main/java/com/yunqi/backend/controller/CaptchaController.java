@@ -15,6 +15,8 @@ import cn.hutool.core.util.IdUtil;
 import com.yunqi.backend.common.result.Result;
 import com.yunqi.backend.common.constant.CacheConstants;
 import com.yunqi.backend.common.util.RedisCache;
+import com.yunqi.backend.exception.BizException;
+import com.yunqi.backend.exception.message.SystemError;
 import com.yunqi.backend.service.CaptchaService;
 import org.springframework.util.FastByteArrayOutputStream;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,7 +62,9 @@ public class CaptchaController {
         String base64Image = null;
         try {
             FastByteArrayOutputStream os = new FastByteArrayOutputStream();
-            ImageIO.write(image, "jpg", os);
+            if (!ImageIO.write(image, "PNG", os)) {
+                throw new BizException(SystemError.CAPTCHA_GENERATE_ERROR);
+            }
             byte[] imageBytes = os.toByteArray();
 
             base64Image = Base64.getEncoder().encodeToString(imageBytes);
