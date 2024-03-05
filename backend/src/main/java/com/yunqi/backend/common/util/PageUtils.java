@@ -35,7 +35,7 @@ public class PageUtils {
      * 获取pageRequest
      * @return
      */
-    public static PageRequest getPageRequest() {
+    private static PageRequest getPageRequest() {
         try {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();

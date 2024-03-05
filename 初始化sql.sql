@@ -129,8 +129,8 @@ create table tb_user_customer (
 );
 
 ### 供应商表
-DROP TABLE IF exists tb_user_customer;
-create table tb_user_customer (
+DROP TABLE IF exists tb_user_supplier;
+create table tb_user_supplier (
 	id BIGINT primary key COMMENT "主键",
 
     nickname VARCHAR(64) COMMENT "昵称",

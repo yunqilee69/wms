@@ -267,21 +267,6 @@ const total = ref(0);
 const title = ref("");
 const initPassword = ref("123456");
 const roleOptions = ref([]);
-/*** 用户导入参数 */
-const upload = reactive({
-  // 是否显示弹出层（用户导入）
-  open: false,
-  // 弹出层标题（用户导入）
-  title: "",
-  // 是否禁用上传
-  isUploading: false,
-  // 是否更新已经存在的用户数据
-  updateSupport: 0,
-  // 设置上传的请求头部
-  headers: { Authorization: "Bearer " + getToken() },
-  // 上传的地址
-  url: import.meta.env.VITE_APP_BASE_API + "/system/user/importData"
-});
 
 const data = reactive({
   form: {},
@@ -303,12 +288,6 @@ const data = reactive({
 });
 
 const { queryParams, form, rules } = toRefs(data);
-
-/** 通过条件过滤节点  */
-const filterNode = (value, data) => {
-  if (!value) return true;
-  return data.label.indexOf(value) !== -1;
-};
 
 /** 查询用户列表 */
 function getList() {
@@ -343,8 +322,6 @@ function handleQuery() {
 /** 重置按钮操作 */
 function resetQuery() {
   proxy.resetForm("queryRef");
-  queryParams.value.deptId = undefined;
-  proxy.$refs.deptTreeRef.setCurrentKey(null);
   handleQuery();
 };
 /** 删除按钮操作 */
@@ -376,17 +353,6 @@ function handleResetPwd(row) {
        proxy.$modal.msgSuccess("密码重置成功");
     });
   });
-  // proxy.$prompt('请输入接收' + row.username + '新密码的手机号', "提示", {
-  //   confirmButtonText: "确定",
-  //   cancelButtonText: "取消",
-  //   closeOnClickModal: false,
-  //   inputPattern: /^.{5,20}$/,
-  //   inputErrorMessage: "用户密码长度必须介于 5 和 20 之间",
-  // }).then(({ value }) => {
-  //   resetUserPwd(row.userId, value).then(response => {
-  //     proxy.$modal.msgSuccess("修改成功，新密码是：" + value);
-  //   });
-  // }).catch(() => {});
 };
 /** 选择条数  */
 function handleSelectionChange(selection) {
@@ -398,7 +364,6 @@ function handleSelectionChange(selection) {
 function reset() {
   form.value = {
     userId: undefined,
-    deptId: undefined,
     username: undefined,
     nickname: undefined,
     password: undefined,

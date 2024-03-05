@@ -1,5 +1,5 @@
-import request from '@/utils/request'
-import { parseStrEmpty } from "@/utils/ruoyi";
+import request from '@/utils/request.js'
+import { parseStrEmpty } from "@/utils/ruoyi.js";
 
 // 查询员工列表
 export function listEmpUser(query) {
@@ -119,13 +119,5 @@ export function updateAuthRole(data) {
     url: '/system/user/authRole',
     method: 'put',
     params: data
-  })
-}
-
-// 查询部门下拉树结构
-export function deptTreeSelect() {
-  return request({
-    url: '/system/user/deptTree',
-    method: 'get'
   })
 }
