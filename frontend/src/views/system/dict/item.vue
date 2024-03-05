@@ -190,6 +190,7 @@ const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
 const defaultTypeCode = ref("");
+const defaultTypeId = ref("");
 const typeOptions = ref([]);
 const route = useRoute();
 // 数据标签回显样式
@@ -253,6 +254,7 @@ function cancel() {
 function reset() {
   form.value = {
     id: undefined,
+    typeId: undefined,
     typeCode: undefined,
     label: undefined,
     value: undefined,
@@ -283,6 +285,7 @@ function resetQuery() {
 function handleAdd() {
   reset();
   form.value.typeCode = queryParams.value.typeCode;
+  form.value.typeId = defaultTypeId.value;
   open.value = true;
   title.value = "添加字典数据";
 }
@@ -298,6 +301,7 @@ function handleUpdate(row) {
   const id = row.id || ids.value;
   getItem(id).then(response => {
     form.value = response;
+    form.value.typeId = defaultTypeId.value;
     open.value = true;
     title.value = "修改字典数据";
   });
@@ -335,13 +339,8 @@ function handleDelete(row) {
     useDictStore().removeDict(queryParams.value.typeCode);
   }).catch(() => {});
 }
-/** 导出按钮操作 */
-function handleExport() {
-  proxy.download("system/dict/data/export", {
-    ...queryParams.value
-  }, `dict_data_${new Date().getTime()}.xlsx`);
-}
 
+defaultTypeId.value = route.params.dictId;
 getTypes(route.params && route.params.dictId);
 getTypeList();
 </script>

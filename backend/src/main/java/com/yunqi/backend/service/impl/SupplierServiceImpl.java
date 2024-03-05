@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 
 /**
- * 客户服务类
+ * 供应商服务类
  * @author liyunqi
  */
 @Service
@@ -38,7 +38,7 @@ public class SupplierServiceImpl extends ServiceImpl<SupplierMapper, Supplier> i
     public void saveSupplier(SupplierDTO supplierDTO) {
         Supplier supplier = new Supplier();
         BeanUtils.copyProperties(supplierDTO, supplier);
-        // TODO 客户 新增校验
+        // TODO 供应商 新增校验
         supplierMapper.insert(supplier);
     }
 
@@ -46,7 +46,7 @@ public class SupplierServiceImpl extends ServiceImpl<SupplierMapper, Supplier> i
     public void updateSupplier(SupplierDTO supplierDTO) {
         Supplier supplier = new Supplier();
         BeanUtils.copyProperties(supplierDTO, supplier);
-        // TODO 客户 更新校验
+        // TODO 供应商 更新校验
         supplierMapper.updateById(supplier);
     }
 }

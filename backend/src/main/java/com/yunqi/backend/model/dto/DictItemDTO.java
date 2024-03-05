@@ -16,6 +16,11 @@ public class DictItemDTO {
     private Long id;
 
     /**
+     * 字典id
+     */
+    private Long typeId;
+
+    /**
      * 字典编码
      */
     @NotNull(message = "字典编码不能为空")

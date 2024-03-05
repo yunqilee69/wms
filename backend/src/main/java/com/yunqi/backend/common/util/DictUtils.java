@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jca.context.SpringContextResourceAdapter;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -42,7 +43,8 @@ public class DictUtils {
      */
     public static void refreshCache() {
         // 清除所有缓存
-        redisCache.deleteObject(CacheConstants.SYS_DICT_CODE+"*");
+        Collection<String> keys = redisCache.keys(CacheConstants.SYS_DICT_CODE + "*");
+        redisCache.deleteObject(keys);
 
         // 设置所有新的缓存
         List<DictType> dictTypeAll = dictTypeService.getDictTypeAll();

@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * 客户控制器
+ * 供应商控制器
  * @author liyunqi
  */
 @RestController
@@ -63,7 +63,7 @@ public class SupplierController {
     @DeleteMapping("/{supplierIds}")
     public Result delete(@PathVariable List<Long> supplierIds) {
         if (supplierIds == null || supplierIds.size() == 0) {
-            return Result.fail("客户id不能为空");
+            return Result.fail("货物id不能为空");
         }
         supplierService.removeBatchByIds(supplierIds);
         return Result.success();

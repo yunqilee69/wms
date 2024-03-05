@@ -5,9 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunqi.backend.common.util.PageUtils;
+import com.yunqi.backend.exception.BizException;
+import com.yunqi.backend.exception.message.DictError;
 import com.yunqi.backend.mapper.DictTypeMapper;
 import com.yunqi.backend.model.dto.DictTypeDTO;
+import com.yunqi.backend.model.entity.DictItem;
 import com.yunqi.backend.model.entity.DictType;
+import com.yunqi.backend.service.DictItemService;
 import com.yunqi.backend.service.DictTypeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -25,6 +29,9 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, DictType> i
 
     @Resource
     DictTypeMapper dictTypeMapper;
+
+    @Resource
+    DictItemService dictItemService;
 
     /**
      * 分页查询
@@ -64,7 +71,9 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, DictType> i
 
     @Override
     public void updateDictType(DictTypeDTO dictTypeDTO) {
-        // TODO 完成字典修改的校验
+        if (dictTypeDTO.getId() == null || dictTypeDTO.getCode() == null) {
+            throw new BizException(DictError.UPDATE_ERROR);
+        }
 
         LambdaUpdateWrapper<DictType> wrapper = new LambdaUpdateWrapper<>();
         wrapper.set(dictTypeDTO.getName() != null, DictType::getName, dictTypeDTO.getName());
@@ -73,12 +82,20 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, DictType> i
         wrapper.set(dictTypeDTO.getOrderNum() != 0, DictType::getOrderNum, dictTypeDTO.getOrderNum());
         wrapper.set(dictTypeDTO.getRemark() != null, DictType::getRemark, dictTypeDTO.getRemark());
         wrapper.eq(dictTypeDTO.getId() != null, DictType::getId, dictTypeDTO.getId());
-
         update(wrapper);
+
+        LambdaUpdateWrapper<DictItem> itemWrapper = new LambdaUpdateWrapper<>();
+        itemWrapper.set(dictTypeDTO.getCode() != null, DictItem::getTypeCode, dictTypeDTO.getCode());
+        itemWrapper.eq(DictItem::getTypeId, dictTypeDTO.getId());
+        dictItemService.update(itemWrapper);
     }
 
     @Override
     public void deleteDictType(List<Long> ids) {
         removeByIds(ids);
+
+        LambdaQueryWrapper<DictItem> itemWrapper = new LambdaQueryWrapper<>();
+        itemWrapper.in(DictItem::getTypeId, ids);
+        dictItemService.remove(itemWrapper);
     }
 }

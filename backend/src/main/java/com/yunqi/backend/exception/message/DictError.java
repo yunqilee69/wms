@@ -5,7 +5,8 @@ import com.yunqi.backend.common.base.BaseError;
 /**
  * @author liyunqi
  */public enum DictError implements BaseError {
-    PARAM_IS_EMPTY(30001, "请求参数为空，请确认后重试");
+    PARAM_IS_EMPTY(30001, "请求参数为空，请确认后重试"),
+    UPDATE_ERROR(30002, "更新失败，请联系管理员");
 
     int code;
 

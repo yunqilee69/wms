@@ -16,6 +16,11 @@ public class DictItem extends BaseEntity {
     private Long id;
 
     /**
+     * 字典id
+     */
+    private Long typeId;
+
+    /**
      * 字典编码
      */
     private String typeCode;
