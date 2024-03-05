@@ -9,6 +9,7 @@ import com.yunqi.backend.exception.BizException;
 import com.yunqi.backend.exception.message.RoleError;
 import com.yunqi.backend.mapper.RoleMapper;
 import com.yunqi.backend.model.dto.RoleDTO;
+import com.yunqi.backend.model.dto.RoleOptionDTO;
 import com.yunqi.backend.model.entity.Role;
 import com.yunqi.backend.model.entity.RoleMenu;
 import com.yunqi.backend.model.entity.User;
@@ -52,7 +53,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     public Set<String> getRoleName(User user) {
         String username = user.getUsername();
         HashSet<String> result = new HashSet<>();
-        if (username.equals("admin")) {
+        if ("admin".equals(username)) {
             result.add("管理员");
         } else {
             result.addAll(roleMapper.getRoleNameByUserId(user.getId()));
@@ -64,7 +65,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     public Set<String> getRoleKey(User user) {
         String username = user.getUsername();
         HashSet<String> result = new HashSet<>();
-        if (username.equals("admin")) {
+        if ("admin".equals(username)) {
             result.add("admin");
         } else {
             result.addAll(roleMapper.getRoleKeyByUserId(user.getId()));
@@ -142,7 +143,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         // 更新角色菜单
         LambdaQueryWrapper<RoleMenu> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(RoleMenu::getRoleId, roleId);
-        roleMenuService.remove(queryWrapper);
+        if (roleId != null) {
+            roleMenuService.remove(queryWrapper);
+        }
 
         List<RoleMenu> roleMenuList = new ArrayList<>();
         for (Long menuId : roleDTO.getMenuIds()) {
@@ -172,6 +175,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         roleMapper.update(wrapper);
     }
 
+    @Override
+    public List<RoleOptionDTO> getRoleOptions() {
+        return roleMapper.getRoleoptions();
+    }
+
     /**
      * 校验角色名是否唯一
      * @param roleName
@@ -188,9 +196,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             return true;
         } else if (roleList.size() == 1) {
             Role role = roleList.get(0);
-            if (role.getName().equals(roleName) && role.getId().equals(roleId)) {
-                return true;
-            }
+            return role.getName().equals(roleName) && role.getId().equals(roleId);
         }
         return false;
     }
@@ -210,9 +216,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             return true;
         } else if (roleList.size() == 1) {
             Role role = roleList.get(0);
-            if (role.getRoleKey().equals(roleKey) && role.getId().equals(roleId)) {
-                return true;
-            }
+            return role.getRoleKey().equals(roleKey) && role.getId().equals(roleId);
         }
         return false;
     }

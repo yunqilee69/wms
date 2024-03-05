@@ -1,6 +1,7 @@
 package com.yunqi.backend.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.yunqi.backend.model.dto.EmpDTO;
 import com.yunqi.backend.model.dto.UserDTO;
 import com.yunqi.backend.model.entity.User;
 import org.apache.ibatis.annotations.Mapper;
@@ -26,7 +27,13 @@ public interface UserMapper extends BaseMapper<User> {
      * @param userDTO
      * @return
      */
-    List<User> selectUnallocatedList(@Param("userDTO") UserDTO userDTO);
+    List<User> selectUnallocatedList(@Param("userDTO") UserDTO userDTO, @Param("roleId") Long roleId);
 
 
+    /**
+     * 获取员工的分页数据
+     * @param userDTO
+     * @return
+     */
+    List<EmpDTO> getEmpPage(@Param("empDTO") EmpDTO empDTO);
 }

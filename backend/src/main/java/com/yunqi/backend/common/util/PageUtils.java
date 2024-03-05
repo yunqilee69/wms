@@ -68,16 +68,17 @@ public class PageUtils {
      * 根据page信息设置分页查询结果
      * @return
      */
-    public static List handlePageList(List list, Page page) {
+    public static void handlePageList(List list, Page page) {
         int beginIndex = (int) ((page.getCurrent() - 1) * page.getSize());
         if (beginIndex > list.size()) {
-            return null;
+            beginIndex = list.size();
         }
         int endIndex = (int)page.getCurrent()*(int)page.getSize();
         if (endIndex > list.size()) {
             endIndex = list.size();
         }
-        return list.subList(beginIndex, endIndex);
+        page.setRecords(list.subList(beginIndex, endIndex));
+        page.setTotal(list.size());
     }
 
 }

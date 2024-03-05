@@ -1,10 +1,12 @@
 package com.yunqi.backend.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.yunqi.backend.model.dto.RoleOptionDTO;
 import com.yunqi.backend.model.entity.Role;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -31,5 +33,6 @@ public interface RoleMapper extends BaseMapper<Role> {
 
     Role selectByRoleKey(String roleKey);
 
-
+    // 获取角色下拉选项
+    List<RoleOptionDTO> getRoleoptions();
 }

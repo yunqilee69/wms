@@ -1,5 +1,6 @@
 package com.yunqi.backend.common.util;
 
+import java.security.SecureRandom;
 import java.util.Collection;
 
 import com.yunqi.backend.common.constant.SystemConstants;
@@ -60,6 +61,22 @@ public class SecurityUtils {
     public static boolean matchesPassword(String rawPassword, String encodedPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    /**
+     * 生成密码
+     * @return
+     */
+    public static String generatePassword() {
+        // 生成密码
+        StringBuilder password = new StringBuilder();
+        String allChart = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789";
+        SecureRandom random = new SecureRandom();
+        for (int i = 0; i < 8; i++) {
+            int index = random.nextInt(allChart.length());
+            password.append(allChart.charAt(index));
+        }
+        return password.toString();
     }
 
     /**

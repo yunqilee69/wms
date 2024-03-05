@@ -15,7 +15,8 @@ public enum UserError implements BaseError {
     USERNAME_NOT_EXISTS(10006, "账号不存在"),
     USERNAME_ALREADY_EXISTS(10007, "该账号已存在"),
     USER_ROLE_ID_NULL(10008, "用户或角色不存在"),
-    OLD_PASSWORD_ERROR(10009, "旧密码错误，请重试");
+    OLD_PASSWORD_ERROR(10009, "旧密码错误，请重试"),
+    RESET_PASSWORD_ERROR(10010, "重置密码失败，请重试");
 
     int code;
     String msg;

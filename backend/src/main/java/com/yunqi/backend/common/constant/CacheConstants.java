@@ -2,11 +2,10 @@ package com.yunqi.backend.common.constant;
 
 /**
  * 缓存的key 常量
- * 
+ *
  * @author ruoyi
  */
-public class CacheConstants
-{
+public class CacheConstants {
     /**
      * 登录用户 redis key
      */
@@ -18,9 +17,9 @@ public class CacheConstants
     public static final String CAPTCHA_CODE_KEY = "captcha_codes:";
 
     /**
-     * 参数管理 cache key
+     * 短信验证码 cache key
      */
-    public static final String SYS_CONFIG_KEY = "sys_config:";
+    public static final String SMS_CODE_KEY = "sms_codes:";
 
     /**
      * 字典管理 cache key

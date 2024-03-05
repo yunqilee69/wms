@@ -3,6 +3,7 @@ package com.yunqi.backend.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yunqi.backend.model.dto.RoleDTO;
+import com.yunqi.backend.model.dto.RoleOptionDTO;
 import com.yunqi.backend.model.entity.Role;
 import com.yunqi.backend.model.entity.User;
 
@@ -48,4 +49,9 @@ public interface RoleService extends IService<Role> {
     void changeStatus(RoleDTO roleDTO);
 
 
+    /**
+     * 获取角色下拉选项
+     * @return
+     */
+    List<RoleOptionDTO> getRoleOptions();
 }

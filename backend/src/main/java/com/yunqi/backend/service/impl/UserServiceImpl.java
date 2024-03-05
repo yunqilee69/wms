@@ -9,25 +9,25 @@ import com.yunqi.backend.common.util.CheckUtils;
 import com.yunqi.backend.common.util.PageUtils;
 import com.yunqi.backend.common.util.RedisCache;
 import com.yunqi.backend.common.util.SecurityUtils;
-import com.yunqi.backend.core.service.TokenService;
 import com.yunqi.backend.exception.BizException;
 import com.yunqi.backend.exception.message.UserError;
 import com.yunqi.backend.mapper.UserMapper;
-import com.yunqi.backend.model.dto.RegisterUserDTO;
+import com.yunqi.backend.model.dto.EmpDTO;
 import com.yunqi.backend.model.dto.UserDTO;
 import com.yunqi.backend.model.entity.User;
+import com.yunqi.backend.model.entity.UserRole;
 import com.yunqi.backend.model.request.RegisterRequest;
+import com.yunqi.backend.service.UserRoleService;
 import com.yunqi.backend.service.UserService;
-import io.netty.handler.codec.compression.Bzip2Decoder;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author liyunqi
@@ -43,7 +43,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     RedisCache redisCache;
 
     @Autowired
-    private TokenService tokenService;
+    UserRoleService userRoleService;
 
     /**
      * 根据username进行查找
@@ -98,8 +98,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     /**
      * 获取所有已分配角色的用户
-     * @param nickname
-     * @param phone
      * @return
      */
     @Override
@@ -109,20 +107,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (userList == null) {
             userList = new ArrayList<>();
         }
-        page.setRecords(PageUtils.handlePageList(userList, page));
-        page.setTotal(userList.size());
+        PageUtils.handlePageList(userList, page);
         return page;
     }
 
     @Override
-    public Page<User> selectUnallocatedList(UserDTO userDTO) {
+    public Page<User> selectUnallocatedList(UserDTO userDTO, Long roleId) {
         Page<User> page = PageUtils.getPage();
-        List<User> userList = userMapper.selectUnallocatedList(userDTO);
+        List<User> userList = userMapper.selectUnallocatedList(userDTO, roleId);
         if (userList == null) {
             userList = new ArrayList<>();
         }
-        page.setRecords(PageUtils.handlePageList(userList, page));
-        page.setTotal(userList.size());
+        PageUtils.handlePageList(userList, page);
         return page;
     }
 
@@ -164,6 +160,78 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         wrapper.set(userDTO.getPhone() != null,  User::getPhone, userDTO.getPhone());
         wrapper.set(userDTO.getGender() != null,  User::getGender, userDTO.getGender());
 
+        userMapper.update(wrapper);
+    }
+
+    @Override
+    public Page<EmpDTO> getEmpPage(EmpDTO empDTO) {
+        Page<EmpDTO> page = PageUtils.getPage();
+        List<EmpDTO> userList = userMapper.getEmpPage(empDTO);
+        PageUtils.handlePageList(userList, page);
+        return page;
+    }
+
+    @Override
+    public User selectUserById(Long userId) {
+        return userMapper.selectById(userId);
+    }
+
+
+    @Override
+    public void saveEmp(EmpDTO empDTO) {
+        // TODO 校验保存员工
+        User user = new User();
+        BeanUtils.copyProperties(empDTO, user);
+
+        save(user);
+
+        // 保存员工对应的角色
+        List<Long> roleIds = empDTO.getRoleIds();
+        List<UserRole> userRoleList = new ArrayList<>();
+        for (Long roleId : roleIds) {
+            UserRole userRole = new UserRole();
+            userRole.setRoleId(roleId);
+            userRole.setUserId(user.getId());
+            userRoleList.add(userRole);
+        }
+        userRoleService.saveBatch(userRoleList);
+    }
+
+    @Override
+    public void updateEmp(EmpDTO empDTO) {
+        // TODO 校验更新员工
+        User user = new User();
+        BeanUtils.copyProperties(empDTO, user);
+
+        user.setId(empDTO.getUserId());
+        updateById(user);
+
+        // 更新员工对应的角色
+        userRoleService.deleteUserRoleByUserId(user.getId());
+        List<Long> roleIds = empDTO.getRoleIds();
+        List<UserRole> userRoleList = new ArrayList<>();
+        for (Long roleId : roleIds) {
+            UserRole userRole = new UserRole();
+            userRole.setRoleId(roleId);
+            userRole.setUserId(user.getId());
+            userRoleList.add(userRole);
+        }
+        userRoleService.saveBatch(userRoleList);
+    }
+
+    @Override
+    public void deleteEmp(List<Long> userIds) {
+        removeByIds(userIds);
+    }
+
+    @Override
+    public void resetPwd(Long userId, String password) {
+        if (userId == null) {
+            throw new BizException(UserError.RESET_PASSWORD_ERROR);
+        }
+        LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(User::getId, userId);
+        wrapper.set(User::getPassword, SecurityUtils.encryptPassword(password));
         userMapper.update(wrapper);
     }
 

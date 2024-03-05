@@ -42,11 +42,12 @@ export const constantRoutes = [
     component: () => import('@/views/login'),
     hidden: true
   },
-  {
-    path: '/register',
-    component: () => import('@/views/register'),
-    hidden: true
-  },
+  //{
+    // 注册界面，注释掉即可关闭系统注册功能，只能由管理员进行维护
+    // path: '/register',
+    // component: () => import('@/views/register'),
+    // hidden: true
+  //},
   {
     path: "/:pathMatch(.*)*",
     component: () => import('@/views/error/404'),
@@ -88,20 +89,6 @@ export const constantRoutes = [
 
 // 动态路由，基于用户权限动态去加载
 export const dynamicRoutes = [
-  {
-    path: '/system/user-auth',
-    component: Layout,
-    hidden: true,
-    permissions: ['system:user:edit'],
-    children: [
-      {
-        path: 'role/:userId(\\d+)',
-        component: () => import('@/views/user/authRole'),
-        name: 'AuthRole',
-        meta: { title: '分配角色', activeMenu: '/system/user' }
-      }
-    ]
-  },
   {
     path: '/system/role-auth',
     component: Layout,

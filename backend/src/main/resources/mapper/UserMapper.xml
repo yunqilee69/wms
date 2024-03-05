@@ -3,11 +3,30 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yunqi.backend.mapper.UserMapper">
 
+    <resultMap id="EmpDTOResultMap" type="com.yunqi.backend.model.dto.EmpDTO">
+        <result column="userId" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="nickname" property="nickname"/>
+        <result column="phone" property="phone"/>
+        <result column="status" property="status"/>
+        <result column="gender" property="gender"/>
+        <result column="email" property="email"/>
+        <result column="avatar" property="avatar"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="updater" property="updater"/>
+        <collection property="roleIds" ofType="long">
+            <result column="role_id" />
+        </collection>
+
+    </resultMap>
+
+
     <select id="selectAllocatedList" resultType="User">
         select tu.* from tb_user tu
         where tu.id in (
-            select user_id from tb_user_role
-            where role_id = #{roleId}
+        select user_id from tb_user_role
+        where role_id = #{roleId}
         )
         <if test="userDTO.username != null">
             and tu.username like concat('%', #{userDTO.username}, '%')
@@ -24,8 +43,9 @@
     <select id="selectUnallocatedList" resultType="User">
         select tu.* from tb_user tu
         where tu.id not in (
-            select user_id from tb_user_role
-            group by user_id
+        select user_id from tb_user_role
+        where role_id = #{roleId}
+        group by user_id
         )
         <if test="userDTO.username != null">
             and tu.username like concat('%', #{userDTO.username}, '%')
@@ -36,5 +56,35 @@
         <if test="userDTO.phone != null">
             and tu.phone like concat('%', #{userDTO.phone}, '%')
         </if>
+    </select>
+    <select id="getEmpPage" resultMap="EmpDTOResultMap">
+        select
+        tu.id userId,
+        tu.username,
+        tu.nickname,
+        tu.phone,
+        tu.status,
+        tu.gender,
+        tu.email,
+        tu.avatar,
+        tu.create_time,
+        tu.creator,
+        tu.update_time,
+        tu.updater,
+        tur.role_id
+        from tb_user tu
+        left join tb_user_role tur on tu.id = tur.user_id
+        <where>
+            <if test="empDTO.username != null">and tu.username like concat('%',  #{empDTO.username}, '%')</if>
+            <if test="empDTO.nickname != null">and tu.nickname like concat('%',  #{empDTO.nickname}, '%')</if>
+            <if test="empDTO.phone != null">and tu.phone like concat('%',  #{empDTO.phone}, '%')</if>
+            <if test="empDTO.status != null">and tu.status = #{empDTO.status}</if>
+            <if test="empDTO.roleIds != null">
+                and tur.role_id in
+                <foreach collection="empDTO.roleIds" item="roleId" open="(" separator="," close=")">
+                    #{roleId}
+                </foreach>
+            </if>
+        </where>
     </select>
 </mapper>

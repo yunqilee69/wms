@@ -34,8 +34,23 @@ token:
 
 captcha:
   # 类型: Line(线段),Circle(圆圈),Shear(扭曲)
-  type: Shear
-  # 有效时间(默认5分钟)
+  type: Line
+  # 有效时间(分钟)
   expireTime: 10
-  # 验证码字符数量(默认为4)
+  # 验证码字符数量
   codeCount: 4
+
+aliyun:
+  sms:
+    
+    templateList:
+      # 用于区分多个模板，与代码耦合
+      - name: CAPTCHA_CODE
+        # sms的模板代码
+        templateCode: SMS_465321127
+        # sms的模板签名
+        signName: WMS
+      - name: RESET_PWT
+        templateCode: SMS_465391054
+        # 模板名称
+        signName: WMS

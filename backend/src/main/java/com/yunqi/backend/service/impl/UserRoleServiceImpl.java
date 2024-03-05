@@ -6,15 +6,19 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunqi.backend.exception.BizException;
 import com.yunqi.backend.exception.message.UserError;
 import com.yunqi.backend.mapper.UserRoleMapper;
+import com.yunqi.backend.model.dto.EmpDTO;
 import com.yunqi.backend.model.dto.UserRoleDTO;
+import com.yunqi.backend.model.entity.User;
 import com.yunqi.backend.model.entity.UserRole;
 import com.yunqi.backend.service.UserRoleService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author liyunqi
@@ -68,4 +72,23 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
 
         saveBatch(userRoleList);
     }
+
+    @Override
+    public List<Long> getRoleIdsByUserId(Long userId) {
+        LambdaQueryWrapper<UserRole> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserRole::getUserId, userId);
+        List<UserRole> userRoles = userRoleMapper.selectList(wrapper);
+        return userRoles.stream().map(UserRole::getRoleId).collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteUserRoleByUserId(Long userId) {
+        if (userId == null) {
+            return;
+        }
+        LambdaQueryWrapper<UserRole> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(userId != null ,UserRole::getUserId, userId);
+        remove(wrapper);
+    }
+
 }

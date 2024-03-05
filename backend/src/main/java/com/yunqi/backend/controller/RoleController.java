@@ -5,6 +5,7 @@ import com.yunqi.backend.common.result.PageResult;
 import com.yunqi.backend.common.result.Result;
 import com.yunqi.backend.common.util.PageUtils;
 import com.yunqi.backend.model.dto.RoleDTO;
+import com.yunqi.backend.model.dto.RoleOptionDTO;
 import com.yunqi.backend.model.dto.UserDTO;
 import com.yunqi.backend.model.dto.UserRoleDTO;
 import com.yunqi.backend.model.entity.Role;
@@ -12,6 +13,7 @@ import com.yunqi.backend.model.entity.User;
 import com.yunqi.backend.service.RoleService;
 import com.yunqi.backend.service.UserRoleService;
 import com.yunqi.backend.service.UserService;
+import org.apache.ibatis.annotations.Results;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +38,12 @@ public class RoleController {
 
     @Resource
     UserRoleService userRoleService;
+
+    @GetMapping("/options")
+    public Result getRoleOptions() {
+        List<RoleOptionDTO> roleOptionDTOList = roleService.getRoleOptions();
+        return Result.success(roleOptionDTOList);
+    }
 
     @GetMapping("/list")
     public Result<PageResult> getRolePage(RoleDTO roleDTO) {
@@ -87,6 +95,9 @@ public class RoleController {
      */
     @GetMapping("/authUser/allocatedList")
     public Result allocatedList(UserDTO userDTO, Long roleId) {
+        if (roleId == null) {
+            return null;
+        }
         Page<User> page = userService.selectAllocatedList(userDTO, roleId);
         return Result.success(PageUtils.convertPageResult(page));
     }
@@ -95,8 +106,11 @@ public class RoleController {
      * 查询未分配用户角色列表
      */
     @GetMapping("/authUser/unallocatedList")
-    public Result unallocatedList(UserDTO userDTO) {
-        Page<User> page = userService.selectUnallocatedList(userDTO);
+    public Result unallocatedList(UserDTO userDTO, Long roleId) {
+        if (roleId == null) {
+            return null;
+        }
+        Page<User> page = userService.selectUnallocatedList(userDTO, roleId);
         return Result.success(PageUtils.convertPageResult(page));
     }
 

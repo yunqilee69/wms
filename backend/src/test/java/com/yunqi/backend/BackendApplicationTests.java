@@ -3,6 +3,7 @@ package com.yunqi.backend;
 import com.yunqi.backend.common.constant.CacheConstants;
 import com.yunqi.backend.common.util.RedisCache;
 import com.yunqi.backend.common.util.SecurityUtils;
+import com.yunqi.backend.config.properties.AliyunSmsProperties;
 import com.yunqi.backend.core.service.LoginService;
 import com.yunqi.backend.mapper.MenuMapper;
 import com.yunqi.backend.mapper.RoleMapper;
@@ -11,6 +12,7 @@ import com.yunqi.backend.model.entity.Menu;
 import com.yunqi.backend.model.request.RegisterRequest;
 import com.yunqi.backend.service.DictTypeService;
 import com.yunqi.backend.service.DictItemService;
+import com.yunqi.backend.service.UserRoleService;
 import com.yunqi.backend.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,12 @@ class BackendApplicationTests {
 
     @Autowired
     private MenuMapper menuMapper;
+
+    @Resource
+    UserRoleService userRoleService;
+
+    @Resource
+    AliyunSmsProperties aliyunSmsProperties;
 
     @Resource
     RoleMapper roleMapper;
@@ -107,6 +115,17 @@ class BackendApplicationTests {
         HashMap<String, Object> params = new HashMap<>();
         params.put("menuIds", menuList);
         params.put("roleId", roleId);
-        roleMapper.insertMenuIdsWithRoleId(params);
+    }
+
+    @Test
+    void userRoleServiceTest() {
+        userRoleService.deleteUserRoleByUserId(null);
+    }
+
+    @Test
+    void AliyunSmsUtilsTest() {
+        List<AliyunSmsProperties.SmsTemplate> templateList = aliyunSmsProperties.getTemplateList();
+        System.out.println(templateList);
+
     }
 }

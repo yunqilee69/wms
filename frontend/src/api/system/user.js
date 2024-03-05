@@ -11,49 +11,44 @@ export function listEmpUser(query) {
 }
 
 // 查询用户详细
-export function getUser(userId) {
+export function getEmpUser(userId) {
   return request({
-    url: '/system/user/' + parseStrEmpty(userId),
+    url: '/system/user/emp/' + parseStrEmpty(userId),
     method: 'get'
   })
 }
 
 // 新增用户
-export function addUser(data) {
+export function addEmpUser(data) {
   return request({
-    url: '/system/user',
+    url: '/system/user/emp',
     method: 'post',
     data: data
   })
 }
 
 // 修改用户
-export function updateUser(data) {
+export function updateEmpUser(data) {
   return request({
-    url: '/system/user',
+    url: '/system/user/emp',
     method: 'put',
     data: data
   })
 }
 
 // 删除用户
-export function delUser(userId) {
+export function delEmpUser(userId) {
   return request({
-    url: '/system/user/' + userId,
+    url: '/system/user/emp/' + userId,
     method: 'delete'
   })
 }
 
 // 用户密码重置
-export function resetUserPwd(userId, password) {
-  const data = {
-    userId,
-    password
-  }
+export function resetUserPwd(userId) {
   return request({
-    url: '/system/user/resetPwd',
-    method: 'put',
-    data: data
+    url: '/system/user/resetPwd/' + userId,
+    method: 'put'
   })
 }
 

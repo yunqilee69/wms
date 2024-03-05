@@ -6,14 +6,16 @@ import lombok.Data;
 import java.util.List;
 
 /**
+ * 员工DTO
  * @author liyunqi
  */
 @Data
-public class UserDTO extends BaseDTO {
+public class EmpDTO extends BaseDTO {
+
     /**
-     * 主键
+     * 用户id
      */
-    private Long id;
+    private Long userId;
 
     /*
      * 账号
@@ -21,24 +23,9 @@ public class UserDTO extends BaseDTO {
     private String username;
 
     /**
-     * 密码
+     * 重置密码
      */
     private String password;
-
-    /**
-     * 旧密码
-     */
-    private String oldPassword;
-
-    /**
-     * 新密码
-     */
-    private String newPassword;
-
-    /**
-     * 二次密码
-     */
-    private String confirmPassword;
 
     /**
      * 昵称
