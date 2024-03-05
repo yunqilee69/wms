@@ -4,10 +4,10 @@
       <!--客户数据-->
       <el-col :span="24" :xs="24">
         <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-          <el-form-item label="昵称" prop="username">
+          <el-form-item label="客户昵称" prop="nickname">
             <el-input
                 v-model="queryParams.nickname"
-                placeholder="请输入昵称"
+                placeholder="请输入客户昵称"
                 clearable
                 style="width: 240px"
                 @keyup.enter="handleQuery"
@@ -68,7 +68,7 @@
               <el-avatar :size="60" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>
             </template>
           </el-table-column>
-          <el-table-column label="昵称" align="center" key="nickname" prop="nickname" :show-overflow-tooltip="true" />
+          <el-table-column label="客户昵称" align="center" key="nickname" prop="nickname" :show-overflow-tooltip="true" />
           <el-table-column label="手机号" align="center" key="phone" prop="phone" :show-overflow-tooltip="true" />
           <el-table-column label="性别" align="center" key="gender" prop="gender" :show-overflow-tooltip="true">
             <template #default="scope">
