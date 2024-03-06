@@ -14,22 +14,33 @@
             />
           </el-form-item>
           <el-form-item label="品牌" prop="brand">
-            <el-input
+            <el-select
                 v-model="queryParams.brand"
-                placeholder="请输入品牌"
-                clearable
-                style="width: 240px"
+                filterable
+                placeholder="请选择品牌"
                 @keyup.enter="handleQuery"
-            />
+            >
+              <el-option
+                  v-for="item in sys_inventory_brand"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+              />
+            </el-select>
           </el-form-item>
-          <el-form-item label="分类" prop="category">
-            <el-input
+          <el-form-item label="类别" prop="category">
+            <el-select
                 v-model="queryParams.category"
-                placeholder="请输入分类"
-                clearable
-                style="width: 240px"
-                @keyup.enter="handleQuery"
-            />
+                filterable
+                placeholder="请选择类别"
+            >
+              <el-option
+                  v-for="item in sys_inventory_category"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+              />
+            </el-select>
           </el-form-item>
           <el-form-item label="条形码" prop="barCode">
             <el-input

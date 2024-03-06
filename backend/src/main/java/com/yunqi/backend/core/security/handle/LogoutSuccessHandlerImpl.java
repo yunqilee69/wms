@@ -1,5 +1,6 @@
 package com.yunqi.backend.core.security.handle;
 
+import com.google.gson.Gson;
 import com.yunqi.backend.common.result.Result;
 import com.yunqi.backend.core.service.TokenService;
 import com.yunqi.backend.model.dto.LoginUserDTO;
@@ -42,6 +43,6 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
         response.setStatus(200);
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
-        response.getWriter().print(Result.success("账号退出成功"));
+        response.getWriter().print(new Gson().toJson(Result.success("账号退出成功")));
     }
 }

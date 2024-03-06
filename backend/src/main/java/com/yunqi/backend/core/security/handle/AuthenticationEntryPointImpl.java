@@ -1,5 +1,6 @@
 package com.yunqi.backend.core.security.handle;
 
+import com.google.gson.Gson;
 import com.yunqi.backend.common.result.Result;
 import com.yunqi.backend.exception.message.SystemError;
 import org.springframework.security.core.AuthenticationException;
@@ -30,7 +31,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint, S
         response.setStatus(200);
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
-        response.getWriter().print(Result.fail(code, msg));
+        response.getWriter().print(new Gson().toJson(Result.fail(code, msg)));
 
     }
 }

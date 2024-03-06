@@ -28,8 +28,8 @@ public class WareServiceImpl extends ServiceImpl<WareMapper, Ware> implements Wa
         Page<Ware> page = PageUtils.getPage();
         LambdaQueryWrapper<Ware> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(wareDTO.getName() != null, Ware::getName, wareDTO.getName());
-        wrapper.like(wareDTO.getBrand() != null, Ware::getBrand, wareDTO.getBrand());
-        wrapper.like(wareDTO.getCategory() != null, Ware::getCategory, wareDTO.getCategory());
+        wrapper.eq(wareDTO.getBrand() != null, Ware::getBrand, wareDTO.getBrand());
+        wrapper.eq(wareDTO.getCategory() != null, Ware::getCategory, wareDTO.getCategory());
         wrapper.like(wareDTO.getBarCode() != null, Ware::getBarCode, wareDTO.getBarCode());
         return wareMapper.selectPage(page, wrapper);
     }
