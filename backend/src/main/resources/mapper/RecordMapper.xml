@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunqi.backend.mapper.RecordMapper">
+
+    <resultMap id="RecordDTOResultMap" type="com.yunqi.backend.model.dto.RecordDTO">
+        <result column="id" property="id"/>
+        <result column="location_id" property="locationId"/>
+        <result column="ware_id" property="wareId"/>
+        <result column="location_name" property="locationName"/>
+        <result column="number" property="number"/>
+        <result column="production_date" property="productionDate"/>
+        <result column="quality_month" property="qualityMonth"/>
+        <result column="guarantee_date" property="guaranteeDate"/>
+        <result column="alarm_threshold" property="alarmThreshold"/>
+        <result column="total_amount" property="totalAmount"/>
+        <result column="wareName" property="wareName"/>
+        <result column="wareBrand" property="wareBrand"/>
+        <result column="wareSpec" property="wareSpec"/>
+        <result column="wareUnit" property="wareUnit"/>
+        <result column="creator" property="creator"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="updater" property="updater"/>
+    </resultMap>
+
+    <select id="getRecordPage" resultMap="RecordDTOResultMap">
+        select tir.*, tiw.name wareName,
+                tiw.brand wareBrand, tiw.spec wareSpec, tiw.unit wareUnit
+        from tb_inventory_record tir
+        left join tb_inventory_ware tiw on tiw.id = tir.ware_id
+        <where>
+            <if test="recordDTO.locationName != null">and tir.location_name like concat('%', #{recordDTO.locationName},'%')</if>
+            <if test="recordDTO.wareName != null">and tiw.name like concat('%', #{recordDTO.wareName},'%')</if>
+            <if test="recordDTO.wareBrand != null">and tiw.brand like concat('%', #{recordDTO.wareBrand},'%')</if>
+        </where>
+    </select>
+</mapper>

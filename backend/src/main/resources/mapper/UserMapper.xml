@@ -12,6 +12,7 @@
         <result column="gender" property="gender"/>
         <result column="email" property="email"/>
         <result column="avatar" property="avatar"/>
+        <result column="creator" property="creator"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result column="updater" property="updater"/>
