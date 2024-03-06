@@ -302,7 +302,6 @@ const data = reactive({
   },
   rules: {
     name: [{ required: true, message: "货物名称不能为空", trigger: "blur" }],
-    password: [{ required: true, message: "货物密码不能为空", trigger: "blur" }, { min: 5, max: 20, message: "货物密码长度必须介于 5 和 20 之间", trigger: "blur" }],
     purchasePrice: [{ required: true, message: "进价不能为空", trigger: "blur" },
       { pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/, message: "请输入正确额格式,可保留两位小数", trigger: "blur" }],
     salePrice: [{ required: true, message: "售价不能为空", trigger: "blur" },

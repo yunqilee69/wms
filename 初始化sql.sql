@@ -180,12 +180,11 @@ create table tb_inventory_ware_money (
     update_time DATETIME COMMENT "更新时间"
 );
 
-### 货物位表
+### 货位表
 DROP TABLE IF exists tb_inventory_location;
 create table tb_inventory_location (
 	id BIGINT primary key COMMENT "主键",
 
-    code VARCHAR(64) COMMENT "货位编码",
     name VARCHAR(64) COMMENT "名称",
     status VARCHAR(64) COMMENT "状态",
     capacity VARCHAR(64) COMMENT "容量",
