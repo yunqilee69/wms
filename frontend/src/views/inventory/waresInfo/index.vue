@@ -109,6 +109,7 @@
             </template>
           </el-table-column>
           <el-table-column label="条形码" align="center" key="barCode" prop="barCode" :show-overflow-tooltip="true" />
+          <el-table-column label="保质期" align="center" key="qualityMonth" prop="qualityMonth" :show-overflow-tooltip="true" />
           <el-table-column label="规格" align="center" key="spec" prop="spec" :show-overflow-tooltip="true">
             <template #default="scope">
               <dict-tag :options="sys_inventory_spec" :value="scope.row.spec" />
@@ -246,6 +247,13 @@
           </el-col>
         </el-row>
         <el-row>
+          <el-col :span="12">
+            <el-form-item label="保质期(月)" prop="qualityMonth">
+              <el-input v-model="form.qualityMonth" placeholder="请输入保质期"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="24">
             <el-form-item label="描述">
               <el-input v-model="form.description" type="textarea" placeholder="请输入内容"></el-input>
@@ -306,6 +314,7 @@ const data = reactive({
       { pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/, message: "请输入正确额格式,可保留两位小数", trigger: "blur" }],
     salePrice: [{ required: true, message: "售价不能为空", trigger: "blur" },
       { pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/, message: "请输入正确额格式,可保留两位小数", trigger: "blur" }],
+    qualityMonth: [{ required: true, message: "进价不能为空", trigger: "blur" }, { type: 'number', message: "保质期必须为数字" }],
   }
 });
 
@@ -363,6 +372,7 @@ function reset() {
     purchasePrice: undefined,
     salePrice: undefined,
     description: undefined,
+    quantityMonth: undefined
   };
   proxy.resetForm("wareRef");
 };

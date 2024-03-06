@@ -161,7 +161,8 @@ create table tb_inventory_ware (
     sale_price DECIMAL(10, 2) COMMENT "售价",
     category VARCHAR(64) COMMENT "分类",
    	picture VARCHAR(255) COMMENT "图片",
-    
+    quality_month int COMMENT "保质期（月）",
+
     creator VARCHAR(64) COMMENT "创建人",
     create_time DATETIME COMMENT "创建时间",
     updater VARCHAR(64) COMMENT "更新人",

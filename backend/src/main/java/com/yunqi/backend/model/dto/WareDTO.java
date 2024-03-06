@@ -67,4 +67,8 @@ public class WareDTO extends BaseDTO {
      */
     private String picture;
 
+    /**
+     * 保质期（月）
+     */
+    private int qualityMonth;
 }

@@ -68,4 +68,9 @@ public class Ware extends BaseEntity {
      * 图片
      */
     private String picture;
+
+    /**
+     * 保质期（月）
+     */
+    private int qualityMonth;
 }
