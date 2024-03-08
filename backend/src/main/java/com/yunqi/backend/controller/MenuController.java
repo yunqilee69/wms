@@ -32,6 +32,7 @@ public class MenuController {
      * @param menuDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('system:menu:list')")
     @GetMapping("/list")
     public Result listMenu(MenuDTO menuDTO) {
         Long userId = SecurityUtils.getLoginUser().getUserId();
@@ -45,6 +46,7 @@ public class MenuController {
      * @param menuDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('system:menu:add')")
     @PostMapping
     public Result saveMenu(@Validated @RequestBody MenuDTO menuDTO) {
         menuService.saveMenu(menuDTO);
@@ -57,6 +59,7 @@ public class MenuController {
      * @param menuDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('system:menu:edit')")
     @PutMapping
     public Result updateMenu(@Validated @RequestBody MenuDTO menuDTO) {
         menuService.updateMenu(menuDTO);
@@ -66,6 +69,7 @@ public class MenuController {
     /**
      * 删除菜单
      */
+    @PreAuthorize("@sps.hasPermi('system:menu:delete')")
     @DeleteMapping("/{menuId}")
     public Result remove(@PathVariable Long menuId) {
         menuService.deleteMenu(menuId);
@@ -78,6 +82,7 @@ public class MenuController {
      * @param menuId
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('system:menu:query')")
     @GetMapping("/{menuId}")
     public Result getMenu(@PathVariable Long menuId) {
         Menu menu = menuService.getById(menuId);

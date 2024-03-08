@@ -12,6 +12,7 @@ import com.yunqi.backend.model.entity.DictType;
 import com.yunqi.backend.service.DictItemService;
 import com.yunqi.backend.service.DictTypeService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,8 @@ public class DictTypeController {
      * @param dictType
      * @return
      */
+
+    @PreAuthorize("@sps.hasPermi('system:dict:list')")
     @GetMapping("/list")
     public Result<PageResult> getDictTypePage(DictTypeDTO dictTypeDTO) {
         Page<DictType> dictTypePage = dictTypeService.getDictTypePage(dictTypeDTO);
@@ -45,6 +48,8 @@ public class DictTypeController {
      * @param dictTypeId
      * @return
      */
+
+    @PreAuthorize("@sps.hasPermi('system:dict:query')")
     @GetMapping("/{dictTypeId}")
     public Result<DictType> getByDictTypeId(@PathVariable Long dictTypeId) {
         DictType dictType = dictTypeService.getById(dictTypeId);
@@ -56,18 +61,29 @@ public class DictTypeController {
      * @param dictTypeDTO
      * @return
      */
+
+    @PreAuthorize("@sps.hasPermi('system:dict:add')")
     @PostMapping
     public Result save(@Validated @RequestBody DictTypeDTO dictTypeDTO) {
         dictTypeService.saveDictType(dictTypeDTO);
         return Result.success();
     }
 
+    /**
+     * 更新
+     * @param dictTypeDTO
+     * @return
+     */
+
+    @PreAuthorize("@sps.hasPermi('system:dict:edit')")
     @PutMapping
     public Result update(@Validated @RequestBody DictTypeDTO dictTypeDTO) {
         dictTypeService.updateDictType(dictTypeDTO);
         return Result.success();
     }
 
+
+    @PreAuthorize("@sps.hasPermi('system:dict:delete')")
     @DeleteMapping("/{dictTypeIds}")
     public Result delete(@PathVariable List<Long> dictTypeIds) {
         dictTypeService.deleteDictType(dictTypeIds);
@@ -77,6 +93,8 @@ public class DictTypeController {
     /**
      * 刷新字典的redis缓存
      */
+
+    @PreAuthorize("@sps.hasPermi('system:dict:refresh')")
     @DeleteMapping("/refreshCache")
     public Result refreshCache() {
         DictUtils.refreshCache();

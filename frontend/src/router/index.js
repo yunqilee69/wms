@@ -117,6 +117,20 @@ export const dynamicRoutes = [
       }
     ]
   },
+  {
+    path: '/inventory/check-detail',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:dict:list'],
+    children: [
+      {
+        path: ':checkId(\\d+)',
+        component: () => import('@/views/inventory/check/detail'),
+        name: 'CheckDetail',
+        meta: { title: '盘点过程', activeMenu: '/inventory/check' }
+      }
+    ]
+  },
 ]
 
 const router = createRouter({

@@ -40,7 +40,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public Set<String> selectMenuPermsByUserId(Long userId) {
-        return null;
+        Set<String> perms = menuMapper.selectMenuPermsByUserId(userId);
+        return perms.stream().filter(perm -> perm != null && !"".equals(perm)).collect(Collectors.toSet());
     }
 
     @Override

@@ -53,7 +53,7 @@
                 icon="edit"
                 :disabled="multiple"
                 @click="handleAlarmThreshold"
-                v-hasPermi="['system:user:remove']"
+                v-hasPermi="['inventory:record:setAlarm']"
             >批量设置阈值</el-button>
           </el-col>
           <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
@@ -107,7 +107,7 @@
           </el-table-column>
           <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
             <template #default="scope">
-              <el-button link type="primary" icon="Edit" @click="handleAlarmThreshold(scope.row)" v-hasPermi="['system:user:edit']">设置阈值</el-button>
+              <el-button link type="primary" icon="Edit" @click="handleAlarmThreshold(scope.row)" v-hasPermi="['inventory:record:setAlarm']">设置阈值</el-button>
             </template>
           </el-table-column>
         </el-table>

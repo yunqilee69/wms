@@ -76,7 +76,7 @@
                      plain
                      icon="Plus"
                      @click="handleAdd"
-                     v-hasPermi="['system:user:add']"
+                     v-hasPermi="['user:emp:add']"
                   >新增</el-button>
                </el-col>
                <el-col :span="1.5">
@@ -86,7 +86,7 @@
                      icon="Edit"
                      :disabled="single"
                      @click="handleUpdate"
-                     v-hasPermi="['system:user:edit']"
+                     v-hasPermi="['user:emp:edit']"
                   >修改</el-button>
                </el-col>
                <el-col :span="1.5">
@@ -96,7 +96,7 @@
                      icon="Delete"
                      :disabled="multiple"
                      @click="handleDelete"
-                     v-hasPermi="['system:user:remove']"
+                     v-hasPermi="['user:emp:delete']"
                   >删除</el-button>
                </el-col>
                <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
@@ -135,13 +135,13 @@
                <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
                   <template #default="scope">
                      <el-tooltip content="修改" placement="top" v-if="scope.row.userId != 1">
-                        <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:user:edit']"></el-button>
+                        <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['user:emp:edit']"></el-button>
                      </el-tooltip>
                      <el-tooltip content="删除" placement="top" v-if="scope.row.userId != 1">
-                        <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:user:remove']"></el-button>
+                        <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['user:emp:delete']"></el-button>
                      </el-tooltip>
                      <el-tooltip content="重置密码" placement="top" v-if="scope.row.userId != 1">
-                         <el-button link type="primary" icon="Key" @click="handleResetPwd(scope.row)" v-hasPermi="['system:user:resetPwd']"></el-button>
+                         <el-button link type="primary" icon="Key" @click="handleResetPwd(scope.row)" v-hasPermi="['user:emp:resetPwd']"></el-button>
                      </el-tooltip>
                   </template>
                </el-table-column>
@@ -249,7 +249,7 @@
 
 <script setup name="User">
 import { getToken } from "@/utils/auth";
-import { changeUserStatus, listEmpUser, resetUserPwd, delEmpUser, getEmpUser, updateEmpUser, addEmpUser } from "@/api/system/user";
+import { changeEmpStatus, listEmpUser, resetUserPwd, delEmpUser, getEmpUser, updateEmpUser, addEmpUser } from "@/api/user/emp";
 import { getRoleOptions } from "@/api/system/role";
 
 const router = useRouter();
@@ -338,7 +338,7 @@ function handleDelete(row) {
 function handleStatusChange(row) {
   let text = row.status === "0" ? "启用" : "停用";
   proxy.$modal.confirm('确认要' + text  + row.username + '账号吗?').then(function () {
-    return changeUserStatus(row.userId, row.status);
+    return changeEmpStatus(row.userId, row.status);
   }).then(() => {
     proxy.$modal.msgSuccess(text + "成功");
   }).catch(function () {

@@ -39,18 +39,24 @@ public class RoleController {
     @Resource
     UserRoleService userRoleService;
 
+    /**
+     * 获取角色下拉框数据
+     * @return
+     */
     @GetMapping("/options")
     public Result getRoleOptions() {
         List<RoleOptionDTO> roleOptionDTOList = roleService.getRoleOptions();
         return Result.success(roleOptionDTOList);
     }
 
+    @PreAuthorize("@sps.hasPermi('system:role:list')")
     @GetMapping("/list")
     public Result<PageResult> getRolePage(RoleDTO roleDTO) {
         Page<Role> page = roleService.getRolePage(roleDTO);
         return Result.success(PageUtils.convertPageResult(page));
     }
 
+    @PreAuthorize("@sps.hasPermi('system:role:get')")
     @GetMapping("/{roleId}")
     public Result<Role> getRoleById(@PathVariable Long roleId) {
         return Result.success(roleService.getById(roleId));
@@ -61,12 +67,14 @@ public class RoleController {
      * @param roleDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('system:role:add')")
     @PostMapping
     public Result saveRole(@Validated @RequestBody RoleDTO roleDTO) {
         roleService.saveRole(roleDTO);
         return Result.success();
     }
 
+    @PreAuthorize("@sps.hasPermi('system:role:edit')")
     @PutMapping
     public Result updateRole(@Validated @RequestBody RoleDTO roleDTO) {
         roleService.updateRole(roleDTO);
@@ -78,14 +86,17 @@ public class RoleController {
      * @param roleDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('system:role:edit')")
     @PutMapping("/changeStatus")
     public Result changeStatus(@RequestBody RoleDTO roleDTO) {
         roleService.changeStatus(roleDTO);
         return Result.success();
     }
 
+    @PreAuthorize("@sps.hasPermi('system:role:delete')")
     @DeleteMapping("/{roleIds}")
     public Result deleteRoleByIds(@PathVariable List<Long> roleIds) {
+        // TODO 删除角色前进行校验，确保该角色已经无用户使用
         roleService.deleteRoleByIds(roleIds);
         return Result.success();
     }
@@ -93,6 +104,7 @@ public class RoleController {
     /**
      * 查询已分配用户角色列表
      */
+    @PreAuthorize("@sps.hasPermi('system:role:list')")
     @GetMapping("/authUser/allocatedList")
     public Result allocatedList(UserDTO userDTO, Long roleId) {
         if (roleId == null) {
@@ -105,6 +117,7 @@ public class RoleController {
     /**
      * 查询未分配用户角色列表
      */
+    @PreAuthorize("@sps.hasPermi('system:role:list')")
     @GetMapping("/authUser/unallocatedList")
     public Result unallocatedList(UserDTO userDTO, Long roleId) {
         if (roleId == null) {
@@ -117,6 +130,7 @@ public class RoleController {
     /**
      * 取消授权用户
      */
+    @PreAuthorize("@sps.hasPermi('system:role:edit')")
     @PutMapping("/authUser/cancel")
     public Result cancelAuthUser(@RequestBody UserRoleDTO userRoleDTO) {
         userRoleService.deleteAuthUser(userRoleDTO);
@@ -126,6 +140,7 @@ public class RoleController {
     /**
      * 批量取消授权用户
      */
+    @PreAuthorize("@sps.hasPermi('system:role:edit')")
     @PutMapping("/authUser/cancelAll")
     public Result cancelAuthUserAll(Long roleId, Long[] userIds) {
         userRoleService.deleteAuthUsers(roleId, Arrays.asList(userIds));
@@ -135,6 +150,7 @@ public class RoleController {
     /**
      * 批量选择用户授权
      */
+    @PreAuthorize("@sps.hasPermi('system:role:edit')")
     @PutMapping("/authUser/selectAll")
     public Result selectAuthUserAll(Long roleId, Long[] userIds) {
         userRoleService.insertUserRole(roleId, Arrays.asList(userIds));

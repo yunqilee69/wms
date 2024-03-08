@@ -6,6 +6,7 @@ import com.yunqi.backend.common.util.PageUtils;
 import com.yunqi.backend.model.dto.WareDTO;
 import com.yunqi.backend.model.entity.Ware;
 import com.yunqi.backend.service.WareService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -27,6 +28,7 @@ public class WareController {
      * @param wareDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('inventory:waresInfo:list')")
     @GetMapping("/list")
     public Result getList(WareDTO wareDTO) {
         Page<Ware> page = wareService.getWarePage(wareDTO);
@@ -38,6 +40,7 @@ public class WareController {
      * @param wareId
      * @return
      */
+    @PreAuthorize("sps.hasAnyPermi('inventory:waresInfo:query,inventory:record:query')")
     @GetMapping("/{wareId}")
     public Result getOne(@PathVariable Long wareId) {
         Ware ware = wareService.getById(wareId);

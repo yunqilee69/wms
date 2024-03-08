@@ -6,6 +6,7 @@ import com.yunqi.backend.common.util.PageUtils;
 import com.yunqi.backend.model.dto.CustomerDTO;
 import com.yunqi.backend.model.entity.Customer;
 import com.yunqi.backend.service.CustomerService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -27,6 +28,7 @@ public class CustomerController {
      * @param customerDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('user:customer:list')")
     @GetMapping("/list")
     public Result getList(CustomerDTO customerDTO) {
         Page<Customer> page = customerService.getCustomerPage(customerDTO);
@@ -38,6 +40,7 @@ public class CustomerController {
      * @param customerId
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('user:customer:query')")
     @GetMapping("/{customerId}")
     public Result getOne(@PathVariable Long customerId) {
         Customer customer = customerService.getById(customerId);
@@ -49,6 +52,7 @@ public class CustomerController {
      * @param customerDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('user:customer:add')")
     @PostMapping
     public Result add(@RequestBody CustomerDTO customerDTO) {
         customerService.saveCustomer(customerDTO);
@@ -60,6 +64,7 @@ public class CustomerController {
      * @param customerIds
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('user:customer:delete')")
     @DeleteMapping("/{customerIds}")
     public Result delete(@PathVariable List<Long> customerIds) {
         if (customerIds == null || customerIds.size() == 0) {
@@ -74,6 +79,7 @@ public class CustomerController {
      * @param customerDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('user:customer:edit')")
     @PutMapping
     public Result update(@RequestBody CustomerDTO customerDTO) {
         customerService.updateCustomer(customerDTO);

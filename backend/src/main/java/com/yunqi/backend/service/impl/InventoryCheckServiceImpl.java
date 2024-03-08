@@ -1,9 +1,14 @@
 package com.yunqi.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yunqi.backend.common.constant.DocumentConstants;
+import com.yunqi.backend.common.util.DocumentUtils;
 import com.yunqi.backend.common.util.PageUtils;
+import com.yunqi.backend.exception.BizException;
+import com.yunqi.backend.exception.message.InventoryCheckError;
 import com.yunqi.backend.mapper.InventoryCheckMapper;
 import com.yunqi.backend.model.dto.InventoryCheckDTO;
 import com.yunqi.backend.model.entity.InventoryCheck;
@@ -13,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 盘点服务实现类
@@ -41,16 +47,36 @@ public class InventoryCheckServiceImpl extends ServiceImpl<InventoryCheckMapper,
         InventoryCheck inventoryCheck = new InventoryCheck();
         BeanUtils.copyProperties(inventoryCheckDTO, inventoryCheck);
         // TODO 库存盘点 新增校验
-        // TODO 设置单据号
+        String documentCode = DocumentUtils.generateDocumentNumber(DocumentConstants.CHECK);
+        inventoryCheck.setDocumentCode(documentCode);
         inventoryCheckMapper.insert(inventoryCheck);
     }
 
     @Override
     public void updateInventoryCheck(InventoryCheckDTO inventoryCheckDTO) {
-        InventoryCheck inventoryCheck = new InventoryCheck();
-        BeanUtils.copyProperties(inventoryCheckDTO, inventoryCheck);
-        // TODO 库存盘点 更新校验
         // 状态为已盘点的不能进行更新
-        inventoryCheckMapper.updateById(inventoryCheck);
+        InventoryCheck inventoryCheck = inventoryCheckMapper.selectById(inventoryCheckDTO.getId());
+        if (inventoryCheck == null || inventoryCheck.getStatus().equals("3")) {
+            // 状态为已修正，不允许进行删除
+            throw new BizException(InventoryCheckError.STATUS_IS_FIXED_UPDATE);
+        }
+
+        LambdaUpdateWrapper<InventoryCheck> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.set(InventoryCheck::getName, inventoryCheckDTO.getName());
+        wrapper.set(InventoryCheck::getRemark, inventoryCheckDTO.getRemark());
+        wrapper.eq(InventoryCheck::getId, inventoryCheckDTO.getId());
+        inventoryCheckMapper.update(wrapper);
+    }
+
+    @Override
+    public void deleteInventoryCheck(List<Long> ids) {
+        for (Long id : ids) {
+            InventoryCheck inventoryCheck = inventoryCheckMapper.selectById(id);
+            if (inventoryCheck == null || inventoryCheck.getStatus().equals("3")) {
+                // 状态为已修正，不允许进行删除
+                throw new BizException(InventoryCheckError.STATUS_IS_FIXED_DEL);
+            }
+        }
+        removeBatchByIds(ids);
     }
 }

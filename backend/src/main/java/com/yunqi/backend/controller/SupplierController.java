@@ -6,6 +6,7 @@ import com.yunqi.backend.common.util.PageUtils;
 import com.yunqi.backend.model.dto.SupplierDTO;
 import com.yunqi.backend.model.entity.Supplier;
 import com.yunqi.backend.service.SupplierService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -27,6 +28,7 @@ public class SupplierController {
      * @param supplierDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('user:supplier:list')")
     @GetMapping("/list")
     public Result getList(SupplierDTO supplierDTO) {
         Page<Supplier> page = supplierService.getSupplierPage(supplierDTO);
@@ -38,6 +40,7 @@ public class SupplierController {
      * @param supplierId
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('user:supplier:query')")
     @GetMapping("/{supplierId}")
     public Result getOne(@PathVariable Long supplierId) {
         Supplier supplier = supplierService.getById(supplierId);
@@ -49,6 +52,7 @@ public class SupplierController {
      * @param supplierDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('user:supplier:add')")
     @PostMapping
     public Result add(@RequestBody SupplierDTO supplierDTO) {
         supplierService.saveSupplier(supplierDTO);
@@ -60,6 +64,7 @@ public class SupplierController {
      * @param supplierIds
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('user:supplier:delete')")
     @DeleteMapping("/{supplierIds}")
     public Result delete(@PathVariable List<Long> supplierIds) {
         if (supplierIds == null || supplierIds.size() == 0) {
@@ -74,6 +79,7 @@ public class SupplierController {
      * @param supplierDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('user:supplier:edit')")
     @PutMapping
     public Result update(@RequestBody SupplierDTO supplierDTO) {
         supplierService.updateSupplier(supplierDTO);

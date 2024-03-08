@@ -40,4 +40,11 @@
         order by m.parent_id, m.order_num
     </select>
 
+    <select id="selectMenuPermsByUserId" resultType="java.lang.String">
+        select distinct m.perms from tb_menu m
+        left join tb_role_menu rm on m.id = rm.menu_id
+        left join tb_user_role ur on rm.role_id = ur.role_id
+        where ur.user_id = #{userId}
+    </select>
+
 </mapper>

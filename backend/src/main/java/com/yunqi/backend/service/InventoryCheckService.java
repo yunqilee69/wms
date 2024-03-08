@@ -6,6 +6,8 @@ import com.yunqi.backend.model.dto.InventoryCheckDTO;
 import com.yunqi.backend.model.dto.InventoryCheckDTO;
 import com.yunqi.backend.model.entity.InventoryCheck;
 
+import java.util.List;
+
 /**
  * 盘点服务类
  * @author liyunqi
@@ -29,4 +31,10 @@ public interface InventoryCheckService extends IService<InventoryCheck> {
      * @param inventoryCheckDTO
      */
     void updateInventoryCheck(InventoryCheckDTO inventoryCheckDTO);
+
+    /**
+     * 删除
+     * @param ids
+     */
+    void deleteInventoryCheck(List<Long> ids);
 }

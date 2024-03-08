@@ -6,6 +6,7 @@ import com.yunqi.backend.common.util.PageUtils;
 import com.yunqi.backend.model.dto.LocationDTO;
 import com.yunqi.backend.model.entity.Location;
 import com.yunqi.backend.service.LocationService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -27,6 +28,7 @@ public class LocationController {
      * @param locationDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('inventory:waresLocation:list')")
     @GetMapping("/list")
     public Result getList(LocationDTO locationDTO) {
         Page<Location> page = locationService.getLocationPage(locationDTO);
@@ -38,6 +40,7 @@ public class LocationController {
      * @param locationId
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('inventory:waresLocation:query')")
     @GetMapping("/{locationId}")
     public Result getOne(@PathVariable Long locationId) {
         Location location = locationService.getById(locationId);
@@ -49,6 +52,7 @@ public class LocationController {
      * @param locationDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('inventory:waresLocation:add')")
     @PostMapping
     public Result add(@RequestBody LocationDTO locationDTO) {
         locationService.saveLocation(locationDTO);
@@ -60,6 +64,7 @@ public class LocationController {
      * @param locationIds
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('inventory:waresLocation:delete')")
     @DeleteMapping("/{locationIds}")
     public Result delete(@PathVariable List<Long> locationIds) {
         if (locationIds == null || locationIds.size() == 0) {
@@ -74,6 +79,7 @@ public class LocationController {
      * @param locationDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('inventory:waresLocation:edit')")
     @PutMapping
     public Result update(@RequestBody LocationDTO locationDTO) {
         locationService.updateLocation(locationDTO);

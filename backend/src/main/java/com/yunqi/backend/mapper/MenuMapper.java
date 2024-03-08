@@ -6,6 +6,7 @@ import com.yunqi.backend.model.entity.Menu;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author liyunqi
@@ -35,4 +36,11 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @return
      */
     List<Menu> selectMenuTreeByUserId(Long userId);
+
+    /**
+     * 根据用户id获取该用户的所有的权限字符
+     * @param userId
+     * @return
+     */
+    Set<String> selectMenuPermsByUserId(Long userId);
 }

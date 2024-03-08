@@ -10,6 +10,7 @@ import com.yunqi.backend.model.dto.DictItemDTO;
 import com.yunqi.backend.model.entity.DictItem;
 import com.yunqi.backend.service.DictItemService;
 import org.apache.logging.log4j.message.ReusableMessage;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,7 @@ public class DictItemController {
      * @param dictItem
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('system:dict:list')")
     @GetMapping("/list")
     public Result<PageResult> getDictItemPage(DictItemDTO dictItemDTO) {
         Page<DictItem> dictItemPage = dictItemService.getDictItemPage(dictItemDTO);
@@ -42,6 +44,7 @@ public class DictItemController {
      * @param itemId
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('system:dict:query')")
     @GetMapping("/{itemId}")
     public Result getDictItemByItemId(@PathVariable Long itemId) {
         DictItem dictItem = dictItemService.getById(itemId);
@@ -53,6 +56,7 @@ public class DictItemController {
      * @param dictItemDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('system:dict:add')")
     @PostMapping
     public Result save(@Validated @RequestBody DictItemDTO dictItemDTO) {
         dictItemService.saveDictItem(dictItemDTO);
@@ -65,6 +69,7 @@ public class DictItemController {
      * @param dictItemDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('system:dict:edit')")
     @PutMapping
     public Result updateDictItem(@Validated @RequestBody DictItemDTO dictItemDTO) {
         dictItemService.updateDictItem(dictItemDTO);
@@ -77,6 +82,7 @@ public class DictItemController {
      * @param dictItemIds
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('system:dict:delete')")
     @DeleteMapping("/{dictItemIds}")
     public Result delete(@PathVariable List<Long> dictItemIds) {
         dictItemService.deleteDictItem(dictItemIds);

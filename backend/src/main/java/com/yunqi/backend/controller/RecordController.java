@@ -8,6 +8,7 @@ import com.yunqi.backend.model.dto.WareDTO;
 import com.yunqi.backend.model.entity.Record;
 import com.yunqi.backend.model.entity.Ware;
 import com.yunqi.backend.service.RecordService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -30,6 +31,7 @@ public class RecordController {
      * @param recordDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('inventory:record:list')")
     @GetMapping("/list")
     public Result getList(RecordDTO recordDTO) {
         Page<RecordDTO> page = recordService.getRecordPage(recordDTO);
@@ -42,6 +44,7 @@ public class RecordController {
      * @param alarmThreshold
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('inventory:record:setAlarm')")
     @PutMapping("/alarmThreshold")
     public Result updateAlarmThreshold(Long[] recordIds, Integer alarmThreshold) {
         recordService.updateAlarmThreshold(Arrays.asList(recordIds), alarmThreshold);

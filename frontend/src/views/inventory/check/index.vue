@@ -67,7 +67,7 @@
                 plain
                 icon="Plus"
                 @click="handleAdd"
-                v-hasPermi="['system:user:add']"
+                v-hasPermi="['inventory:check:add']"
             >新增</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -77,7 +77,7 @@
                 icon="Edit"
                 :disabled="single"
                 @click="handleUpdate"
-                v-hasPermi="['system:user:edit']"
+                v-hasPermi="['inventory:check:edit']"
             >修改</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -87,8 +87,18 @@
                 icon="Delete"
                 :disabled="multiple"
                 @click="handleDelete"
-                v-hasPermi="['system:user:remove']"
+                v-hasPermi="['inventory:check:delete']"
             >删除</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+                type="info"
+                plain
+                icon="shop"
+                :disabled="single"
+                @click="handleCheckDetail"
+                v-hasPermi="['inventory:check:pandian']"
+            >盘点</el-button>
           </el-col>
           <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
@@ -97,7 +107,7 @@
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="单据号" align="center" key="documentCode" prop="documentCode" :show-overflow-tooltip="true" />
           <el-table-column label="名称" align="center" key="name" prop="name" :show-overflow-tooltip="true" />
-          <el-table-column label="库存盘点类型" align="center" prop="type" >
+          <el-table-column label="盘点单类型" align="center" prop="type" >
             <template #default="scope">
               <dict-tag :options="sys_inventory_check_type" :value="scope.row.type" />
             </template>
@@ -116,10 +126,10 @@
           <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
             <template #default="scope">
               <el-tooltip content="修改" placement="top">
-                <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:user:edit']"></el-button>
+                <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['inventory:check:edit']"></el-button>
               </el-tooltip>
               <el-tooltip content="删除" placement="top">
-                <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:user:remove']"></el-button>
+                <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['inventory:check:delete']"></el-button>
               </el-tooltip>
             </template>
           </el-table-column>
@@ -139,8 +149,8 @@
       <el-form :model="form" :rules="rules" ref="checkRef" label-width="80px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="库存盘点名称" prop="name">
-              <el-input v-model="form.name" placeholder="库存盘点名称" maxlength="30" />
+            <el-form-item label="盘点单名称" prop="name">
+              <el-input v-model="form.name" placeholder="请输入盘点单名称" maxlength="30" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -163,6 +173,7 @@
               <el-select
                   v-model="form.type"
                   filterable
+                  :disabled="update"
                   placeholder="请选择类型"
               >
                 <el-option
@@ -221,10 +232,12 @@
 
 <script setup name="User">
 import { getCheckList, addCheck, delCheck, getCheckById, updateCheck} from "@/api/inventory/check"
+import {useRoute} from "vue-router";
 
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable } = proxy.useDict( "sys_normal_disable");
 
+const  router = useRouter();
 const checkList = ref([]);
 const open = ref(false);
 const loading = ref(true);
@@ -234,8 +247,7 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
-
-const detailShow = ref(false);
+const update = ref(false)
 
 const data = reactive({
   detailForm: {},
@@ -250,7 +262,7 @@ const data = reactive({
   }
 });
 
-const { queryParams, form, rules, detailForm } = toRefs(data);
+const { queryParams, form, rules } = toRefs(data);
 const {
   sys_inventory_check_type, sys_inventory_check_status } =
     proxy.useDict( "sys_inventory_check_type", "sys_inventory_check_status");
@@ -305,6 +317,7 @@ function reset() {
     remark: undefined
 
   };
+  update.value = false;
   proxy.resetForm("checkRef");
 };
 
@@ -320,7 +333,7 @@ function handleAdd() {
   // 对应状态为已新建
   form.value.status = "1";
   open.value = true;
-  title.value = "添加货物";
+  title.value = "添加盘点单";
 };
 /** 修改按钮操作 */
 function handleUpdate(row) {
@@ -329,7 +342,8 @@ function handleUpdate(row) {
   getCheckById(id).then(response => {
     form.value = response;
     open.value = true;
-    title.value = "修改货物";
+    title.value = "修改盘点单";
+    update.value = true;
   });
 };
 /** 提交按钮 */
@@ -353,9 +367,9 @@ function submitForm() {
   });
 };
 
-/** 显示库存盘点的详细数据 */
-function showCheckDetail(checkId) {
-
+function handleCheckDetail() {
+  const id = ids.value[0];
+  router.push("/inventory/check-detail/" + id);
 }
 
 getList();
