@@ -39,6 +39,15 @@
               />
             </el-select>
           </el-form-item>
+          <el-form-item label="条形码" prop="barCode">
+            <el-input
+                v-model="queryParams.barCode"
+                placeholder="请输入条形码"
+                clearable
+                style="width: 240px"
+                @keyup.enter="handleQuery"
+            />
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -73,6 +82,7 @@
               <dict-tag :options="sys_inventory_brand" :value="scope.row.wareBrand" />
             </template>
           </el-table-column>
+          <el-table-column label="条形码" align="center" key="barCode" prop="barCode" :show-overflow-tooltip="true" />
           <el-table-column label="在库数量" align="center" key="number" prop="number" />
           <el-table-column label="报警阈值" align="center" key="alarmThreshold" prop="alarmThreshold" />
           <el-table-column label="规格" align="center" key="wareSpec" prop="wareSpec" :show-overflow-tooltip="true">

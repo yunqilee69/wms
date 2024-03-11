@@ -106,7 +106,13 @@
         <el-table v-loading="loading" :data="checkList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="单据号" align="center" key="documentCode" prop="documentCode" :show-overflow-tooltip="true" />
-          <el-table-column label="名称" align="center" key="name" prop="name" :show-overflow-tooltip="true" />
+          <el-table-column label="名称" align="center" key="name" prop="name" :show-overflow-tooltip="true" >
+            <template #default="scope">
+              <router-link :to="'/inventory/check-detail/' + scope.row.id" class="link-type">
+                <span>{{ scope.row.name }}</span>
+              </router-link>
+            </template>
+          </el-table-column>
           <el-table-column label="盘点单类型" align="center" prop="type" >
             <template #default="scope">
               <dict-tag :options="sys_inventory_check_type" :value="scope.row.type" />
@@ -232,7 +238,6 @@
 
 <script setup name="User">
 import { getCheckList, addCheck, delCheck, getCheckById, updateCheck} from "@/api/inventory/check"
-import {useRoute} from "vue-router";
 
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable } = proxy.useDict( "sys_normal_disable");

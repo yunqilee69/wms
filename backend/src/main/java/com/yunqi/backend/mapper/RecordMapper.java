@@ -20,4 +20,12 @@ public interface RecordMapper extends BaseMapper<Record> {
      * @return
      */
     List<RecordDTO> getRecordPage(@Param("recordDTO") RecordDTO recordDTO);
+
+    /**
+     * 获取在这次的盘点过程中还未盘点的库存记录
+     * @param recordDTO
+     * @param checkId
+     * @return
+     */
+    List<RecordDTO> getUnCheckRecordPage(@Param("recordDTO") RecordDTO recordDTO, @Param("checkId") Long checkId);
 }

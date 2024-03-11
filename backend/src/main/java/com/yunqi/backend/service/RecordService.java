@@ -24,4 +24,12 @@ public interface RecordService extends IService<Record> {
      * @param alarmThreshold
      */
     void updateAlarmThreshold(List<Long> recordIds, Integer alarmThreshold);
+
+    /**
+     * 获取在这次的盘点过程中还未盘点的库存记录
+     * @param recordDTO
+     * @param checkId
+     * @return
+     */
+    Page<RecordDTO> getUnCheckRecordList(RecordDTO recordDTO, Long checkId);
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yunqi.backend.common.result.Result;
 import com.yunqi.backend.common.util.PageUtils;
 import com.yunqi.backend.model.dto.InventoryCheckDTO;
+import com.yunqi.backend.model.dto.WareDTO;
 import com.yunqi.backend.model.entity.InventoryCheck;
 import com.yunqi.backend.service.InventoryCheckService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -83,6 +84,19 @@ public class InventoryCheckController {
     @PutMapping
     public Result update(@RequestBody InventoryCheckDTO inventoryCheckDTO) {
         inventoryCheckService.updateInventoryCheck(inventoryCheckDTO);
+        return Result.success();
+    }
+
+//-------------------------------盘点细节---------------------------------------
+
+    /**
+     * 获取
+     * @param wareDTO
+     * @return
+     */
+    @PreAuthorize("@sps.hasPermi('inventory:check:query')")
+    @GetMapping("/detail/list")
+    public Result getCheckDetailList(WareDTO wareDTO, Long checkId) {
         return Result.success();
     }
 }

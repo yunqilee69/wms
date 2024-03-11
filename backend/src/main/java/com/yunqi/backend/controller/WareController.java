@@ -40,7 +40,7 @@ public class WareController {
      * @param wareId
      * @return
      */
-    @PreAuthorize("sps.hasAnyPermi('inventory:waresInfo:query,inventory:record:query')")
+    @PreAuthorize("@sps.hasAnyPermi('inventory:waresInfo:query,inventory:record:query')")
     @GetMapping("/{wareId}")
     public Result getOne(@PathVariable Long wareId) {
         Ware ware = wareService.getById(wareId);

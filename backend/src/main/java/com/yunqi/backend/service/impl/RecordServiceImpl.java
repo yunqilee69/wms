@@ -50,4 +50,12 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         wrapper.in(Record::getId, recordIds);
         recordMapper.update(wrapper);
     }
+
+    @Override
+    public Page<RecordDTO> getUnCheckRecordList(RecordDTO recordDTO, Long checkId) {
+        Page<RecordDTO> page = PageUtils.getPage();
+        List<RecordDTO> recordDTOList = recordMapper.getUnCheckRecordPage(recordDTO, checkId);
+        PageUtils.handlePageList(recordDTOList, page);
+        return page;
+    }
 }

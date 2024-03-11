@@ -71,6 +71,11 @@ public class RecordDTO extends BaseDTO {
     private String wareName;
 
     /**
+     * 条形码
+     */
+    private String barCode;
+
+    /**
      * 货物品牌
      */
     private String wareBrand;
