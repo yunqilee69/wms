@@ -7,6 +7,7 @@
         <result column="id" property="id"/>
         <result column="check_id" property="checkId"/>
         <result column="record_id" property="recordId"/>
+        <result column="location_name" property="locationName"/>
         <result column="pre_number" property="preNumber"/>
         <result column="now_number" property="nowNumber"/>
         <result column="pre_production_date" property="preProductionDate"/>
@@ -18,7 +19,8 @@
     </resultMap>
 
     <select id="getDetailPage" resultMap="InventoryCheckDetailDTOResultMap">
-        select ticd.*, tiw.name wareName, tiw.brand wareBrand, tiw.bar_code barCode, tiw.picture
+        select ticd.*, tiw.name wareName, tiw.brand wareBrand, tiw.bar_code barCode, tiw.picture,
+        tir.location_name
         from tb_inventory_check_detail ticd
         left join tb_inventory_record tir on tir.id = ticd.record_id
         left join tb_inventory_ware tiw on tiw.id = tir.ware_id

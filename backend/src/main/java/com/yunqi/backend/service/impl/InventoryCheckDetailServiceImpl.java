@@ -35,8 +35,8 @@ public class InventoryCheckDetailServiceImpl extends ServiceImpl<InventoryCheckD
     RecordService recordService;
 
     @Override
-    public Page<InventoryCheckDetail> getInventoryCheckDetailPage(InventoryCheckDetailDTO inventoryCheckDetailDTO) {
-        Page<InventoryCheckDetail> page = PageUtils.getPage();
+    public Page<InventoryCheckDetailDTO> getInventoryCheckDetailPage(InventoryCheckDetailDTO inventoryCheckDetailDTO) {
+        Page<InventoryCheckDetailDTO> page = PageUtils.getPage();
         List<InventoryCheckDetailDTO> list = inventoryCheckDetailMapper.getDetailPage(inventoryCheckDetailDTO);
         PageUtils.handlePageList(list, page);
         return page;

@@ -1,5 +1,7 @@
 package com.yunqi.backend.service.impl;
 
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.dysmsapi20170525.Client;
 import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
 import com.aliyun.dysmsapi20170525.models.SendSmsResponse;
@@ -8,14 +10,16 @@ import com.aliyun.teaopenapi.models.Config;
 import com.google.gson.Gson;
 import com.yunqi.backend.common.constant.CacheConstants;
 import com.yunqi.backend.common.util.RedisCache;
-import com.yunqi.backend.config.properties.AliyunSmsProperties;
+import com.yunqi.backend.config.properties.AliOSSProperties;
+import com.yunqi.backend.config.properties.AliSmsProperties;
 import com.yunqi.backend.exception.BizException;
 import com.yunqi.backend.exception.message.SmsError;
-import com.yunqi.backend.service.AliyunSmsService;
+import com.yunqi.backend.service.AliyunService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,13 +32,16 @@ import java.util.regex.Pattern;
  */
 @Service
 @Slf4j
-public class AliyunSmsServiceImpl implements AliyunSmsService {
+public class AliyunServiceImpl implements AliyunService {
 
     @Resource
-    AliyunSmsProperties smsProperties;
+    AliSmsProperties smsProperties;
 
     @Resource
     RedisCache redisCache;
+
+    @Resource
+    AliOSSProperties ossProperties;
 
     /**
      * 使用AK&SK初始化账号Client
@@ -94,8 +101,8 @@ public class AliyunSmsServiceImpl implements AliyunSmsService {
     @Override
     public void sendCaptchaCode(String phone, String code) {
         SendSmsRequest sendSmsRequest = new SendSmsRequest();
-        List<AliyunSmsProperties.SmsTemplate> templateList = smsProperties.getTemplateList();
-        for (AliyunSmsProperties.SmsTemplate smsTemplate : templateList) {
+        List<AliSmsProperties.SmsTemplate> templateList = smsProperties.getTemplateList();
+        for (AliSmsProperties.SmsTemplate smsTemplate : templateList) {
             if (smsTemplate.getName().equals("CAPTCHA_CODE")) {
                 sendSmsRequest.setSignName(smsTemplate.getSignName());
                 sendSmsRequest.setTemplateCode(smsTemplate.getTemplateCode());
@@ -126,8 +133,8 @@ public class AliyunSmsServiceImpl implements AliyunSmsService {
     @Override
     public void sendResetPwd(String phone, String nickname, String pwd) {
         SendSmsRequest sendSmsRequest = new SendSmsRequest();
-        List<AliyunSmsProperties.SmsTemplate> templateList = smsProperties.getTemplateList();
-        for (AliyunSmsProperties.SmsTemplate smsTemplate : templateList) {
+        List<AliSmsProperties.SmsTemplate> templateList = smsProperties.getTemplateList();
+        for (AliSmsProperties.SmsTemplate smsTemplate : templateList) {
             if (smsTemplate.getName().equals("RESET_PWT")) {
                 sendSmsRequest.setSignName(smsTemplate.getSignName());
                 sendSmsRequest.setTemplateCode(smsTemplate.getTemplateCode());
@@ -150,5 +157,37 @@ public class AliyunSmsServiceImpl implements AliyunSmsService {
             throw new BizException(SmsError.SEND_SMS_FAILED);
         }
         log.info("重置密码发送成功，phone:{}， nickname:{}", phone, nickname);
+    }
+
+    @Override
+    public String ossUpload(InputStream inputStream, String fileName) {
+        //获取阿里云OSS参数
+        String endpoint = ossProperties.getEndpoint();
+        String accessKeyId = ossProperties.getAccessKeyId();
+        String accessKeySecret = ossProperties.getAccessKeySecret();
+        String bucketName = ossProperties.getBucketName();
+        //上传文件到 OSS
+        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+        ossClient.putObject(bucketName, fileName, inputStream);
+
+        // 关闭ossClient
+        ossClient.shutdown();
+        return ossProperties.getUrlPrefix() + fileName;// 把上传到oss的路径返回
+    }
+
+    @Override
+    public boolean ossDelete(String fileName) {
+        //获取阿里云OSS参数
+        String endpoint = ossProperties.getEndpoint();
+        String accessKeyId = ossProperties.getAccessKeyId();
+        String accessKeySecret = ossProperties.getAccessKeySecret();
+        String bucketName = ossProperties.getBucketName();
+        //上传文件到 OSS
+        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+        ossClient.deleteObject(bucketName, fileName);
+
+        // 关闭ossClient
+        ossClient.shutdown();
+        return true;
     }
 }

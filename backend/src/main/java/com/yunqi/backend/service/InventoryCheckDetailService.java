@@ -17,7 +17,7 @@ public interface InventoryCheckDetailService extends IService<InventoryCheckDeta
      * @param inventoryCheckDTO
      * @return
      */
-    Page<InventoryCheckDetail> getInventoryCheckDetailPage(InventoryCheckDetailDTO inventoryCheckDTO);
+    Page<InventoryCheckDetailDTO> getInventoryCheckDetailPage(InventoryCheckDetailDTO inventoryCheckDTO);
 
     /**
      * 新增

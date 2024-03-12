@@ -104,10 +104,11 @@
 
             <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
               <el-table-column type="selection" width="50" align="center" />
-              <el-table-column label="头像" align="center" key="avatar" prop="avatar" :show-overflow-tooltip="true" >
-                 <template #default="scope">
-                    <el-avatar :size="60" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>
-                 </template></el-table-column>
+              <el-table-column label="头像" align="center" key="avatar" prop="avatar" >
+                <template #default="scope">
+                  <image-preview :src="scope.row.avatar" :height="50" :width="50" />
+                </template>
+              </el-table-column>
               <el-table-column label="账号" align="center" key="username" prop="username" :show-overflow-tooltip="true" />
               <el-table-column label="用户昵称" align="center" key="nickname" prop="nickname" :show-overflow-tooltip="true" />
               <el-table-column label="角色" align="center" key="roleName" prop="roleName" />
@@ -228,6 +229,13 @@
                   </el-form-item>
                </el-col>
             </el-row>
+           <el-row>
+             <el-col :span="24">
+               <el-form-item label="头像" prop="avatar">
+                 <image-upload :limit="1" v-model:model-value="form.avatar" />
+               </el-form-item>
+             </el-col>
+           </el-row>
             <el-row>
                <el-col :span="24">
                   <el-form-item label="备注">

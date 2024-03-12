@@ -37,7 +37,7 @@ public class InventoryCheckDetailController {
     @PreAuthorize("@sps.hasPermi('inventory:check:query')")
     @GetMapping("/list")
     public Result getList(InventoryCheckDetailDTO inventoryCheckDTO) {
-        Page<InventoryCheckDetail> page = inventoryCheckDetailService.getInventoryCheckDetailPage(inventoryCheckDTO);
+        Page<InventoryCheckDetailDTO> page = inventoryCheckDetailService.getInventoryCheckDetailPage(inventoryCheckDTO);
         return Result.success(PageUtils.convertPageResult(page));
     }
 

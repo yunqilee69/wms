@@ -17,26 +17,33 @@ import com.yunqi.backend.common.constant.CacheConstants;
 import com.yunqi.backend.common.util.RedisCache;
 import com.yunqi.backend.exception.BizException;
 import com.yunqi.backend.exception.message.SystemError;
+import com.yunqi.backend.service.AliyunService;
 import com.yunqi.backend.service.CaptchaService;
+import org.springframework.data.annotation.Id;
 import org.springframework.util.FastByteArrayOutputStream;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 验证码操作处理
+ * 系统公共控制
  *
  * @author ruoyi
  */
 @RestController
 @RequestMapping
-public class CaptchaController {
+public class CommonController {
 
     @Resource
     RedisCache redisCache;
 
     @Resource
     CaptchaService captchaService;
+
+    @Resource
+    AliyunService aliyunService;
 
     /**
      * 生成验证码
@@ -58,7 +65,7 @@ public class CaptchaController {
         return Result.success(map);
     }
 
-    public String convertImageToBase64(BufferedImage image) {
+    private String convertImageToBase64(BufferedImage image) {
         String base64Image = null;
         try {
             FastByteArrayOutputStream os = new FastByteArrayOutputStream();
@@ -75,41 +82,16 @@ public class CaptchaController {
         return base64Image;
     }
 
-//    /**
-//     * 生成验证码
-//     */
-//    @GetMapping("/captchaImage")
-//    public Result getCode(HttpServletResponse response) throws IOException {
-//        // 保存验证码信息
-//        String uuid = IdUtil.simpleUUID();
-//        String verifyKey = CacheConstants.CAPTCHA_CODE_KEY + uuid;
-//
-//        String capStr = null, code = null;
-//        BufferedImage image = null;
-//
-//        // 生成验证码
-//        String captchaType = RuoYiConfig.getCaptchaType();
-//        if ("math".equals(captchaType)) {
-//            String capText = captchaProducerMath.createText();
-//            capStr = capText.substring(0, capText.lastIndexOf("@"));
-//            code = capText.substring(capText.lastIndexOf("@") + 1);
-//            image = captchaProducerMath.createImage(capStr);
-//        } else if ("char".equals(captchaType)) {
-//            capStr = code = captchaProducer.createText();
-//            image = captchaProducer.createImage(capStr);
-//        }
-//
-//        redisCache.setCacheObject(verifyKey, code, SystemConstants.CAPTCHA_EXPIRATION, TimeUnit.MINUTES);
-//        // 转换流信息写出
-//        FastByteArrayOutputStream os = new FastByteArrayOutputStream();
-//        try {
-//            ImageIO.write(image, "jpg", os);
-//        } catch (IOException e) {
-//            return AjaxResult.error(e.getMessage());
-//        }
-//
-//        ajax.put("uuid", uuid);
-//        ajax.put("img", Base64.encode(os.toByteArray()));
-//        return ajax;
-//    }
+    /**
+     * 上传
+     * @param file
+     * @return
+     */
+    @PostMapping("/upload")
+    public Result upload(MultipartFile file) throws IOException {
+        String originalFilename = file.getOriginalFilename();
+        String filename = IdUtil.simpleUUID() + originalFilename.substring(originalFilename.lastIndexOf("."));
+        String url = aliyunService.ossUpload(file.getInputStream(), filename);
+        return Result.success(url);
+    }
 }

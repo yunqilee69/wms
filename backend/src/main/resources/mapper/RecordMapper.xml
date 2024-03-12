@@ -16,6 +16,7 @@
         <result column="total_amount" property="totalAmount"/>
         <result column="wareName" property="wareName"/>
         <result column="barCode" property="barCode"/>
+        <result column="picture" property="picture"/>
         <result column="wareBrand" property="wareBrand"/>
         <result column="wareSpec" property="wareSpec"/>
         <result column="wareUnit" property="wareUnit"/>
@@ -26,7 +27,7 @@
     </resultMap>
 
     <select id="getRecordPage" resultMap="RecordDTOResultMap">
-        select tir.*, tiw.name wareName, tiw.bar_code barCode,
+        select tir.*, tiw.name wareName, tiw.bar_code barCode, tiw.picture picture,
                 tiw.brand wareBrand, tiw.spec wareSpec, tiw.unit wareUnit
         from tb_inventory_record tir
         left join tb_inventory_ware tiw on tiw.id = tir.ware_id
@@ -38,7 +39,7 @@
         </where>
     </select>
     <select id="getUnCheckRecordPage" resultMap="RecordDTOResultMap">
-        select tir.*, tiw.name wareName, tiw.bar_code barCode, tiw.brand wareBrand
+        select tir.*, tiw.name wareName, tiw.bar_code barCode, tiw.brand wareBrand, tiw.picture picture
         from tb_inventory_record tir
         left join tb_inventory_ware tiw on tiw.id = tir.ware_id
         where

@@ -1,13 +1,12 @@
 package com.yunqi.backend.service;
 
-import java.util.List;
-import java.util.Map;
+import java.io.InputStream;
 
 /**
  * 短信服务
  * @author liyunqi
  */
-public interface AliyunSmsService {
+public interface AliyunService {
 
     /**
      * 发送短信
@@ -25,4 +24,19 @@ public interface AliyunSmsService {
      * @return
      */
     void sendResetPwd(String phone, String username, String pwd);
+
+    /**
+     * 上传文件，返回访问路径
+     * @param inputStream
+     * @param fileName
+     * @return
+     */
+    String ossUpload(InputStream inputStream, String fileName);
+
+    /**
+     * 删除文件，成功为true
+     * @param fileName
+     * @return
+     */
+    boolean ossDelete(String fileName);
 }

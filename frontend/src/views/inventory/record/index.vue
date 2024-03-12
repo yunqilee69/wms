@@ -70,6 +70,11 @@
 
         <el-table v-loading="loading" :data="recordList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="50" align="center" />
+          <el-table-column label="图片" align="center" key="picture" prop="picture">
+            <template #default="scope">
+              <image-preview :src="scope.row.picture" :height="50" :width="50" />
+            </template>
+          </el-table-column>
           <el-table-column label="货位名称" align="center" key="locationName" prop="locationName" :show-overflow-tooltip="true" />
           <el-table-column label="货物名称" align="center" prop="wareName" >
             <template #default="scope">

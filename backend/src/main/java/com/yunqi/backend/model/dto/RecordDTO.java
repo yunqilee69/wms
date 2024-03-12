@@ -89,4 +89,9 @@ public class RecordDTO extends BaseDTO {
      * 货物单位
      */
     private String wareUnit;
+
+    /**
+     * 货物图片
+     */
+    private String picture;
 }

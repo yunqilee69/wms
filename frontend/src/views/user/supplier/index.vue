@@ -65,7 +65,7 @@
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="头像" align="center" key="avatar" prop="avatar" >
             <template #default="scope">
-              <el-avatar :size="60" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>
+              <image-preview :src="scope.row.avatar" :height="50" :width="50" />
             </template>
           </el-table-column>
           <el-table-column label="供应商昵称" align="center" key="nickname" prop="nickname" :show-overflow-tooltip="true" />
@@ -134,6 +134,13 @@
                     :value="dict.value"
                 ></el-option>
               </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="头像" prop="avatar">
+              <image-upload :limit="1" v-model:model-value="form.avatar" />
             </el-form-item>
           </el-col>
         </el-row>

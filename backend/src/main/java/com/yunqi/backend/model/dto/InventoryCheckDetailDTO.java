@@ -30,6 +30,11 @@ public class InventoryCheckDetailDTO{
     private Long recordId;
 
     /**
+     * 货位名称
+     */
+    private String locationName;
+
+    /**
      * 盘点前数量
      */
     private int preNumber;

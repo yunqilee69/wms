@@ -94,7 +94,7 @@
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="图片" align="center" key="picture" prop="picture" >
             <template #default="scope">
-              <el-avatar :size="60" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>
+              <image-preview :src="scope.row.picture" :height="50" :width="50" />
             </template>
           </el-table-column>
           <el-table-column label="品牌" align="center" key="brand" prop="brand" :show-overflow-tooltip="true" >
@@ -248,8 +248,15 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="保质期(月)" prop="qualityMonth">
-              <el-input v-model="form.qualityMonth" placeholder="请输入保质期"></el-input>
+            <el-form-item label="保质期" prop="qualityMonth">
+              <el-input v-model="form.qualityMonth" placeholder="请输入保质期(月)"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="货物图片" prop="picture">
+              <image-upload :limit="1" v-model:model-value="form.picture" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -275,6 +282,8 @@
 <script setup name="User">
 import { getWareList, getWareById, addWare, delWare, updateWare } from "@/api/inventory/ware"
 import DictTag from "@/components/DictTag/index.vue";
+import FileUpload from "@/components/FileUpload/index.vue";
+import ImagePreview from "@/components/ImagePreview/index.vue";
 
 const router = useRouter();
 const { proxy } = getCurrentInstance();
@@ -314,7 +323,7 @@ const data = reactive({
       { pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/, message: "请输入正确额格式,可保留两位小数", trigger: "blur" }],
     salePrice: [{ required: true, message: "售价不能为空", trigger: "blur" },
       { pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/, message: "请输入正确额格式,可保留两位小数", trigger: "blur" }],
-    qualityMonth: [{ required: true, message: "进价不能为空", trigger: "blur" }, { type: 'number', message: "保质期必须为数字" }],
+    qualityMonth: [{ required: true, message: "保质期不能为空", trigger: "blur" }, { pattern: /^\d+$/, message: "保质期必须为数字" }],
   }
 });
 
@@ -366,6 +375,7 @@ function reset() {
     name: undefined,
     brand: undefined,
     category: undefined,
+    picture: undefined,
     barCode: undefined,
     spec: undefined,
     unit: undefined,

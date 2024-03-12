@@ -85,14 +85,12 @@
 
     <el-table v-loading="loading" :data="checkDetailList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="货物图片" prop="username" >
+      <el-table-column label="货物图片" prop="picture" >
         <template #default="scope">
-          <el-image
-              src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-              style="width: 60px; height: 60px"
-          />
+          <image-preview :src="scope.row.picture" :height="50" :width="50" />
         </template>
       </el-table-column>
+      <el-table-column label="货位名称" prop="locationName" />
       <el-table-column label="货物名称" prop="wareName" :show-overflow-tooltip="true" />
       <el-table-column label="品牌" prop="wareBrand" :show-overflow-tooltip="true" >
         <template #default="scope">
@@ -170,6 +168,7 @@
 <script setup>
 import { getCheckDetailList, addCheckDetail, delCheckDetail, getCheckDetailById, updateCheckDetail} from "@/api/inventory/checkDetail"
 import SelectRecord from "@/views/inventory/check/selectRecord.vue";
+import ImagePreview from "@/components/ImagePreview/index.vue";
 
 const route = useRoute();
 const { proxy } = getCurrentInstance();

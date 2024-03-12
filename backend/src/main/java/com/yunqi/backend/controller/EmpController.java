@@ -6,8 +6,7 @@ import com.yunqi.backend.common.util.PageUtils;
 import com.yunqi.backend.common.util.SecurityUtils;
 import com.yunqi.backend.model.dto.EmpDTO;
 import com.yunqi.backend.model.entity.User;
-import com.yunqi.backend.service.AliyunSmsService;
-import com.yunqi.backend.service.RoleService;
+import com.yunqi.backend.service.AliyunService;
 import com.yunqi.backend.service.UserRoleService;
 import com.yunqi.backend.service.UserService;
 import org.springframework.beans.BeanUtils;
@@ -32,7 +31,7 @@ public class EmpController {
 
 
     @Resource
-    AliyunSmsService aliyunSmsService;
+    AliyunService aliyunService;
 
     /**
      * 分页查询获取员工
@@ -113,7 +112,7 @@ public class EmpController {
 
         // 发送新密码到手机号
         User user = userService.getById(userId);
-        aliyunSmsService.sendResetPwd(user.getPhone(), user.getNickname(), password);
+        aliyunService.sendResetPwd(user.getPhone(), user.getNickname(), password);
         return Result.success();
     }
 
