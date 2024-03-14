@@ -52,6 +52,7 @@ public class WareController {
      * @param wareDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('inventory:waresInfo:add')")
     @PostMapping
     public Result add(@RequestBody WareDTO wareDTO) {
         wareService.saveWare(wareDTO);
@@ -63,11 +64,13 @@ public class WareController {
      * @param wareIds
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('inventory:waresInfo:delete')")
     @DeleteMapping("/{wareIds}")
     public Result delete(@PathVariable List<Long> wareIds) {
         if (wareIds == null || wareIds.size() == 0) {
             return Result.fail("货物id不能为空");
         }
+        // TODO 删除前需要检验，库存记录是否存在对应的货物
         wareService.removeBatchByIds(wareIds);
         return Result.success();
     }
@@ -77,6 +80,7 @@ public class WareController {
      * @param wareDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('inventory:waresInfo:edit')")
     @PutMapping
     public Result update(@RequestBody WareDTO wareDTO) {
         wareService.updateWare(wareDTO);

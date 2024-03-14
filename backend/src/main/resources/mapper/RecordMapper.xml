@@ -48,4 +48,15 @@
             <if test="recordDTO.wareBrand != null">and tiw.brand like concat('%', #{recordDTO.wareBrand},'%')</if>
             <if test="recordDTO.barCode != null">and tiw.bar_code like concat('%', #{recordDTO.barCode},'%')</if>
     </select>
+
+    <select id="getUnPurchaseRecordList" resultMap="RecordDTOResultMap">
+        select tir.*, tiw.name wareName, tiw.bar_code barCode, tiw.brand wareBrand, tiw.picture picture
+        from tb_inventory_record tir
+        left join tb_inventory_ware tiw on tiw.id = tir.ware_id
+        where
+        tir.id not in (select record_id from tb_order_purchase_detail where order_id = #{orderId})
+        <if test="recordDTO.wareName != null">and tiw.name like concat('%', #{recordDTO.wareName},'%')</if>
+        <if test="recordDTO.wareBrand != null">and tiw.brand like concat('%', #{recordDTO.wareBrand},'%')</if>
+        <if test="recordDTO.barCode != null">and tiw.bar_code like concat('%', #{recordDTO.barCode},'%')</if>
+    </select>
 </mapper>

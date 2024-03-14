@@ -19,12 +19,11 @@ public class DocumentUtils {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddSS");
         String date = dateFormat.format(new Date());
 
-        // 生成一个四位的随机数
+        // 生成一个三位的随机数
         Random random = new Random();
         int randomNum = random.nextInt(1000);
-
         // 生成单据号
-        return type + date + randomNum;
+        return type + date + String.format("%03d", randomNum);
     }
 
 

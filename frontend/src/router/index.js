@@ -131,6 +131,20 @@ export const dynamicRoutes = [
       }
     ]
   },
+  {
+    path: '/order/purchase-detail',
+    component: Layout,
+    hidden: true,
+    permissions: ['order:purchase:list'],
+    children: [
+      {
+        path: ':orderId(\\d+)',
+        component: () => import('@/views/order/purchase/detail.vue'),
+        name: 'PurchaseDetail',
+        meta: { title: '采购单细节', activeMenu: '/order/purchase' }
+      }
+    ]
+  },
 ]
 
 const router = createRouter({

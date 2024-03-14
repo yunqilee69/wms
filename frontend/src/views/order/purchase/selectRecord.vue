@@ -77,10 +77,13 @@
 </template>
 
 <script setup>
-import { unCheckRecordList, addCheckRecordAll } from "@/api/inventory/checkDetail"
+import { getUnPurchaseRecordList, addUnPurchaseRecord } from "@/api/order/purchase"
 
 const props = defineProps({
-  checkId: {
+  orderId: {
+    type: [Number, String]
+  },
+  detailType: {
     type: [Number, String]
   }
 });
@@ -96,15 +99,17 @@ const recordIds = ref([]);
 const queryParams = reactive({
   pageNum: 1,
   pageSize: 10,
-  checkId: undefined,
+  orderId: undefined,
   wareName: undefined,
   wareBrand: undefined,
-  barCode: undefined
+  barCode: undefined,
+  detailType: undefined
 });
 
 // 显示弹框
 function show() {
-  queryParams.checkId = props.checkId;
+  queryParams.orderId = props.orderId;
+  queryParams.detailType = props.detailType;
   getList();
   visible.value = true;
 }
@@ -118,7 +123,7 @@ function handleSelectionChange(selection) {
 }
 // 查询表数据
 function getList() {
-  unCheckRecordList(queryParams).then(res => {
+  getUnPurchaseRecordList(queryParams).then(res => {
     recordList.value = res.rows;
     total.value = res.total;
   });
@@ -136,13 +141,13 @@ function resetQuery() {
 const emit = defineEmits(["ok"]);
 /** 选择授权用户操作 */
 function handleSelectRecord() {
-  const checkId = queryParams.checkId;
+  const orderId = queryParams.orderId;
   const uIds = recordIds.value.join(",");
   if (uIds == "") {
-    proxy.$modal.msgError("请选择要盘点的货物");
+    proxy.$modal.msgError("请选择要加入的货物");
     return;
   }
-  addCheckRecordAll({ checkId: checkId, recordIds: uIds }).then(res => {
+  addUnPurchaseRecord({ orderId: orderId, recordIds: uIds, detailType: props.detailType }).then(res => {
     proxy.$modal.msgSuccess("添加成功");
     visible.value = false;
     emit("ok");

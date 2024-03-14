@@ -32,4 +32,12 @@ public interface RecordService extends IService<Record> {
      * @return
      */
     Page<RecordDTO> getUnCheckRecordList(RecordDTO recordDTO, Long checkId);
+
+    /**
+     * 获取采购订单中未被加入的货物记录
+     * @param recordDTO
+     * @param orderId
+     * @return
+     */
+    Page<RecordDTO> getUnPurchaseRecordList(RecordDTO recordDTO, Long orderId);
 }

@@ -28,4 +28,12 @@ public interface RecordMapper extends BaseMapper<Record> {
      * @return
      */
     List<RecordDTO> getUnCheckRecordPage(@Param("recordDTO") RecordDTO recordDTO, @Param("checkId") Long checkId);
+
+    /**
+     * 获取采购订单中未被加入的货物记录
+     * @param recordDTO
+     * @param orderId
+     * @return
+     */
+    List<RecordDTO> getUnPurchaseRecordList(@Param("recordDTO") RecordDTO recordDTO, @Param("orderId")  Long orderId);
 }

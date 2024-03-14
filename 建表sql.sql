@@ -250,13 +250,14 @@ create table tb_inventory_check_detail (
 );
 
 ### 采购订单表
-DROP TABLE IF exists tb_order_sale;
-create table tb_order_sale (
+DROP TABLE IF exists tb_order_purchase;
+create table tb_order_purchase (
 	id BIGINT primary key COMMENT "主键",
     
     document_code VARCHAR(255) COMMENT "订单单据号",
     status VARCHAR(64) COMMENT "订单状态",
     
+    supplier_id BIGINT COMMENT "供应商id",
     supplier_name VARCHAR(64) COMMENT "供应商名称",
     supplier_phone VARCHAR(64) COMMENT "供应商电话",
     receiver_name VARCHAR(64) COMMENT "收件人",
@@ -266,7 +267,7 @@ create table tb_order_sale (
     origin_amount DECIMAL(10, 2) COMMENT "原本货物金额",
     return_number int COMMENT "退货数量",
     return_amount DECIMAL(10, 2) COMMENT "退款金额",
-    return_reason VARCHAR(64) COMMENT "退货原因",
+    remark VARCHAR(1024) COMMENT "备注",
     actual_amount DECIMAL(10, 2) COMMENT "实际付款金额",
     
     creator VARCHAR(64) COMMENT "创建人",
@@ -276,13 +277,16 @@ create table tb_order_sale (
 );
 
 ### 采购订单详情表
-DROP TABLE IF exists tb_order_sale_detail;
-create table tb_order_sale_detail (
+DROP TABLE IF exists tb_order_purchase_detail;
+create table tb_order_purchase_detail (
 	id BIGINT primary key COMMENT "主键",
     
+    order_id BIGINT COMMENT "订单id",
     ware_id BIGINT COMMENT "货物id",
     record_id BIGINT COMMENT "库存id",
     
+    picture VARCHAR(255) COMMENT "货物图片",
+    location_name VARCHAR(64) COMMENT "货位名称",
     ware_name VARCHAR(64) COMMENT "货物名称",
     ware_brand VARCHAR(64) COMMENT "货物品牌",
     ware_spec VARCHAR(64) COMMENT "货物规格",
@@ -295,13 +299,14 @@ create table tb_order_sale_detail (
 );
 
 ### 销售订单表
-DROP TABLE IF exists tb_order_purchase;
-create table tb_order_purchase (
+DROP TABLE IF exists tb_order_sale;
+create table tb_order_sale (
 	id BIGINT primary key COMMENT "主键",
     
     document_code VARCHAR(255) COMMENT "订单单据号",
     status VARCHAR(64) COMMENT "订单状态",
     
+    customer_id BIGINT COMMENT "客户id",
     delivery_name VARCHAR(64) COMMENT "送货人名称",
     delivery_phone VARCHAR(64) COMMENT "送货人电话",
     customer_name VARCHAR(64) COMMENT "客户名称",
@@ -312,7 +317,7 @@ create table tb_order_purchase (
     origin_amount DECIMAL(10, 2) COMMENT "原本货物金额",
     return_number int COMMENT "退货数量",
     return_amount DECIMAL(10, 2) COMMENT "退款金额",
-    return_reason VARCHAR(64) COMMENT "退货原因",
+    remark VARCHAR(1024) COMMENT "备注",
     actual_amount DECIMAL(10, 2) COMMENT "实际付款金额",
     
     creator VARCHAR(64) COMMENT "创建人",
@@ -326,9 +331,12 @@ DROP TABLE IF exists tb_order_sale_detail;
 create table tb_order_sale_detail (
 	id BIGINT primary key COMMENT "主键",
     
+    order_id BIGINT COMMENT "订单id",
     ware_id BIGINT COMMENT "货物id",
     record_id BIGINT COMMENT "库存id",
     
+    picture VARCHAR(255) COMMENT "货物图片",
+    location_name VARCHAR(64) COMMENT "货位名称",
     ware_name VARCHAR(64) COMMENT "货物名称",
     ware_brand VARCHAR(64) COMMENT "货物品牌",
     ware_spec VARCHAR(64) COMMENT "货物规格",
@@ -338,4 +346,12 @@ create table tb_order_sale_detail (
     ware_number int COMMENT "货物数量",
     
     type VARCHAR(64) COMMENT "类型（送货，退货）"
+);
+
+### 订单结算截图表
+DROP TABLE IF exists tb_order_settlement;
+create table tb_order_settlement (
+    id BIGINT primary key COMMENT "主键",
+    order_id BIGINT COMMENT "订单id",
+    picture VARCHAR(255) COMMENT "图片"
 );

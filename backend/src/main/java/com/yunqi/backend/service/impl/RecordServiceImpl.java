@@ -58,4 +58,12 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         PageUtils.handlePageList(recordDTOList, page);
         return page;
     }
+
+    @Override
+    public Page<RecordDTO> getUnPurchaseRecordList(RecordDTO recordDTO, Long orderId) {
+        Page<RecordDTO> page = PageUtils.getPage();
+        List<RecordDTO> recordDTOList = recordMapper.getUnPurchaseRecordList(recordDTO, orderId);
+        PageUtils.handlePageList(recordDTOList, page);
+        return page;
+    }
 }
