@@ -36,4 +36,12 @@ public interface RecordMapper extends BaseMapper<Record> {
      * @return
      */
     List<RecordDTO> getUnPurchaseRecordList(@Param("recordDTO") RecordDTO recordDTO, @Param("orderId")  Long orderId);
+
+    /**
+     * 获取销售订单中未被加入的货物记录
+     * @param recordDTO
+     * @param orderId
+     * @return
+     */
+    List<RecordDTO> getUnSaleRecordList(@Param("recordDTO") RecordDTO recordDTO,@Param("orderId") Long orderId);
 }
