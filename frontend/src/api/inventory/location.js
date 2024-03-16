@@ -43,3 +43,11 @@ export function delLocation(locationId) {
         method: 'delete'
     })
 }
+
+// 获取货位选择器
+export function getWareLocationSelect() {
+    return request({
+        url: '/inventory/location/getSelect',
+        method: 'get'
+    })
+}

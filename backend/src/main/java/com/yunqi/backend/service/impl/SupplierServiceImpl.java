@@ -3,7 +3,10 @@ package com.yunqi.backend.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yunqi.backend.common.util.CheckUtils;
 import com.yunqi.backend.common.util.PageUtils;
+import com.yunqi.backend.exception.BizException;
+import com.yunqi.backend.exception.message.CommonError;
 import com.yunqi.backend.mapper.SupplierMapper;
 import com.yunqi.backend.model.dto.SupplierDTO;
 import com.yunqi.backend.model.entity.Supplier;
@@ -38,7 +41,18 @@ public class SupplierServiceImpl extends ServiceImpl<SupplierMapper, Supplier> i
     public void saveSupplier(SupplierDTO supplierDTO) {
         Supplier supplier = new Supplier();
         BeanUtils.copyProperties(supplierDTO, supplier);
-        // TODO 供应商 新增校验
+
+        // 校验手机号
+        if (CheckUtils.checkPhone(supplier.getPhone())) {
+            throw new BizException(CommonError.PHONE_ERROR);
+        }
+
+        LambdaQueryWrapper<Supplier> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Supplier::getPhone, supplier.getPhone());
+        if (supplierMapper.selectCount(wrapper) > 0) {
+            throw new BizException(CommonError.PHONE_REPEAT);
+        }
+
         supplierMapper.insert(supplier);
     }
 
@@ -46,7 +60,17 @@ public class SupplierServiceImpl extends ServiceImpl<SupplierMapper, Supplier> i
     public void updateSupplier(SupplierDTO supplierDTO) {
         Supplier supplier = new Supplier();
         BeanUtils.copyProperties(supplierDTO, supplier);
-        // TODO 供应商 更新校验
+        // 校验手机号
+        if (CheckUtils.checkPhone(supplier.getPhone())) {
+            throw new BizException(CommonError.PHONE_ERROR);
+        }
+
+        LambdaQueryWrapper<Supplier> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Supplier::getPhone, supplier.getPhone());
+        Supplier temp = supplierMapper.selectOne(wrapper);
+        if (temp != null && !temp.getPhone().equals(supplier.getPhone())) {
+            throw new BizException(CommonError.PHONE_REPEAT);
+        }
         supplierMapper.updateById(supplier);
     }
 }

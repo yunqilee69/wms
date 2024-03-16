@@ -48,4 +48,10 @@ public interface RecordService extends IService<Record> {
      * @return
      */
     Page<RecordDTO> getUnSaleRecordList(RecordDTO recordDTO, Long orderId);
+
+    /**
+     * 新增库存记录
+     * @param recordDTO
+     */
+    void saveRecord(RecordDTO recordDTO);
 }

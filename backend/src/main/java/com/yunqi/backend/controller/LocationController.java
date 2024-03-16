@@ -1,16 +1,23 @@
 package com.yunqi.backend.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yunqi.backend.common.result.Result;
+import com.yunqi.backend.common.util.DictUtils;
 import com.yunqi.backend.common.util.PageUtils;
 import com.yunqi.backend.model.dto.LocationDTO;
 import com.yunqi.backend.model.entity.Location;
+import com.yunqi.backend.model.entity.Ware;
 import com.yunqi.backend.service.LocationService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 货位信息控制器
@@ -86,4 +93,14 @@ public class LocationController {
         return Result.success();
     }
 
+    /**
+     * 获取数据库所有的货物数据，并组装为前端select组件的数据
+     * @return
+     */
+    @GetMapping("/getSelect")
+    public Result getSelect() {
+        LambdaQueryWrapper<Location> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Location::getStatus, "0");
+        return Result.success(locationService.getBaseMapper().selectList(wrapper));
+    }
 }

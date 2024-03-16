@@ -1,7 +1,9 @@
 package com.yunqi.backend.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yunqi.backend.common.result.Result;
+import com.yunqi.backend.common.util.DictUtils;
 import com.yunqi.backend.common.util.PageUtils;
 import com.yunqi.backend.model.dto.WareDTO;
 import com.yunqi.backend.model.entity.Ware;
@@ -10,7 +12,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 货物信息控制器
@@ -85,6 +91,30 @@ public class WareController {
     public Result update(@RequestBody WareDTO wareDTO) {
         wareService.updateWare(wareDTO);
         return Result.success();
+    }
+
+    /**
+     * 获取数据库所有的货物数据，并组装为前端select组件的数据
+     * @return
+     */
+    @GetMapping("/getSelect")
+    public Result getSelect() {
+        List<Ware> wareList = wareService.getBaseMapper().selectList(null);
+        Map<String, List<Ware>> map = wareList.stream().collect(Collectors.groupingBy(Ware::getBrand));
+        List<Object> result = new ArrayList<>();
+        map.forEach((key, value) -> {
+            String brand = DictUtils.getLabelByValue(key, "sys_inventory_brand");
+            // 将规格的值转换为显示名称
+            value.forEach(ware -> {
+                ware.setSpec(DictUtils.getLabelByValue(ware.getSpec(), "sys_inventory_spec"));
+            });
+            // 组装前端数据
+            HashMap<Object, Object> t = new HashMap<>();
+            t.put("label", brand);
+            t.put("options", value);
+            result.add(t);
+        });
+        return Result.success(result);
     }
 
 }

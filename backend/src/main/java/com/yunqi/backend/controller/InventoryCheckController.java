@@ -99,4 +99,6 @@ public class InventoryCheckController {
     public Result getCheckDetailList(WareDTO wareDTO, Long checkId) {
         return Result.success();
     }
+
+    // TODO 将盘点的数据应用到数据库中，应用后不可修改
 }

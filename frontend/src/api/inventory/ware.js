@@ -43,3 +43,10 @@ export function delWare(wareId) {
         method: 'delete'
     })
 }
+
+export function getWareSelect() {
+    return request({
+        url: '/inventory/ware/getSelect',
+        method: 'get'
+    })
+}

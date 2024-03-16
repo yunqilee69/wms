@@ -8,16 +8,22 @@ import com.yunqi.backend.common.result.Result;
 import com.yunqi.backend.common.util.PageUtils;
 import com.yunqi.backend.exception.BizException;
 import com.yunqi.backend.exception.message.RecordError;
+import com.yunqi.backend.mapper.LocationMapper;
 import com.yunqi.backend.mapper.RecordMapper;
+import com.yunqi.backend.mapper.WareMapper;
 import com.yunqi.backend.model.dto.RecordDTO;
+import com.yunqi.backend.model.entity.Location;
 import com.yunqi.backend.model.entity.Record;
+import com.yunqi.backend.model.entity.Ware;
 import com.yunqi.backend.service.RecordService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author liyunqi
@@ -27,6 +33,12 @@ import java.util.List;
 public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> implements RecordService {
     @Resource
     RecordMapper recordMapper;
+
+    @Resource
+    LocationMapper locationMapper;
+
+    @Resource
+    WareMapper wareMapper;
 
     @Override
     public Page<RecordDTO> getRecordPage(RecordDTO recordDTO) {
@@ -73,5 +85,21 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         List<RecordDTO> recordDTOList = recordMapper.getUnSaleRecordList(recordDTO, orderId);
         PageUtils.handlePageList(recordDTOList, page);
         return page;
+    }
+
+    @Override
+    public void saveRecord(RecordDTO recordDTO) {
+        Record record = new Record();
+        BeanUtils.copyProperties(recordDTO, record);
+
+        // 组装数据
+        Location location = locationMapper.selectById(recordDTO.getLocationId());
+        Ware ware = wareMapper.selectById(recordDTO.getWareId());
+        record.setLocationName(location.getName());
+        record.setQualityMonth(ware.getQualityMonth());
+        record.setGuaranteeDate(recordDTO.getProductionDate().plusMonths(ware.getQualityMonth()));
+
+        // TODO 新增校验
+        recordMapper.insert(record);
     }
 }

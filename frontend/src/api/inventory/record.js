@@ -22,3 +22,12 @@ export function updateAlarmThreshold(recordIds, alarmThreshold) {
         params: data
     })
 }
+
+// 新增库存记录
+export function addRecord(data) {
+    return request({
+        url: '/inventory/record',
+        method: 'post',
+        data: data
+    })
+}

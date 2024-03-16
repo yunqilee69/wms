@@ -51,4 +51,31 @@ public class RecordController {
         return Result.success();
     }
 
+    /**
+     * 新增库存
+     * @param recordDTO
+     * @return
+     */
+    @PreAuthorize("@sps.hasPermi('inventory:record:add')")
+    @PostMapping
+    public Result add(@RequestBody RecordDTO recordDTO) {
+        recordService.saveRecord(recordDTO);
+        return Result.success();
+    }
+
+    /**
+     * 删除库存记录
+     * @param ids
+     * @return
+     */
+    @PreAuthorize("@sps.hasPermi('inventory:record:remove')")
+    @DeleteMapping
+    public Result delete(List<Long> ids) {
+        if (ids.size() == 0) {
+            return Result.fail("库存id为空");
+        }
+        //TODO 删除校验
+        recordService.removeBatchByIds(ids);
+        return Result.success();
+    }
 }

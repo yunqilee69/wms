@@ -59,6 +59,25 @@
             <el-button
                 type="primary"
                 plain
+                icon="Plus"
+                @click="handleAdd"
+                v-hasPermi="['inventory:record:add']"
+            >新增</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+                type="danger"
+                plain
+                icon="Delete"
+                :disabled="multiple"
+                @click="handleDelete"
+                v-hasPermi="['inventory:record:delete']"
+            >删除</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+                type="primary"
+                plain
                 icon="edit"
                 :disabled="multiple"
                 @click="handleAlarmThreshold"
@@ -138,7 +157,7 @@
 
     <!-- 查看货物详情   -->
     <el-dialog :title="'货物详情'" v-model="detailShow" width="500px" append-to-body>
-      <el-form :model="detailForm" :rules="rules" ref="wareRef" label-width="80px">
+      <el-form :model="detailForm" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="货物名称" prop="name">
@@ -240,12 +259,84 @@
         </el-row>
       </el-form>
     </el-dialog>
+
+<!--    新增库存记录-->
+    <el-dialog :title="'新增库存记录'" v-model="open" width="500px" append-to-body>
+      <el-form :model="form" :rules="rules" ref="recordRef" label-width="80px">
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="货位" prop="locationId">
+              <el-select
+                  v-model="form.locationId"
+                  clearable
+                  filterable
+              >
+                <el-option
+                    v-for="item in wareLocationList"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="货物" prop="wareId">
+              <el-select
+                  v-model="form.wareId"
+                  clearable
+                  filterable
+              >
+                <el-option-group
+                    v-for="group in wareList"
+                    :key="group.label"
+                    :label="group.label"
+                >
+                  <el-option
+                    v-for="item in group.options"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  >
+                    <span>{{ item.name }}</span>
+                    <span class="spec" >{{ item.spec }}</span>
+                  </el-option>
+                </el-option-group>
+              </el-select>
+            </el-form-item>
+
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="生产日期" prop="productionDate">
+              <el-date-picker
+                v-model="form.productionDate"
+                type="date"
+                placeholder="请选择货物生产日期"
+                format="YYYY-MM-DD"
+                value-format="YYYY-MM-DD"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+          <el-button @click="cancel">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup name="User">
-import { getRecordList, updateAlarmThreshold } from "@/api/inventory/record"
-import { getWareById  } from "@/api/inventory/ware"
+import { getRecordList, updateAlarmThreshold, addRecord } from "@/api/inventory/record"
+import {addWare, getWareById, getWareSelect, updateWare} from "@/api/inventory/ware"
+import {getWareLocationSelect} from "@/api/inventory/location"
 
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable } = proxy.useDict( "sys_normal_disable");
@@ -259,8 +350,11 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
+const wareLocationList = ref([])
+const wareList = ref([])
 
 const detailShow = ref(false);
+const show = ref(false);
 
 const data = reactive({
   detailForm: {},
@@ -271,6 +365,11 @@ const data = reactive({
     locationName: undefined,
     wareName: undefined,
     wareBrand: undefined
+  },
+  rules: {
+    wareId: [{ required: true, message: "货位不能为空", trigger: "blur" }],
+    locationId: [{ required: true, message: "货物不能为空", trigger: "blur" }],
+    productionDate: [{ required: true, message: "生产日期不能为空", trigger: "blur" }],
   }
 });
 
@@ -340,5 +439,58 @@ function handleAlarmThreshold(row) {
   }).catch(() => {});
 }
 
+function reset() {
+  form.value = {
+    id: undefined,
+    wareId: undefined,
+    locationId: undefined,
+    productionDate: undefined
+  }
+}
+
+/** 新增按钮操作 */
+function handleAdd() {
+  reset();
+  open.value = true;
+  title.value = "添加货物";
+
+  // 获取货位数据
+  getWareLocationSelect().then(res => {
+    wareLocationList.value = res;
+  })
+
+  // 获取货物数据
+  getWareSelect().then(res => {
+    wareList.value = res;
+  })
+}
+
+// 确定
+function submitForm() {
+  proxy.$refs["recordRef"].validate(valid => {
+    if (valid) {
+      addRecord(form.value).then(response => {
+        proxy.$modal.msgSuccess("新增成功");
+        open.value = false;
+        getList();
+      });
+    }
+  });
+}
+
+// 取消
+function cancel() {
+  open.value = fales;
+  reset();
+}
+
 getList();
 </script>
+
+<style>
+.spec {
+  float: right;
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
+}
+</style>

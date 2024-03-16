@@ -63,7 +63,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public Long registerUser(RegisterRequest registerRequest) {
-        // TODO 完成注册逻辑
 
         String username = registerRequest.getUsername();
         String password = registerRequest.getPassword();
@@ -179,9 +178,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void saveEmp(EmpDTO empDTO) {
-        // TODO 校验保存员工
+        if (StringUtils.isAnyEmpty(empDTO.getUsername(), empDTO.getPassword())) {
+            throw new BizException(UserError.USERNAME_OR_PASSWORD_EMPTY);
+        }
+
         User user = new User();
         BeanUtils.copyProperties(empDTO, user);
+
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getUsername, empDTO.getUsername());
+        if (userMapper.selectCount(wrapper) > 0) {
+            throw new BizException(UserError.USERNAME_EXISTS);
+        }
 
         save(user);
 
@@ -199,7 +207,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void updateEmp(EmpDTO empDTO) {
-        // TODO 校验更新员工
+        if (StringUtils.isAnyEmpty(empDTO.getUsername(), empDTO.getPassword())) {
+            throw new BizException(UserError.USERNAME_OR_PASSWORD_EMPTY);
+        }
+
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getUsername, empDTO.getUsername());
+        User temp = userMapper.selectOne(wrapper);
+        if (temp != null && temp.getId().longValue() != empDTO.getUserId().longValue()) {
+            throw new BizException(UserError.USERNAME_EXISTS);
+        }
+
         User user = new User();
         BeanUtils.copyProperties(empDTO, user);
 
