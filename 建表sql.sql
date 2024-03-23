@@ -219,6 +219,16 @@ create table tb_inventory_record (
     update_time DATETIME COMMENT "更新时间"
 );
 
+### 库存信息表
+### 每天都会存储一条记录
+DROP TABLE IF exists tb_inventory_info;
+create table tb_inventory_info (
+    id BIGINT primary key COMMENT "主键",
+    total_amount DECIMAL(10, 2) COMMENT "仓库总价值",
+		total_number int COMMENT "仓库总数量",
+    record_date DATETIME COMMENT "记录时间"
+);
+
 ### 库存盘点表
 DROP TABLE IF exists tb_inventory_check;
 create table tb_inventory_check (

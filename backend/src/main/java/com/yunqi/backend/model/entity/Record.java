@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.yunqi.backend.common.base.BaseEntity;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
@@ -62,6 +63,6 @@ public class Record extends BaseEntity {
     /**
      * 总金额
      */
-    private int totalAmount;
+    private BigDecimal totalAmount;
 
 }

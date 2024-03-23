@@ -44,4 +44,10 @@ public interface RecordMapper extends BaseMapper<Record> {
      * @return
      */
     List<RecordDTO> getUnSaleRecordList(@Param("recordDTO") RecordDTO recordDTO,@Param("orderId") Long orderId);
+
+    /**
+     * 获取在库数量低于报警阈值的所有库存记录
+     * @return
+     */
+    List<RecordDTO> getAlarmRecord();
 }

@@ -5,12 +5,15 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yunqi.backend.model.dto.RecordDTO;
 import com.yunqi.backend.model.entity.Record;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * @author liyunqi
  */
 public interface RecordService extends IService<Record> {
+    // TODO 订单应用后，需要更新仓库的数据
+
     /**
      * 分页查询
      * @param recordDTO
@@ -54,4 +57,18 @@ public interface RecordService extends IService<Record> {
      * @param recordDTO
      */
     void saveRecord(RecordDTO recordDTO);
+
+    /**
+     * 获取指定日期内的库存总数量
+     * @param begin
+     * @param end
+     * @return
+     */
+    int getAllNumber(LocalDateTime begin, LocalDateTime end);
+
+    /**
+     * 获取在库数量低于报警阈值的所有库存记录
+     * @return
+     */
+    List<RecordDTO> getAlarmRecord();
 }

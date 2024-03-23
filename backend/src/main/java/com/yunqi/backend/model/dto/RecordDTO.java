@@ -63,7 +63,7 @@ public class RecordDTO extends BaseDTO {
     /**
      * 总金额
      */
-    private int totalAmount;
+    private BigDecimal totalAmount;
 
     /**
      * 货物名称

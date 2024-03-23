@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunqi.backend.common.result.Result;
+import com.yunqi.backend.common.util.DictUtils;
 import com.yunqi.backend.common.util.PageUtils;
 import com.yunqi.backend.exception.BizException;
 import com.yunqi.backend.exception.message.RecordError;
@@ -13,6 +14,7 @@ import com.yunqi.backend.mapper.RecordMapper;
 import com.yunqi.backend.mapper.WareMapper;
 import com.yunqi.backend.model.dto.RecordDTO;
 import com.yunqi.backend.model.entity.Location;
+import com.yunqi.backend.model.entity.OrderSale;
 import com.yunqi.backend.model.entity.Record;
 import com.yunqi.backend.model.entity.Ware;
 import com.yunqi.backend.service.RecordService;
@@ -21,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -101,5 +105,15 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
 
         // TODO 新增校验
         recordMapper.insert(record);
+    }
+
+    @Override
+    public int getAllNumber(LocalDateTime begin, LocalDateTime end) {
+        return 0;
+    }
+
+    @Override
+    public List<RecordDTO> getAlarmRecord() {
+        return recordMapper.getAlarmRecord();
     }
 }

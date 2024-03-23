@@ -72,6 +72,19 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/dataBoard',
+    component: Layout,
+    redirect: '/index',
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/dataBoard'),
+        name: 'DataBoard',
+        meta: { title: '数据看板', icon: 'chart', affix: false }
+      }
+    ]
+  },
+  {
     path: '/user',
     component: Layout,
     hidden: true,

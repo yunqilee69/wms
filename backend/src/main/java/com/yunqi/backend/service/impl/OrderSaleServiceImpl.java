@@ -15,10 +15,7 @@ import com.yunqi.backend.mapper.OrderSaleDetailMapper;
 import com.yunqi.backend.mapper.OrderSaleMapper;
 import com.yunqi.backend.model.dto.OrderSaleDTO;
 import com.yunqi.backend.model.dto.SettlementDTO;
-import com.yunqi.backend.model.entity.OrderSale;
-import com.yunqi.backend.model.entity.OrderSaleDetail;
-import com.yunqi.backend.model.entity.Customer;
-import com.yunqi.backend.model.entity.User;
+import com.yunqi.backend.model.entity.*;
 import com.yunqi.backend.service.CustomerService;
 import com.yunqi.backend.service.OrderSaleService;
 import com.yunqi.backend.service.OrderSettlementService;
@@ -121,7 +118,7 @@ public class OrderSaleServiceImpl extends ServiceImpl<OrderSaleMapper, OrderSale
         }
 
         LambdaUpdateWrapper<OrderSale> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.set(OrderSale::getStatus, DictUtils.getValueByLabel("已付款", "sale_order_status"));
+        wrapper.set(OrderSale::getStatus, DictUtils.getValueByLabel("已收款", "sale_order_status"));
         wrapper.set(OrderSale::getActualAmount, settlementDTO.getActualAmount());
         wrapper.set(OrderSale::getRemark, settlementDTO.getRemark());
         wrapper.eq(OrderSale::getId, settlementDTO.getOrderId());
@@ -184,6 +181,21 @@ public class OrderSaleServiceImpl extends ServiceImpl<OrderSaleMapper, OrderSale
         updateWrapper.set(OrderSale::getReturnNumber, returnNumber);
         updateWrapper.eq(OrderSale::getId, orderId);
         orderSaleMapper.update(updateWrapper);
+    }
+
+    @Override
+    public BigDecimal getAmountByDate(LocalDateTime begin, LocalDateTime end) {
+        LambdaQueryWrapper<OrderSale> wrapper = new LambdaQueryWrapper<>();
+        wrapper.ge(OrderSale::getDeliveryTime, begin);
+        wrapper.le(OrderSale::getDeliveryTime, end);
+        wrapper.eq(OrderSale::getStatus, DictUtils.getValueByLabel("已收款", "sale_order_status"));
+        List<OrderSale> saleList = orderSaleMapper.selectList(wrapper);
+
+        BigDecimal amount = BigDecimal.ZERO;
+        for (OrderSale orderSale : saleList) {
+            amount = amount.add(orderSale.getActualAmount());
+        }
+        return amount;
     }
 
 }

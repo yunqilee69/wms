@@ -77,7 +77,6 @@ public class DictUtils {
      * @param typeCode
      */
     public static String getLabelByValue(String value, String typeCode) {
-        refreshCache();
         List<DictItem> dictItemList = getDictItemCache(typeCode).stream().filter(dictItem -> dictItem.getValue().equals(value)).collect(Collectors.toList());
         if (dictItemList.size() == 0) {
             throw new BizException(DictError.FIND_ITEM_ERROR);
@@ -91,7 +90,6 @@ public class DictUtils {
      * @param typeCode
      */
     public static String getValueByLabel(String label, String typeCode) {
-        refreshCache();
         List<DictItem> dictItemList = getDictItemCache(typeCode).stream().filter(dictItem -> dictItem.getLabel().equals(label)).collect(Collectors.toList());
         if (dictItemList.size() == 0) {
             throw new BizException(DictError.FIND_ITEM_ERROR);

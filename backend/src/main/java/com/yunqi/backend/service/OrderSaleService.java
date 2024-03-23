@@ -6,6 +6,8 @@ import com.yunqi.backend.model.dto.OrderSaleDTO;
 import com.yunqi.backend.model.dto.SettlementDTO;
 import com.yunqi.backend.model.entity.OrderSale;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -52,4 +54,12 @@ public interface OrderSaleService extends IService<OrderSale> {
      * @param orderId
      */
     void updateOrderSaleData(Long orderId);
+
+    /**
+     * 根据时间范围获取采购订单的总实际金额
+     * @param begin
+     * @param end
+     * @return
+     */
+    BigDecimal getAmountByDate(LocalDateTime begin, LocalDateTime end);
 }

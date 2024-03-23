@@ -82,14 +82,14 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                 router.setAlwaysShow(true);
                 router.setRedirect("noRedirect");
                 router.setChildren(buildMenus(menuChildren));
-            } else if (menu.getParentId().intValue() == 0) {
+            } else if (menu.getParentId().intValue() == 0 && MenuConstants.TYPE_MENU.equals(menu.getMenuType())) {
                 router.setMeta(new MetaDTO(menu.getName(), menu.getIcon()));
                 router.setPath("/");
                 List<RouterDTO> childrenList = new ArrayList<>();
                 RouterDTO children = new RouterDTO();
                 String routerPath = menu.getRouterPath();
                 children.setPath(routerPath);
-                children.setComponent(UserConstants.INNER_LINK);
+                children.setComponent(UserConstants.PARENT_VIEW);
                 children.setName(StringUtils.capitalize(routerPath));
                 children.setMeta(new MetaDTO(menu.getName(), menu.getIcon(), menu.getRouterPath()));
                 childrenList.add(children);

@@ -185,4 +185,19 @@ public class OrderPurchaseServiceImpl extends ServiceImpl<OrderPurchaseMapper, O
         orderPurchaseMapper.update(updateWrapper);
     }
 
+    @Override
+    public BigDecimal getAmountByDate(LocalDateTime begin, LocalDateTime end) {
+        LambdaQueryWrapper<OrderPurchase> wrapper = new LambdaQueryWrapper<>();
+        wrapper.ge(OrderPurchase::getReceiptTime, begin);
+        wrapper.le(OrderPurchase::getReceiptTime, end);
+        wrapper.eq(OrderPurchase::getStatus, DictUtils.getValueByLabel("已付款", "purchase_order_status"));
+        List<OrderPurchase> purchaseList = orderPurchaseMapper.selectList(wrapper);
+
+        BigDecimal amount = BigDecimal.ZERO;
+        for (OrderPurchase orderPurchase : purchaseList) {
+            amount = amount.add(orderPurchase.getActualAmount());
+        }
+        return amount;
+    }
+
 }

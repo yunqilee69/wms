@@ -78,7 +78,7 @@ public class OrderSale extends BaseEntity {
     /**
      * 退货总金额
      */
-    private String returnAmount;
+    private BigDecimal returnAmount;
 
     /**
      * 备注

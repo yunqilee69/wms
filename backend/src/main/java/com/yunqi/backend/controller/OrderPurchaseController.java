@@ -116,4 +116,5 @@ public class OrderPurchaseController {
         return Result.success();
     }
 
+    // TODO 可以手动设置价格，默认是货物数据库中的数据
 }
