@@ -70,7 +70,7 @@ public class OrderSaleServiceImpl extends ServiceImpl<OrderSaleMapper, OrderSale
         orderSale.setDocumentCode(DocumentUtils.generateDocumentNumber(DocumentConstants.PURCHASE));
         orderSale.setStatus("1");
         orderSale.setCustomerId(customerId);
-        orderSale.setCustomerName(customer.getNickname());
+        orderSale.setCustomerName(customer.getName());
         orderSale.setCustomerPhone(customer.getPhone());
         orderSale.setCustomerAddress(customer.getAddress());
 

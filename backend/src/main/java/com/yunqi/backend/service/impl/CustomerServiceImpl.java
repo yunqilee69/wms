@@ -29,6 +29,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     public Page<Customer> getCustomerPage(CustomerDTO customerDTO) {
         Page<Customer> page = PageUtils.getPage();
         LambdaQueryWrapper<Customer> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(customerDTO.getName() != null, Customer::getName, customerDTO.getName());
         wrapper.like(customerDTO.getNickname() != null, Customer::getNickname, customerDTO.getNickname());
         wrapper.like(customerDTO.getPhone() != null, Customer::getPhone, customerDTO.getPhone());
         return customerMapper.selectPage(page, wrapper);

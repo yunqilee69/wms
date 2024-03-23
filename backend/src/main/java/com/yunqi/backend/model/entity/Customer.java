@@ -18,7 +18,12 @@ public class Customer extends BaseEntity {
     private Long id;
 
     /**
-     * 昵称
+     * 客户名称
+     */
+    private String name;
+
+    /**
+     * 联系人名称
      */
     private String nickname;
 

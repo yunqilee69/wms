@@ -4,10 +4,19 @@
       <!--供应商数据-->
       <el-col :span="24" :xs="24">
         <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="82px">
-          <el-form-item label="供应商昵称" prop="nickname">
+          <el-form-item label="供应商名称" prop="nickname">
+            <el-input
+                v-model="queryParams.name"
+                placeholder="请输入供应商名称"
+                clearable
+                style="width: 240px"
+                @keyup.enter="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="联系人名称" prop="nickname">
             <el-input
                 v-model="queryParams.nickname"
-                placeholder="请输入供应商昵称"
+                placeholder="请输入联系人名称"
                 clearable
                 style="width: 240px"
                 @keyup.enter="handleQuery"
@@ -68,7 +77,8 @@
               <image-preview :src="scope.row.avatar" :height="50" :width="50" />
             </template>
           </el-table-column>
-          <el-table-column label="供应商昵称" align="center" key="nickname" prop="nickname" :show-overflow-tooltip="true" />
+          <el-table-column label="供应商名称" align="center" key="name" prop="name" :show-overflow-tooltip="true" />
+          <el-table-column label="联系人名称" align="center" key="nickname" prop="nickname" :show-overflow-tooltip="true" />
           <el-table-column label="手机号" align="center" key="phone" prop="phone" :show-overflow-tooltip="true" />
           <el-table-column label="性别" align="center" key="gender" prop="gender" :show-overflow-tooltip="true">
             <template #default="scope">
@@ -108,20 +118,20 @@
       <el-form :model="form" :rules="rules" ref="supplierRef" label-width="80px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="供应商昵称" prop="nickname">
-              <el-input v-model="form.nickname" placeholder="请输入供应商昵称" maxlength="30" />
+            <el-form-item label="供应商名称" prop="nickname">
+              <el-input v-model="form.name" placeholder="请输入供应商名称" maxlength="30" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="手机号码" prop="phone">
-              <el-input v-model="form.phone" placeholder="请输入手机号码" maxlength="11" />
+            <el-form-item label="联系人名称" prop="nickname">
+              <el-input v-model="form.nickname" placeholder="请输入联系人名称" maxlength="30" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="邮箱" prop="email">
-              <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
+            <el-form-item label="手机号码" prop="phone">
+              <el-input v-model="form.phone" placeholder="请输入手机号码" maxlength="11" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -134,6 +144,13 @@
                     :value="dict.value"
                 ></el-option>
               </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="邮箱" prop="email">
+              <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -165,7 +182,6 @@
 
 <script setup name="User">
 import { getSupplierList, getSupplierById, addSupplier, delSupplier, updateSupplier } from "@/api/user/supplier"
-import UserAvatar from "@/views/user/profile/userAvatar.vue";
 
 const router = useRouter();
 const { proxy } = getCurrentInstance();
@@ -186,12 +202,13 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
+    name: undefined,
     nickname: undefined,
     phone: undefined
   },
   rules: {
-    nickname: [{ required: true, message: "供应商昵称不能为空", trigger: "blur" }],
-    password: [{ required: true, message: "供应商密码不能为空", trigger: "blur" }, { min: 5, max: 20, message: "供应商密码长度必须介于 5 和 20 之间", trigger: "blur" }],
+    name: [{ required: true, message: "供应商名称不能为空", trigger: "blur" }],
+    nickname: [{ required: true, message: "联系人名称不能为空", trigger: "blur" }],
     email: [{ required: true, message: "邮箱不能为空", trigger: "blur" }, { type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }],
     phone: [{ required: true, message: "手机号不能为空", trigger: "blur" }, { pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur" }],
   }

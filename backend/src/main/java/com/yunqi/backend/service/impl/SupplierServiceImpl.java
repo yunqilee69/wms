@@ -32,6 +32,7 @@ public class SupplierServiceImpl extends ServiceImpl<SupplierMapper, Supplier> i
     public Page<Supplier> getSupplierPage(SupplierDTO supplierDTO) {
         Page<Supplier> page = PageUtils.getPage();
         LambdaQueryWrapper<Supplier> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(supplierDTO.getName() != null, Supplier::getName, supplierDTO.getName());
         wrapper.like(supplierDTO.getNickname() != null, Supplier::getNickname, supplierDTO.getNickname());
         wrapper.like(supplierDTO.getPhone() != null, Supplier::getPhone, supplierDTO.getPhone());
         return supplierMapper.selectPage(page, wrapper);

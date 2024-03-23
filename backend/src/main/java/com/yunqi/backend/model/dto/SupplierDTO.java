@@ -16,7 +16,12 @@ public class SupplierDTO extends BaseEntity {
     private Long id;
 
     /**
-     * 昵称
+     * 供应商名称
+     */
+    private String name;
+
+    /**
+     * 联系人名称
      */
     private String nickname;
 

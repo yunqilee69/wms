@@ -74,7 +74,7 @@ public class OrderPurchaseServiceImpl extends ServiceImpl<OrderPurchaseMapper, O
         orderPurchase.setDocumentCode(DocumentUtils.generateDocumentNumber(DocumentConstants.PURCHASE));
         orderPurchase.setStatus("1");
         orderPurchase.setSupplierId(supplierId);
-        orderPurchase.setSupplierName(supplier.getNickname());
+        orderPurchase.setSupplierName(supplier.getName());
         orderPurchase.setSupplierPhone(supplier.getPhone());
 
         // 保存

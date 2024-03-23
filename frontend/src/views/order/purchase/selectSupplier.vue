@@ -5,10 +5,19 @@
       <!--供应商数据-->
       <el-col :span="24" :xs="24">
         <el-form :model="queryParams" ref="queryRef" :inline="true" label-width="82px">
-          <el-form-item label="供应商昵称" prop="nickname">
+          <el-form-item label="供应商名称" prop="name">
+            <el-input
+                v-model="queryParams.name"
+                placeholder="请输入供应商名称"
+                clearable
+                style="width: 240px"
+                @keyup.enter="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="联系人名称" prop="nickname">
             <el-input
                 v-model="queryParams.nickname"
-                placeholder="请输入供应商昵称"
+                placeholder="请输入联系人名称"
                 clearable
                 style="width: 240px"
                 @keyup.enter="handleQuery"
@@ -40,7 +49,8 @@
               <image-preview :src="scope.row.avatar" :height="50" :width="50" />
             </template>
           </el-table-column>
-          <el-table-column label="供应商昵称" align="center" key="nickname" prop="nickname" :show-overflow-tooltip="true" />
+          <el-table-column label="供应商名称" align="center" key="name" prop="name" :show-overflow-tooltip="true" />
+          <el-table-column label="联系人名称" align="center" key="nickname" prop="nickname" :show-overflow-tooltip="true" />
           <el-table-column label="手机号" align="center" key="phone" prop="phone" :show-overflow-tooltip="true" />
           <el-table-column label="性别" align="center" key="gender" prop="gender" :show-overflow-tooltip="true">
             <template #default="scope">
