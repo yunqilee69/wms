@@ -118,7 +118,7 @@
       <el-form :model="form" :rules="rules" ref="supplierRef" label-width="80px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="供应商名称" prop="nickname">
+            <el-form-item label="供应商名称" prop="name">
               <el-input v-model="form.name" placeholder="请输入供应商名称" maxlength="30" />
             </el-form-item>
           </el-col>

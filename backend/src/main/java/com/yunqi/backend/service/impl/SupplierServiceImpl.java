@@ -44,7 +44,7 @@ public class SupplierServiceImpl extends ServiceImpl<SupplierMapper, Supplier> i
         BeanUtils.copyProperties(supplierDTO, supplier);
 
         // 校验手机号
-        if (CheckUtils.checkPhone(supplier.getPhone())) {
+        if (!CheckUtils.checkPhone(supplier.getPhone())) {
             throw new BizException(CommonError.PHONE_ERROR);
         }
 
@@ -62,7 +62,7 @@ public class SupplierServiceImpl extends ServiceImpl<SupplierMapper, Supplier> i
         Supplier supplier = new Supplier();
         BeanUtils.copyProperties(supplierDTO, supplier);
         // 校验手机号
-        if (CheckUtils.checkPhone(supplier.getPhone())) {
+        if (!CheckUtils.checkPhone(supplier.getPhone())) {
             throw new BizException(CommonError.PHONE_ERROR);
         }
 

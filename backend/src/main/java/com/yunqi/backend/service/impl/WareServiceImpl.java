@@ -70,6 +70,14 @@ public class WareServiceImpl extends ServiceImpl<WareMapper, Ware> implements Wa
         }
 
         wareMapper.insert(ware);
+
+        // 新增货物需要保存货物价格的变化
+        WareMoney wareMoney = new WareMoney();
+        wareMoney.setWareId(ware.getId());
+        wareMoney.setSalePrice(ware.getSalePrice());
+        wareMoney.setPurchasePrice(ware.getPurchasePrice());
+        wareMoney.setRecordTime(LocalDateTime.now());
+        wareMoneyMapper.insert(wareMoney);
     }
 
     @Override

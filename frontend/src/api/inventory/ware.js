@@ -50,3 +50,12 @@ export function getWareSelect() {
         method: 'get'
     })
 }
+
+// 获取货物的价格变动
+export function getMoneyChange(id) {
+    return request({
+        url: '/inventory/ware/getMoneyChange',
+        method: 'get',
+        params: id
+    })
+}

@@ -87,6 +87,16 @@
                 v-hasPermi="['inventory:waresInfo:delete']"
             >删除</el-button>
           </el-col>
+          <el-col :span="1.5">
+            <el-button
+                type="primary"
+                plain
+                icon="Histogram"
+                :disabled="single"
+                @click="handleShowMoney"
+                v-hasPermi="['inventory:waresInfo:showMoney']"
+            >查看价格变动</el-button>
+          </el-col>
           <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
 
@@ -276,14 +286,19 @@
       </template>
     </el-dialog>
 
+    <!-- 查看价格变动 -->
+    <el-dialog title="历史价格" v-model="chartOpen" width="800px" append-to-body>
+      <div id="moneyChart" style="width: 100%; height: 300px"></div>
+    </el-dialog>
   </div>
 </template>
 
 <script setup name="User">
-import { getWareList, getWareById, addWare, delWare, updateWare } from "@/api/inventory/ware"
+import { getWareList, getWareById, addWare, delWare, updateWare, getMoneyChange } from "@/api/inventory/ware"
 import DictTag from "@/components/DictTag/index.vue";
 import FileUpload from "@/components/FileUpload/index.vue";
 import ImagePreview from "@/components/ImagePreview/index.vue";
+import * as echarts from "echarts";
 
 const router = useRouter();
 const { proxy } = getCurrentInstance();
@@ -299,6 +314,7 @@ const {
 
 const wareList = ref([]);
 const open = ref(false);
+const chartOpen = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
 const ids = ref([]);
@@ -408,6 +424,57 @@ function handleUpdate(row) {
     title.value = "修改货物";
   });
 };
+
+/** 获取货物价格变化图 */
+function handleShowMoney() {
+  chartOpen.value = true;
+  getMoneyChange({id: ids.value.join(",")}).then(res => {
+    let chart = echarts.getInstanceByDom(document.getElementById("moneyChart"));
+    if (chart == null) {
+      chart = echarts.init(document.getElementById("moneyChart"));
+    }
+    const option = {
+      xAxis: {
+        name: "日期",
+        type: 'category',
+        data: res.dateList,
+        axisTick: {
+          alignWithLabel: true,
+          length: 8, // 设置刻度的长度
+        },
+        axisLabel: {
+          interval: 'auto', // 设置为 0 表示全部显示，也可以设置为其他值，如2，表示间隔显示
+          //rotate: data.xAxis.length > 10 ? -25 : 0
+        }
+      },
+      legend: {
+        data: ["进价", "售价"]
+      },
+      yAxis: {
+        name: "单位（元）",
+        type: 'value'
+      },
+      tooltip: {
+      },
+      series: [
+        {
+          name: "进价",
+          data: res.purchasePrice,
+          type: 'line',
+          smooth: true
+        },
+        {
+          name: "售价",
+          data: res.salePrice,
+          type: 'line',
+          smooth: true
+        }
+      ]
+    };
+    chart.setOption(option);
+  })
+}
+
 /** 提交按钮 */
 function submitForm() {
   proxy.$refs["wareRef"].validate(valid => {

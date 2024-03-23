@@ -5,13 +5,17 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yunqi.backend.common.result.Result;
 import com.yunqi.backend.common.util.DictUtils;
 import com.yunqi.backend.common.util.PageUtils;
+import com.yunqi.backend.mapper.WareMoneyMapper;
 import com.yunqi.backend.model.dto.WareDTO;
 import com.yunqi.backend.model.entity.Ware;
+import com.yunqi.backend.model.entity.WareMoney;
 import com.yunqi.backend.service.WareService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +32,9 @@ public class WareController {
 
     @Resource
     WareService wareService;
+
+    @Resource
+    WareMoneyMapper wareMoneyMapper;
 
     /**
      * 分页查询
@@ -118,5 +125,33 @@ public class WareController {
     }
 
     // TODO 需要新增一个方法，通过货物id查看货物的金额变化趋势，在表格上设计一个按钮，使用echarts进行显示，一个折线图中直接显示进价和售价
+    /**
+     * 获取数据库所有的货物数据，并组装为前端select组件的数据
+     * @return
+     */
+    @GetMapping("/getMoneyChange")
+    public Result getMoneyChange(Long id) {
+        if (id == null) {
+            return Result.fail("id不能为空");
+        }
+        // 获取数据
+        LambdaQueryWrapper<WareMoney> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(WareMoney::getWareId, id);
+        List<WareMoney> wareMoneyList = wareMoneyMapper.selectList(wrapper);
 
+        // 组装数据
+        List<BigDecimal> salePriceList = new ArrayList<>();
+        List<BigDecimal> purchasePriceList = new ArrayList<>();
+        List<LocalDateTime> dateList = new ArrayList<>();
+        for (WareMoney wareMoney : wareMoneyList) {
+            salePriceList.add(wareMoney.getSalePrice());
+            purchasePriceList.add(wareMoney.getPurchasePrice());
+            dateList.add(wareMoney.getRecordTime());
+        }
+        Map<String, Object> result = new HashMap<>();
+        result.put("salePrice", salePriceList);
+        result.put("purchasePrice", purchasePriceList);
+        result.put("dateList", dateList);
+        return Result.success(result);
+    }
 }
