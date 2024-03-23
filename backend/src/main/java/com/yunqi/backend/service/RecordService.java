@@ -59,6 +59,13 @@ public interface RecordService extends IService<Record> {
     void saveRecord(RecordDTO recordDTO);
 
     /**
+     * 根据货物id获取库存记录数据
+     * @param wareId
+     * @return
+     */
+    List<Record> getRecordByWareId(Long wareId);
+
+    /**
      * 获取指定日期内的库存总数量
      * @param begin
      * @param end

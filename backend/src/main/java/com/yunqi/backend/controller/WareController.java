@@ -117,4 +117,6 @@ public class WareController {
         return Result.success(result);
     }
 
+    // TODO 需要新增一个方法，通过货物id查看货物的金额变化趋势，在表格上设计一个按钮，使用echarts进行显示，一个折线图中直接显示进价和售价
+
 }

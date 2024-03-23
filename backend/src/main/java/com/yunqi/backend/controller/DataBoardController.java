@@ -137,6 +137,10 @@ public class DataBoardController {
         return Result.success(result);
     }
 
+    // TODO 新增，分析订单，生成销量top10的货物
+
+    // TODO 新增，分析订单，生成利润top10的货物
+
     // 获取两个日期之间的所有日期
     private List<LocalDate> getAllDate(LocalDate begin, LocalDate end) {
         //当前集合用于存放从begin到end范围内的每天的日期

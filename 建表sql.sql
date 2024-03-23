@@ -174,11 +174,9 @@ DROP TABLE IF exists tb_inventory_ware_money;
 create table tb_inventory_ware_money (
     id BIGINT primary key COMMENT "主键",
     ware_id BIGINT COMMENT "货物id",
-    pre_sale_price DECIMAL(10, 2) COMMENT "前售价",
-    now_sale_price DECIMAL(10, 2) COMMENT "现售价",
-    pre_purchase_price DECIMAL(10, 2) COMMENT "前进价",
-    now_purchase_price DECIMAL(10, 2) COMMENT "现进价",
-    update_time DATETIME COMMENT "更新时间"
+    sale_price DECIMAL(10, 2) COMMENT "售价",
+    purchase_price DECIMAL(10, 2) COMMENT "进价",
+    record_time DATETIME COMMENT "更新时间"
 );
 
 ### 货位表

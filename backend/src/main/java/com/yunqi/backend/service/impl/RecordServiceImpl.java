@@ -108,6 +108,16 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
     }
 
     @Override
+    public List<Record> getRecordByWareId(Long wareId) {
+        if (wareId == null) {
+            return null;
+        }
+        LambdaQueryWrapper<Record> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Record::getWareId, wareId);
+        return recordMapper.selectList(wrapper);
+    }
+
+    @Override
     public int getAllNumber(LocalDateTime begin, LocalDateTime end) {
         return 0;
     }

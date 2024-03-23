@@ -34,7 +34,7 @@ public class ScheduleTask {
     InventoryInfoMapper inventoryInfoMapper;
 
     /**
-     * 每天的11点半，执行更新仓库的信息
+     * 每天晚上11点半，执行更新仓库的信息
      */
     @Scheduled(cron = "0 30 23 * * *") // 每晚11点半执行
     //@Scheduled(cron = "0 0/2 * * * *")
