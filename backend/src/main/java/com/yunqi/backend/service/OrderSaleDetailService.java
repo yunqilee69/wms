@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yunqi.backend.model.dto.OrderSaleDetailDTO;
 import com.yunqi.backend.model.entity.OrderSaleDetail;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -40,4 +41,11 @@ public interface OrderSaleDetailService extends IService<OrderSaleDetail> {
      * @param orderSaleDetailIds
      */
     void deleteByIds(List<Long> orderSaleDetailIds);
+
+    /**
+     * 设置细节表中的货物的价格
+     * @param detailIds
+     * @param amount
+     */
+    void setAmount(Long[] detailIds, BigDecimal amount);
 }

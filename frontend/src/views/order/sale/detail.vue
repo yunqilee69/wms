@@ -1,120 +1,84 @@
 <template>
   <div class="app-container">
     <!-- 订单信息  -->
-    <el-form>
-      <el-row :gutter="40">
-        <el-col :span="6">
-          <el-form-item label="单据号">
-            <el-input
-                v-model="orderInfo.documentCode"
-                disabled
-            />
-          </el-form-item>
-        </el-col>
-        <el-col  :span="6">
-          <el-form-item label="状态" prop="status" >
-            <el-select
-                v-model="orderInfo.status"
-                disabled
-            >
-              <el-option
-                  v-for="item in sale_order_status"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-
-              />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="客户名称" prop="customerName" >
-            <el-input
-                v-model="orderInfo.customerName"
-                disabled
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="客户电话" prop="customerPhone" >
-            <el-input
-                v-model="orderInfo.customerPhone"
-                disabled
-            />
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="40">
-        <el-col :span="6">
-          <el-form-item label="订货数量" prop="originNumber" >
-            <el-input
-                v-model="orderInfo.originNumber"
-                disabled
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="订货金额" prop="originAmount" >
-            <el-input
-                v-model="orderInfo.originAmount"
-                disabled
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="退货数量" prop="returnNumber" >
-            <el-input
-                v-model="orderInfo.returnNumber"
-                disabled
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="退货金额" prop="returnAmount" >
-            <el-input
-                v-model="orderInfo.returnAmount"
-                disabled
-            />
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="40" v-show="orderInfo.status != '1'" >
-        <el-col :span="6">
-          <el-form-item label="送件人名称" prop="deliveryName" >
-            <el-input
-                v-model="orderInfo.deliveryName"
-                disabled
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="送件人电话" prop="deliveryPhone" >
-            <el-input
-                v-model="orderInfo.deliveryPhone"
-                disabled
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="送件时间" prop="deliveryTime" >
-            <el-date-picker
-                v-model="orderInfo.deliveryTime"
-                value-format="YYYY-MM-DD HH-mm-ss"
-                type="datetime"
-                disabled
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="实际付款金额" prop="actualAmount" v-show="orderInfo.status == '3'">
-            <el-input
-                v-model="orderInfo.actualAmount"
-                disabled
-            />
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
+    <el-card>
+      <template #header>
+        <div class="card-header">
+          <span>订单详细信息</span>
+        </div>
+      </template>
+      <el-descriptions
+          class="margin-top"
+          :column="4"
+          border
+          style="margin-top: 10px"
+      >
+        <el-descriptions-item
+            label="单据号"
+        > {{ orderInfo.documentCode }}
+        </el-descriptions-item>
+        <el-descriptions-item
+            label="状态"
+        >
+          <dict-tag :value="orderInfo.status" :options="sale_order_status"/>
+        </el-descriptions-item>
+        <el-descriptions-item
+            label="客户名称"
+        >
+          {{ orderInfo.customerName }}
+        </el-descriptions-item>
+        <el-descriptions-item
+            label="客户电话"
+        >
+          {{ orderInfo.customerPhone }}
+        </el-descriptions-item>
+        <el-descriptions-item
+            label="订货数量"
+        >
+          {{ orderInfo.originNumber }}
+        </el-descriptions-item>
+        <el-descriptions-item
+            label="订货金额"
+        >
+          {{ orderInfo.originAmount }}
+        </el-descriptions-item>
+        <el-descriptions-item
+            label="退货数量"
+        >
+          {{ orderInfo.returnNumber }}
+        </el-descriptions-item>
+        <el-descriptions-item
+            label="退货金额"
+        >
+          {{ orderInfo.returnAmount }}
+        </el-descriptions-item>
+        <el-descriptions-item
+            v-if="orderInfo.status != '1'"
+            label="送件人名称"
+        >
+          {{ orderInfo.deliveryName }}
+        </el-descriptions-item>
+        <el-descriptions-item
+            v-if="orderInfo.status != '1'"
+            label="送件人电话"
+        >
+          {{ orderInfo.deliveryPhone }}
+        </el-descriptions-item>
+        <el-descriptions-item
+            v-if="orderInfo.status != '1'"
+            label="送件时间"
+        >
+          {{ orderInfo.deliveryTime }}
+        </el-descriptions-item>
+        <el-descriptions-item
+            v-if="orderInfo.status != '1'"
+            label="实际收款金额"
+        >
+          {{ orderInfo.actualAmount }}
+        </el-descriptions-item>
+      </el-descriptions>
+    </el-card>
+    <br>
 
     <!-- 查询条件   -->
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
@@ -183,6 +147,16 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
+            type="success"
+            plain
+            icon="Edit"
+            :disabled="multiple"
+            @click="handleSetAmount"
+            v-hasPermi="['sale:order:edit']"
+        >设置价格</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
             type="danger"
             plain
             icon="CircleClose"
@@ -247,10 +221,9 @@
 </template>
 
 <script setup>
-import { getOrderById, getOrderDetailList, delDetail, setDetailNumber } from "@/api/order/sale.js"
+import { getOrderById, getOrderDetailList, delDetail, setDetailNumber, setDetailAmount } from "@/api/order/sale.js"
 import DictTag from "@/components/DictTag/index.vue";
 import SelectRecord from "@/views/order/sale/selectRecord.vue";
-import {delCheck} from "@/api/inventory/check.js";
 
 const route = useRoute();
 const router = useRouter();
@@ -330,8 +303,8 @@ function getList() {
 
 // 新增货物
 function handleAdd() {
-  // 进货
-  detailType.value = "进货";
+  // 送货
+  detailType.value = "送货";
   nextTick(() => {
     proxy.$refs['recordRef'].show();
   });
@@ -357,6 +330,23 @@ function handleSetNumber() {
     inputErrorMessage: "必须为数字",
   }).then(({ value }) => {
     setDetailNumber({detailIds:detailIds, number:value}).then(response => {
+      getList();
+      proxy.$modal.msgSuccess("修改成功");
+    });
+  }).catch(() => {});
+}
+
+// 设置价格
+function handleSetAmount() {
+  const detailIds = ids.value.join(",");
+  proxy.$prompt('请输入的新价格', "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    closeOnClickModal: false,
+    inputPattern: /^\d*$/,
+    inputErrorMessage: "必须为数字",
+  }).then(({ value }) => {
+    setDetailAmount({detailIds:detailIds, amount:value}).then(response => {
       getList();
       proxy.$modal.msgSuccess("修改成功");
     });

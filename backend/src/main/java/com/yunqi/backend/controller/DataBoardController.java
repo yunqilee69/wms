@@ -1,6 +1,7 @@
 package com.yunqi.backend.controller;
 
 import com.yunqi.backend.common.result.Result;
+import com.yunqi.backend.model.dto.RecordDTO;
 import com.yunqi.backend.service.InventoryInfoService;
 import com.yunqi.backend.service.OrderPurchaseService;
 import com.yunqi.backend.service.OrderSaleService;
@@ -36,6 +37,9 @@ public class DataBoardController {
 
     @Resource
     InventoryInfoService inventoryInfoService;
+
+    @Resource
+    OrderSaleService orderSaleService;
 
     /**
      * 获取指定日期的采购额
@@ -141,16 +145,45 @@ public class DataBoardController {
      * 分析订单，生成销量top10的货物
      */
     @GetMapping("/salesTop10")
-    public Result salesTop10() {
-        return Result.success();
+    public Result salesTop10(
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
+
+        // 获取销量top10的货物信息
+        List<Map<String, String>> list = orderSaleService.getSalesTop10(LocalDateTime.of(begin, LocalTime.MIN), LocalDateTime.of(end, LocalTime.MAX));
+        List<String> xAxis = new ArrayList<>();
+        List<String> yAxis = new ArrayList<>();
+        for (Map<String, String> map : list) {
+            xAxis.add(map.get("wareName"));
+            yAxis.add(map.get("totalNumber"));
+        }
+        Map<String, Object> result = new HashMap<>();
+        result.put("xAxis", xAxis);
+        result.put("yAxis", yAxis);
+        return Result.success(result);
     }
 
     /**
      *  分析订单，生成利润top10的货物
      */
     @GetMapping("/profitTop10")
-    public Result profitTop10() {
-        return Result.success();
+    public Result profitTop10(
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
+
+        // 获取销量top10的货物信息
+        List<Map<String, String>> list = orderSaleService.getProfitTop10(LocalDateTime.of(begin, LocalTime.MIN), LocalDateTime.of(end, LocalTime.MAX));
+        List<String> xAxis = new ArrayList<>();
+        List<String> yAxis = new ArrayList<>();
+        for (Map<String, String> map : list) {
+            xAxis.add(map.get("wareName"));
+            yAxis.add(map.get("totalProfit"));
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("xAxis", xAxis);
+        result.put("yAxis", yAxis);
+        return Result.success(result);
     }
 
     // 获取两个日期之间的所有日期

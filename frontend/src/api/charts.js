@@ -47,3 +47,27 @@ export const getInventoryAmount = (begin, end) => {
         params: data
     })
 }
+
+// 获取销量top10
+export const getSalesTop10 = (begin, end) => {
+    const data = {
+        begin,end
+    }
+    return request({
+        url: '/dataBoard/salesTop10',
+        method: 'get',
+        params: data
+    })
+}
+
+// 获取利润top10
+export const getProfitTop10 = (begin, end) => {
+    const data = {
+        begin,end
+    }
+    return request({
+        url: '/dataBoard/profitTop10',
+        method: 'get',
+        params: data
+    })
+}

@@ -28,12 +28,27 @@
         <div ref="inventoryAmountRef" class="chart"></div>
       </el-col>
     </el-row>
+    <el-row :gutter="30">
+      <el-col :span="12">
+        <div ref="salesTop10Ref" class="chart"></div>
+      </el-col>
+      <el-col :span="12">
+        <div ref="profitTop10Ref" class="chart"></div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script setup>
 import * as echarts from "echarts";
-import {getInventoryAmount, getInventoryNumber, getPurchaseMoney, getSaleMoney} from "@/api/charts.js";
+import {
+  getInventoryAmount,
+  getInventoryNumber,
+  getProfitTop10,
+  getPurchaseMoney,
+  getSaleMoney,
+  getSalesTop10
+} from "@/api/charts.js";
 
 const radio = ref('近7天')
 const begin = ref();
@@ -43,6 +58,8 @@ const purchaseRef = ref();
 const saleRef = ref();
 const inventoryNumberRef = ref();
 const inventoryAmountRef = ref();
+const salesTop10Ref = ref();
+const profitTop10Ref = ref();
 
 // 监视选择的日期范围
 watch(radio, (newValue)=> {
@@ -86,7 +103,7 @@ function formatDate(date) {
   return year + '-' + month + '-' + day;
 }
 
-// 处理chart
+// 处理折线图
 function initLineChart(id, data) {
   let chart = echarts.getInstanceByDom(id);
   if (chart == null) {
@@ -129,6 +146,49 @@ function initLineChart(id, data) {
   chart.setOption(option);
 }
 
+// 处理柱状图
+function initBarChart(id, data) {
+  let chart = echarts.getInstanceByDom(id);
+  if (chart == null) {
+    chart = echarts.init(id);
+  }
+
+  const option = {
+    title: {
+      text: data.title,
+    },
+    xAxis: {
+      name: data.xName,
+      type: 'category',
+      data: data.xAxis,
+      axisTick: {
+        alignWithLabel: true,
+        length: 8, // 设置刻度的长度
+      },
+      axisLabel: {
+        interval: 'auto', // 设置为 0 表示全部显示，也可以设置为其他值，如2，表示间隔显示
+        //rotate: data.xAxis.length > 10 ? -25 : 0
+      }
+    },
+    yAxis: {
+      name: data.yName,
+      type: 'value'
+    },
+    tooltip: {
+
+    },
+    series: [
+      {
+        name: data.yName,
+        data: data.yAxis,
+        type: 'bar',
+        smooth: true
+      }
+    ]
+  };
+  chart.setOption(option);
+}
+
 // 页面的初始化
 function init() {
   getPurchaseMoney(begin.value, end.value).then(res=> {
@@ -154,6 +214,18 @@ function init() {
     res.xName = "日期"
     res.yName = "单位（元）"
     initLineChart(inventoryAmountRef.value, res);
+  });
+  getSalesTop10(begin.value, end.value).then(res=> {
+    res.title = "货物销量top10";
+    res.xName = "日期"
+    res.yName = "单位（元）"
+    initBarChart(salesTop10Ref.value, res);
+  });
+  getProfitTop10(begin.value, end.value).then(res=> {
+    res.title = "货物利润top10";
+    res.xName = "日期"
+    res.yName = "单位（元）"
+    initBarChart(profitTop10Ref.value, res);
   });
 }
 

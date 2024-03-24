@@ -301,6 +301,7 @@ create table tb_order_purchase_detail (
     ware_unit VARCHAR(64) COMMENT "货物单位",
     ware_bar_code VARCHAR(64) COMMENT "货物条形码",
     ware_purchase_price DECIMAL(10, 2) COMMENT "货物进价",
+    ware_sale_price DECIMAL(10, 2) COMMENT "货物售价",
     ware_number int COMMENT "货物数量",
     
     type VARCHAR(64) COMMENT "类型（进货，退货）"
@@ -350,7 +351,8 @@ create table tb_order_sale_detail (
     ware_spec VARCHAR(64) COMMENT "货物规格",
     ware_unit VARCHAR(64) COMMENT "货物单位",
     ware_bar_code VARCHAR(64) COMMENT "货物条形码",
-    ware_sale_price DECIMAL(10, 2) COMMENT "货物进价",
+    ware_purchase_price DECIMAL(10, 2) COMMENT "货物进价",
+    ware_sale_price DECIMAL(10, 2) COMMENT "货物售价",
     ware_number int COMMENT "货物数量",
     
     type VARCHAR(64) COMMENT "类型（送货，退货）"

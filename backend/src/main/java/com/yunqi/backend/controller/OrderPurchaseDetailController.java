@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -78,6 +79,18 @@ public class OrderPurchaseDetailController {
     @PutMapping("/setNumber")
     public Result setNumber(Long[] detailIds, Integer number) {
         orderPurchaseDetailService.setNumber(detailIds, number);
+        return Result.success();
+    }
+
+    /**
+     * 设置细节表中的货物的价格
+     * @param detailIds
+     * @param number
+     * @return
+     */
+    @PutMapping("/setAmount")
+    public Result setAmount(Long[] detailIds, BigDecimal amount) {
+        orderPurchaseDetailService.setAmount(detailIds, amount);
         return Result.success();
     }
 

@@ -67,6 +67,11 @@ public class OrderSaleDetail {
     private String wareBarCode;
 
     /**
+     * 货物进价
+     */
+    private BigDecimal warePurchasePrice;
+
+    /**
      * 货物售价
      */
     private BigDecimal wareSalePrice;

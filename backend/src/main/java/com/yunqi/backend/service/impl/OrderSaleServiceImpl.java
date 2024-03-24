@@ -14,6 +14,7 @@ import com.yunqi.backend.exception.message.OrderError;
 import com.yunqi.backend.mapper.OrderSaleDetailMapper;
 import com.yunqi.backend.mapper.OrderSaleMapper;
 import com.yunqi.backend.model.dto.OrderSaleDTO;
+import com.yunqi.backend.model.dto.RecordDTO;
 import com.yunqi.backend.model.dto.SettlementDTO;
 import com.yunqi.backend.model.entity.*;
 import com.yunqi.backend.service.CustomerService;
@@ -27,6 +28,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 订单销售服务实现类
@@ -196,6 +198,16 @@ public class OrderSaleServiceImpl extends ServiceImpl<OrderSaleMapper, OrderSale
             amount = amount.add(orderSale.getActualAmount());
         }
         return amount;
+    }
+
+    @Override
+    public List<Map<String, String>> getSalesTop10(LocalDateTime begin, LocalDateTime end) {
+        return orderSaleMapper.getSalesTop10(begin, end);
+    }
+
+    @Override
+    public List<Map<String, String>> getProfitTop10(LocalDateTime begin, LocalDateTime end) {
+        return orderSaleMapper.getProfitTop10(begin, end);
     }
 
 }

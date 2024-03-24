@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -91,6 +92,7 @@ public class OrderSaleDetailServiceImpl extends ServiceImpl<OrderSaleDetailMappe
             t.setWareUnit(DictUtils.getLabelByValue(ware.getUnit(), "sys_inventory_unit"));
             t.setWareBarCode(ware.getBarCode());
             t.setWareSalePrice(ware.getSalePrice());
+            t.setWarePurchasePrice(ware.getPurchasePrice());
             t.setWareNumber(0);
             t.setType(DictUtils.getValueByLabel(detailType, "order_detail_type"));
             orderSaleDetailMapper.insert(t);
@@ -139,6 +141,28 @@ public class OrderSaleDetailServiceImpl extends ServiceImpl<OrderSaleDetailMappe
         // 更新订单数据
         orderSaleService.updateOrderSaleData(orderId);
     }
-    
+
+    @Override
+    public void setAmount(Long[] detailIds, BigDecimal amount) {
+        if (detailIds.length == 0) {
+            throw new BizException(OrderError.ORDER_DETAIL_ID_EMPTY);
+        }
+
+        OrderSaleDetail orderSaleDetail = orderSaleDetailMapper.selectById(detailIds[0]);
+        Long orderId = orderSaleDetail.getOrderId();
+        OrderSale orderSale = orderSaleMapper.selectById(orderId);
+        if (!orderSale.getStatus().equals(DictUtils.getValueByLabel("已新建", "sale_order_status"))) {
+            throw new BizException(OrderError.ORDER_STATUS_IS_NOT_1);
+        }
+
+        LambdaUpdateWrapper<OrderSaleDetail> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.set(OrderSaleDetail::getWareSalePrice, amount);
+        updateWrapper.in(OrderSaleDetail::getId, detailIds);
+        orderSaleDetailMapper.update(updateWrapper);
+
+        // 更新订单数据
+        orderSaleService.updateOrderSaleData(orderId);
+    }
+
 
 }

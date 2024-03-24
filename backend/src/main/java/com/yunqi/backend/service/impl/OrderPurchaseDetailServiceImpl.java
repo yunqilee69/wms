@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -94,6 +95,7 @@ public class OrderPurchaseDetailServiceImpl extends ServiceImpl<OrderPurchaseDet
             t.setWareUnit(DictUtils.getLabelByValue(ware.getUnit(), "sys_inventory_unit"));
             t.setWareBarCode(ware.getBarCode());
             t.setWarePurchasePrice(ware.getPurchasePrice());
+            t.setWareSalePrice(ware.getSalePrice());
             t.setWareNumber(0);
             t.setType(DictUtils.getValueByLabel(detailType, "order_detail_type"));
             orderPurchaseDetailMapper.insert(t);
@@ -142,6 +144,28 @@ public class OrderPurchaseDetailServiceImpl extends ServiceImpl<OrderPurchaseDet
         // 更新订单数据
         orderPurchaseService.updateOrderPurchaseData(orderId);
     }
-    
+
+    @Override
+    public void setAmount(Long[] detailIds, BigDecimal amount) {
+        if (detailIds.length == 0) {
+            throw new BizException(OrderError.ORDER_DETAIL_ID_EMPTY);
+        }
+
+        OrderPurchaseDetail orderPurchaseDetail = orderPurchaseDetailMapper.selectById(detailIds[0]);
+        Long orderId = orderPurchaseDetail.getOrderId();
+        OrderPurchase orderPurchase = orderPurchaseMapper.selectById(orderId);
+        if (!orderPurchase.getStatus().equals(DictUtils.getValueByLabel("已新建", "purchase_order_status"))) {
+            throw new BizException(OrderError.ORDER_STATUS_IS_NOT_1);
+        }
+
+        LambdaUpdateWrapper<OrderPurchaseDetail> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.set(OrderPurchaseDetail::getWarePurchasePrice, amount);
+        updateWrapper.in(OrderPurchaseDetail::getId, detailIds);
+        orderPurchaseDetailMapper.update(updateWrapper);
+
+        // 更新订单数据
+        orderPurchaseService.updateOrderPurchaseData(orderId);
+    }
+
 
 }

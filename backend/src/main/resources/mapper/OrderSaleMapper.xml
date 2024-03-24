@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunqi.backend.mapper.OrderSaleMapper">
+
+    <select id="getSalesTop10" resultType="java.util.Map">
+        select d.ware_name wareName, SUM(d.ware_number) totalNumber from tb_order_sale_detail d
+        join tb_order_sale o on o.id = d.order_id
+        where o.delivery_time between #{begin} and #{end}
+        GROUP BY d.ware_id, d.ware_name
+        ORDER BY totalNumber DESC
+        limit 10;
+    </select>
+
+    <select id="getProfitTop10" resultType="java.util.Map">
+        select d.ware_name wareName, SUM((d.ware_sale_price - d.ware_purchase_price)*d.ware_number) totalProfit from tb_order_sale_detail d
+        join tb_order_sale o on o.id = d.order_id
+        where o.delivery_time between #{begin} and #{end}
+        GROUP BY d.ware_id, d.ware_name
+        ORDER BY totalProfit DESC
+        limit 10;
+    </select>
+</mapper>

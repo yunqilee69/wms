@@ -73,6 +73,11 @@ public class OrderPurchaseDetail{
     private BigDecimal warePurchasePrice;
 
     /**
+     * 货物售价
+     */
+    private BigDecimal wareSalePrice;
+
+    /**
      * 货物数量
      */
     private int wareNumber;

@@ -95,6 +95,16 @@ export function setDetailNumber(data) {
     })
 }
 
+// 设置货物数量
+export function setDetailAmount(data) {
+    return request({
+        url: '/order/saleDetail/setAmount',
+        method: 'put',
+        params: data
+    })
+}
+
+
 // 获取未在该订单的货物记录
 export function getUnSaleRecordList(query) {
     return request({
