@@ -103,7 +103,6 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         record.setQualityMonth(ware.getQualityMonth());
         record.setGuaranteeDate(recordDTO.getProductionDate().plusMonths(ware.getQualityMonth()));
 
-        // TODO 新增校验
         recordMapper.insert(record);
     }
 

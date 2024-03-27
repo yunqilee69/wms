@@ -20,6 +20,7 @@ import com.yunqi.backend.model.entity.*;
 import com.yunqi.backend.service.CustomerService;
 import com.yunqi.backend.service.OrderSaleService;
 import com.yunqi.backend.service.OrderSettlementService;
+import com.yunqi.backend.service.RecordService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 订单销售服务实现类
@@ -49,6 +51,9 @@ public class OrderSaleServiceImpl extends ServiceImpl<OrderSaleMapper, OrderSale
 
     @Resource
     CustomerService customerService;
+
+    @Resource
+    RecordService recordService;
 
     @Override
     public Page<OrderSale> getOrderSalePage(OrderSaleDTO orderSaleDTO) {
@@ -102,6 +107,21 @@ public class OrderSaleServiceImpl extends ServiceImpl<OrderSaleMapper, OrderSale
         wrapper.eq(OrderSale::getId, orderId);
         orderSaleMapper.update(wrapper);
 
+        List<OrderSaleDetail> orderSaleDetailList = orderSaleDetailMapper.selectList(
+                new LambdaQueryWrapper<OrderSaleDetail>().eq(OrderSaleDetail::getOrderId, orderId));
+        List<Long> recordIdList = orderSaleDetailList.stream().map(OrderSaleDetail::getRecordId).collect(Collectors.toList());
+        for (Long recordId : recordIdList) {
+            Record record = recordService.getById(recordId);
+            OrderSaleDetail orderSaleDetail = orderSaleDetailList.stream().filter(item -> item.getRecordId().equals(recordId)).collect(Collectors.toList()).get(0);
+            if (orderSaleDetail.getType().equals(DictUtils.getValueByLabel("送货", "order_detail_type"))) {
+                // 送货类型，库存记录要减少
+                record.setNumber(record.getNumber() - orderSaleDetail.getWareNumber());
+            } else  {
+                // 退货类型，库存记录要增加
+                record.setNumber(record.getNumber() + orderSaleDetail.getWareNumber());
+            }
+            recordService.updateById(record);
+        }
     }
 
     @Override

@@ -36,7 +36,6 @@ public class LocationServiceImpl extends ServiceImpl<LocationMapper, Location> i
     public void saveLocation(LocationDTO locationDTO) {
         Location location = new Location();
         BeanUtils.copyProperties(locationDTO, location);
-        // TODO 货位 新增校验
         locationMapper.insert(location);
     }
 
@@ -44,7 +43,6 @@ public class LocationServiceImpl extends ServiceImpl<LocationMapper, Location> i
     public void updateLocation(LocationDTO locationDTO) {
         Location location = new Location();
         BeanUtils.copyProperties(locationDTO, location);
-        // TODO 货位 更新校验
         locationMapper.updateById(location);
     }
 }

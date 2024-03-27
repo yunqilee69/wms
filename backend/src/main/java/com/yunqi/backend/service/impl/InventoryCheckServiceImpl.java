@@ -46,7 +46,6 @@ public class InventoryCheckServiceImpl extends ServiceImpl<InventoryCheckMapper,
     public void saveInventoryCheck(InventoryCheckDTO inventoryCheckDTO) {
         InventoryCheck inventoryCheck = new InventoryCheck();
         BeanUtils.copyProperties(inventoryCheckDTO, inventoryCheck);
-        // TODO 库存盘点 新增校验
         String documentCode = DocumentUtils.generateDocumentNumber(DocumentConstants.CHECK);
         inventoryCheck.setDocumentCode(documentCode);
         inventoryCheckMapper.insert(inventoryCheck);

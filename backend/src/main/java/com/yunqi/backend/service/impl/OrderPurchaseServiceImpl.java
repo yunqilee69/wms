@@ -16,12 +16,10 @@ import com.yunqi.backend.mapper.OrderPurchaseMapper;
 import com.yunqi.backend.model.dto.LoginUserDTO;
 import com.yunqi.backend.model.dto.OrderPurchaseDTO;
 import com.yunqi.backend.model.dto.SettlementDTO;
-import com.yunqi.backend.model.entity.OrderPurchase;
-import com.yunqi.backend.model.entity.OrderPurchaseDetail;
-import com.yunqi.backend.model.entity.Supplier;
-import com.yunqi.backend.model.entity.User;
+import com.yunqi.backend.model.entity.*;
 import com.yunqi.backend.service.OrderPurchaseService;
 import com.yunqi.backend.service.OrderSettlementService;
+import com.yunqi.backend.service.RecordService;
 import com.yunqi.backend.service.SupplierService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +29,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 订单采购服务实现类
@@ -51,6 +50,9 @@ public class OrderPurchaseServiceImpl extends ServiceImpl<OrderPurchaseMapper, O
 
     @Resource
     SupplierService supplierService;
+
+    @Resource
+    RecordService recordService;
 
     @Override
     public Page<OrderPurchase> getOrderPurchasePage(OrderPurchaseDTO orderPurchaseDTO) {
@@ -102,6 +104,23 @@ public class OrderPurchaseServiceImpl extends ServiceImpl<OrderPurchaseMapper, O
         wrapper.set(OrderPurchase::getReceiverPhone, user.getPhone());
         wrapper.eq(OrderPurchase::getId, orderId);
         orderPurchaseMapper.update(wrapper);
+
+        // 更新库存数据
+        List<OrderPurchaseDetail> purchaseDetailList = orderPurchaseDetailMapper.selectList(
+                new LambdaQueryWrapper<OrderPurchaseDetail>().eq(OrderPurchaseDetail::getOrderId, orderId));
+        List<Long> recordIdList = purchaseDetailList.stream().map(OrderPurchaseDetail::getRecordId).collect(Collectors.toList());
+        for (Long recordId : recordIdList) {
+            Record record = recordService.getById(recordId);
+            OrderPurchaseDetail purchaseDetail = purchaseDetailList.stream().filter(item -> item.getRecordId().equals(recordId)).collect(Collectors.toList()).get(0);
+            if (purchaseDetail.getType().equals(DictUtils.getValueByLabel("进货", "order_detail_type"))) {
+                // 进货类型，库存记录要增加
+                record.setNumber(record.getNumber() + purchaseDetail.getWareNumber());
+            } else  {
+                // 退货类型，库存记录要减少
+                record.setNumber(record.getNumber() - purchaseDetail.getWareNumber());
+            }
+            recordService.updateById(record);
+        }
     }
 
     @Override

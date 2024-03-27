@@ -12,7 +12,6 @@ import java.util.List;
  * @author liyunqi
  */
 public interface RecordService extends IService<Record> {
-    // TODO 订单应用后，需要更新仓库的数据
 
     /**
      * 分页查询

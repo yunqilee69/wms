@@ -55,7 +55,6 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> i
         String value = dictItemDTO.getValue();
         int orderNum = dictItemDTO.getOrderNum();
         String status = dictItemDTO.getStatus();
-        String remark = dictItemDTO.getRemark();
         String listClass = dictItemDTO.getListClass();
         if (StringUtils.isAnyEmpty(typeCode, label, value, status, listClass) || orderNum <= 0) {
             throw new BizException(DictError.PARAM_IS_EMPTY);

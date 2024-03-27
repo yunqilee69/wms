@@ -39,7 +39,6 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     public void saveCustomer(CustomerDTO customerDTO) {
         Customer customer = new Customer();
         BeanUtils.copyProperties(customerDTO, customer);
-        // TODO 客户 新增校验
         customerMapper.insert(customer);
     }
 
@@ -47,7 +46,6 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     public void updateCustomer(CustomerDTO customerDTO) {
         Customer customer = new Customer();
         BeanUtils.copyProperties(customerDTO, customer);
-        // TODO 客户 更新校验
         customerMapper.updateById(customer);
     }
 }
