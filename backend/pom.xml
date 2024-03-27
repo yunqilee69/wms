@@ -164,7 +164,7 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.yunqi.backend.BackendApplication</mainClass>
-                    <skip>true</skip>
+                    <skip>false</skip>
                 </configuration>
                 <executions>
                     <execution>

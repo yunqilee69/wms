@@ -108,14 +108,15 @@ create table tb_dict_item(
     update_time DATETIME COMMENT "更新时间"
 );
 
---- 下面为业务表
+### 下面为业务表
 
 ### 客户表
 DROP TABLE IF exists tb_user_customer;
 create table tb_user_customer (
 	id BIGINT primary key COMMENT "主键",
 
-    nickname VARCHAR(64) COMMENT "昵称",
+    nickname VARCHAR(64) COMMENT "客户名称",
+    name VARCHAR(64) COMMENT "联系人名称",
     email VARCHAR(64) COMMENT "邮箱",
     phone VARCHAR(64) COMMENT "手机号",
     gender VARCHAR(64) COMMENT "性别",
@@ -133,7 +134,8 @@ DROP TABLE IF exists tb_user_supplier;
 create table tb_user_supplier (
 	id BIGINT primary key COMMENT "主键",
 
-    nickname VARCHAR(64) COMMENT "昵称",
+    nickname VARCHAR(64) COMMENT "供应商名称",
+    name VARCHAR(64) COMMENT "联系人名称",
     email VARCHAR(64) COMMENT "邮箱",
     phone VARCHAR(64) COMMENT "手机号",
     gender VARCHAR(64) COMMENT "性别",
@@ -223,8 +225,8 @@ DROP TABLE IF exists tb_inventory_info;
 create table tb_inventory_info (
     id BIGINT primary key COMMENT "主键",
     total_amount DECIMAL(10, 2) COMMENT "仓库总价值",
-		total_number int COMMENT "仓库总数量",
-    record_date DATETIME COMMENT "记录时间"
+	total_number int COMMENT "仓库总数量",
+    record_time DATETIME COMMENT "记录时间"
 );
 
 ### 库存盘点表
