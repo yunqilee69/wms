@@ -50,4 +50,10 @@ public interface RecordMapper extends BaseMapper<Record> {
      * @return
      */
     List<RecordDTO> getAlarmRecord();
+
+    /**
+     * 获取即将过期的所有库存记录，时间间隔在yml中进行配置
+     * @return
+     */
+    List<RecordDTO> getAlarmExp(Integer alarmMonth);
 }

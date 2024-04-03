@@ -15,3 +15,11 @@ export function getAlarmOrder() {
         method: 'get'
     })
 }
+
+// 获取处于即将过期的库存记录
+export function getAlarmExp() {
+    return request({
+        url: '/index/getAlarmExp',
+        method: 'get'
+    })
+}

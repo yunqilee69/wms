@@ -19,6 +19,7 @@ import com.yunqi.backend.model.entity.Record;
 import com.yunqi.backend.model.entity.Ware;
 import com.yunqi.backend.service.RecordService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +44,9 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
 
     @Resource
     WareMapper wareMapper;
+
+    @Value("${wms.alarmMonth}")
+    Integer alarmMonth;
 
     @Override
     public Page<RecordDTO> getRecordPage(RecordDTO recordDTO) {
@@ -102,6 +106,7 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         record.setLocationName(location.getName());
         record.setQualityMonth(ware.getQualityMonth());
         record.setGuaranteeDate(recordDTO.getProductionDate().plusMonths(ware.getQualityMonth()));
+        record.setTotalAmount(BigDecimal.ZERO);
 
         recordMapper.insert(record);
     }
@@ -124,5 +129,10 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
     @Override
     public List<RecordDTO> getAlarmRecord() {
         return recordMapper.getAlarmRecord();
+    }
+
+    @Override
+    public List<RecordDTO> getAlarmExp() {
+        return recordMapper.getAlarmExp(alarmMonth);
     }
 }

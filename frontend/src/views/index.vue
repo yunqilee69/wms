@@ -101,14 +101,66 @@
         </el-descriptions-item>
       </el-descriptions>
     </el-card>
+
+    <el-card class="box-card">
+      <template #header>
+        <div class="card-header">
+          <span>货物有效期预警</span>
+        </div>
+      </template>
+      <el-alert
+          v-if="expList == null || expList.length === 0 "
+          type="success"
+          show-icon
+          title="没有库存记录处于即将过期状态~"
+          :closable="false"
+      />
+      <el-alert
+          v-else
+          type="error"
+          show-icon
+          title="请检查下面的库存记录，货物即将过期"
+          :closable="false"
+      />
+      <el-descriptions
+          v-for="item in expList"
+          :key="item.id"
+          class="margin-top"
+          :column="4"
+          border
+          style="margin-top: 10px"
+      >
+        <el-descriptions-item
+            label="货位名称"
+        >
+          {{ item.locationName }}
+        </el-descriptions-item>
+        <el-descriptions-item
+            label="货物名称"
+        >
+          {{ item.wareName }}
+        </el-descriptions-item>
+        <el-descriptions-item
+            label="保质期(月)"
+        >
+          {{ item.qualityMonth }}
+        </el-descriptions-item>
+        <el-descriptions-item
+            label="有效期"
+        >
+          {{ item.guaranteeDate }}
+        </el-descriptions-item>
+      </el-descriptions>
+    </el-card>
   </div>
 </template>
 
 <script setup>
-import {getAlarmRecord, getAlarmOrder} from "@/api/index.js";
+import {getAlarmRecord, getAlarmOrder, getAlarmExp} from "@/api/index.js";
 
 const recordList = ref([])
 const orderList = ref([])
+const expList = ref([])
 
 getAlarmRecord().then(res => {
   recordList.value = res;
@@ -117,6 +169,11 @@ getAlarmRecord().then(res => {
 getAlarmOrder().then(res => {
   orderList.value = res;
 })
+
+getAlarmExp().then(res => {
+  expList.value = res;
+})
+
 
 </script>
 

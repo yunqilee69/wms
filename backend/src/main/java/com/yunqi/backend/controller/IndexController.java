@@ -81,4 +81,13 @@ public class IndexController {
         });
         return Result.success(result);
     }
+
+    /**
+     * 获取处于报警阈值之下的库存记录
+     * @return
+     */
+    @GetMapping("/getAlarmExp")
+    public Result getAlarmExp() {
+        return Result.success(recordService.getAlarmExp());
+    }
 }
