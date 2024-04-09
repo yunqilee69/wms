@@ -60,7 +60,7 @@
                 plain
                 icon="Plus"
                 @click="handleAdd"
-                v-hasPermi="['sale:order:add']"
+                v-hasPermi="['order:sale:add']"
             >新建订单</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -70,7 +70,7 @@
                 icon="SoldOut"
                 :disabled="single"
                 @click="handleTakeDelivery"
-                v-hasPermi="['sale:order:edit']"
+                v-hasPermi="['order:sale:takeDelivery']"
             >送货</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -80,7 +80,7 @@
                 icon="WalletFilled"
                 :disabled="single"
                 @click="handleSettlement"
-                v-hasPermi="['sale:order:delete']"
+                v-hasPermi="['order:sale:settlement']"
             >结算</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -90,7 +90,7 @@
                 icon="Delete"
                 :disabled="multiple"
                 @click="handleDelete"
-                v-hasPermi="['sale:order:delete']"
+                v-hasPermi="['order:sale:delete']"
             >删除</el-button>
           </el-col>
           <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
@@ -138,7 +138,7 @@
           <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
             <template #default="scope">
               <el-tooltip content="查看支付记录" placement="top" v-if="scope.row.status == '3'">
-                <el-button link type="primary" icon="Edit" @click="showPictures(scope.row)" v-hasPermi="['inventory:check:edit']"></el-button>
+                <el-button link type="primary" icon="Edit" @click="showPictures(scope.row)" v-hasPermi="['order:sale:showPay']"></el-button>
               </el-tooltip>
             </template>
           </el-table-column>

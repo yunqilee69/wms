@@ -100,6 +100,16 @@
                 v-hasPermi="['inventory:check:pandian']"
             >盘点</el-button>
           </el-col>
+          <el-col :span="1.5">
+            <el-button
+                type="primary"
+                plain
+                icon="Stamp"
+                :disabled="single"
+                @click="handleApply"
+                v-hasPermi="['inventory:check:apply']"
+            >应用盘点单</el-button>
+          </el-col>
           <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
 
@@ -237,7 +247,7 @@
 </template>
 
 <script setup name="User">
-import { getCheckList, addCheck, delCheck, getCheckById, updateCheck} from "@/api/inventory/check"
+import { getCheckList, addCheck, delCheck, getCheckById, updateCheck, applyCheck} from "@/api/inventory/check"
 
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable } = proxy.useDict( "sys_normal_disable");
@@ -375,6 +385,16 @@ function submitForm() {
 function handleCheckDetail() {
   const id = ids.value[0];
   router.push("/inventory/check-detail/" + id);
+}
+
+function handleApply() {
+  const checkId = ids.value;
+  proxy.$modal.confirm('是否确认应用盘点单').then(function () {
+    return applyCheck(checkId.join(","));
+  }).then(() => {
+    getList();
+    proxy.$modal.msgSuccess("应用成功");
+  }).catch(() => {});
 }
 
 getList();

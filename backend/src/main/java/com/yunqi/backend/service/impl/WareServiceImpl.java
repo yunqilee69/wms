@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunqi.backend.common.util.PageUtils;
 import com.yunqi.backend.exception.BizException;
+import com.yunqi.backend.exception.message.RecordError;
 import com.yunqi.backend.exception.message.WareError;
 import com.yunqi.backend.mapper.WareMapper;
 import com.yunqi.backend.mapper.WareMoneyMapper;
@@ -123,5 +124,16 @@ public class WareServiceImpl extends ServiceImpl<WareMapper, Ware> implements Wa
         }
 
         wareMapper.updateById(ware);
+    }
+
+    @Override
+    public void deleteWare(List<Long> wareIds) {
+        for (Long wareId : wareIds) {
+            List<Record> recordList = recordService.getRecordByWareId(wareId);
+            if (recordList.size() != 0) {
+                throw new BizException(WareError.WARE_IS_USING_IN_RECORD);
+            }
+        }
+
     }
 }

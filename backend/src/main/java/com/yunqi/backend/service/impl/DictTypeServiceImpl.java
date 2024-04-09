@@ -63,8 +63,6 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, DictType> i
     public void saveDictType(DictTypeDTO dictTypeDTO) {
         DictType dictType = new DictType();
         BeanUtils.copyProperties(dictTypeDTO, dictType);
-        // TODO 完成新增字典的校验
-        // code唯一
 
         save(dictType);
     }

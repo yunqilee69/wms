@@ -191,6 +191,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BizException(UserError.USERNAME_EXISTS);
         }
 
+        // 对密码进行加密
+        String encryptPassword = SecurityUtils.encryptPassword(user.getPassword());
+        user.setPassword(encryptPassword);
         save(user);
 
         // 保存员工对应的角色
@@ -240,6 +243,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public void deleteEmp(List<Long> userIds) {
         removeByIds(userIds);
+        // 删除用户对应的角色
+        userIds.forEach(item -> userRoleService.deleteUserRoleByUserId(item));
     }
 
     @Override

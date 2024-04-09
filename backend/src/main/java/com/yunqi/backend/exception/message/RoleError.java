@@ -13,7 +13,7 @@ public enum RoleError implements BaseError {
     ORDER_NUM_GT_ZERO(20005, "角色排序号必须大于0"),
     NAME_ALERTER_EXIST(20006, "角色名称已存在"),
     ROLE_KEY_ALERTER_EXIST(20007, "角色标识已存在"),
-    ;
+    ROLE_IS_USING(20008, "角色正在使用");
 
     int code;
     String msg;

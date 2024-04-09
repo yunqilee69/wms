@@ -132,7 +132,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     public void saveMenu(MenuDTO menuDTO) {
         Menu menu = new Menu();
         BeanUtils.copyProperties(menuDTO, menu);
-        // TODO  完成校验，路由名称必须是唯一的
 
         save(menu);
 
@@ -142,7 +141,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     public void updateMenu(MenuDTO menuDTO) {
         Menu menu = new Menu();
         BeanUtils.copyProperties(menuDTO, menu);
-        // TODO  完成校验，路由名称必须是唯一的
 
         updateById(menu);
     }

@@ -87,18 +87,15 @@ public class InventoryCheckController {
         return Result.success();
     }
 
-//-------------------------------盘点细节---------------------------------------
-
     /**
-     * 获取
-     * @param wareDTO
+     * 应用盘点单，将数据库的数据进行修改
+     * @param checkId
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('inventory:check:query')")
-    @GetMapping("/detail/list")
-    public Result getCheckDetailList(WareDTO wareDTO, Long checkId) {
+    @PutMapping("/apply")
+    @PreAuthorize("@sps.hasPermi('inventory:check:apply')")
+    public Result apply(@RequestBody Long checkId) {
+        inventoryCheckService.apply(checkId);
         return Result.success();
     }
-
-    // TODO 将盘点的数据应用到数据库中，应用后不可修改
 }

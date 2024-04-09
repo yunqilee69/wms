@@ -33,7 +33,7 @@ public class OrderSaleController {
      * @param orderSaleDTO
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('sale:order:list')")
+    @PreAuthorize("@sps.hasPermi('order:sale:list')")
     @GetMapping("/list")
     public Result getList(OrderSaleDTO orderSaleDTO) {
         Page<OrderSale> page = orderSaleService.getOrderSalePage(orderSaleDTO);
@@ -45,7 +45,7 @@ public class OrderSaleController {
      * @param orderSaleId
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('sale:order:query')")
+    @PreAuthorize("@sps.hasPermi('order:sale:query')")
     @GetMapping("/{orderSaleId}")
     public Result getOne(@PathVariable Long orderSaleId) {
         OrderSale orderSale = orderSaleService.getById(orderSaleId);
@@ -57,7 +57,7 @@ public class OrderSaleController {
      * @param supplierId
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('sale:order:add')")
+    @PreAuthorize("@sps.hasPermi('order:sale:add')")
     @PostMapping
     public Result add(@RequestBody Long supplierId) {
         orderSaleService.saveOrderSale(supplierId);
@@ -65,10 +65,11 @@ public class OrderSaleController {
     }
 
     /**
-     * 确认收货
+     * 确认送货
      * @param orderId
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('order:sale:takeDelivery')")
     @PutMapping("/takeDelivery")
     public Result takeDelivery(Long orderId) {
         orderSaleService.takeDelivery(orderId);
@@ -80,6 +81,7 @@ public class OrderSaleController {
      * @param settlementDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('order:sale:settlement')")
     @PutMapping("/settlement")
     public Result settlement(SettlementDTO settlementDTO) {
         orderSaleService.settlementOrder(settlementDTO);
@@ -91,6 +93,7 @@ public class OrderSaleController {
      * @param orderId
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('order:sale:showPay')")
     @GetMapping("/pictures")
     public Result pictures(Long orderId) {
         List<String> picturesList = orderSettlementService.getPicturesByOrderId(orderId);

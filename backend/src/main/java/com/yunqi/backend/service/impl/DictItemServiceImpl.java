@@ -62,15 +62,11 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> i
 
         DictItem dictItem = new DictItem();
         BeanUtils.copyProperties(dictItemDTO, dictItem);
-
-        // TODO 进行字典项的校验
-
         save(dictItem);
     }
 
     @Override
     public void updateDictItem(DictItemDTO dictItemDTO) {
-        // TODO 完成字典修改的校验
 
         LambdaUpdateWrapper<DictItem> wrapper = new LambdaUpdateWrapper<>();
         wrapper.set(dictItemDTO.getLabel() != null, DictItem::getLabel, dictItemDTO.getLabel());

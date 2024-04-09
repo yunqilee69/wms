@@ -2,9 +2,11 @@ package com.yunqi.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunqi.backend.common.constant.DocumentConstants;
+import com.yunqi.backend.common.util.DictUtils;
 import com.yunqi.backend.common.util.DocumentUtils;
 import com.yunqi.backend.common.util.PageUtils;
 import com.yunqi.backend.exception.BizException;
@@ -12,12 +14,17 @@ import com.yunqi.backend.exception.message.InventoryCheckError;
 import com.yunqi.backend.mapper.InventoryCheckMapper;
 import com.yunqi.backend.model.dto.InventoryCheckDTO;
 import com.yunqi.backend.model.entity.InventoryCheck;
+import com.yunqi.backend.model.entity.InventoryCheckDetail;
+import com.yunqi.backend.model.entity.Record;
+import com.yunqi.backend.service.InventoryCheckDetailService;
 import com.yunqi.backend.service.InventoryCheckService;
+import com.yunqi.backend.service.RecordService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -30,6 +37,12 @@ public class InventoryCheckServiceImpl extends ServiceImpl<InventoryCheckMapper,
 
     @Resource
     InventoryCheckMapper inventoryCheckMapper;
+
+    @Resource
+    InventoryCheckDetailService detailService;
+
+    @Resource
+    RecordService recordService;
 
     @Override
     public Page<InventoryCheck> getInventoryCheckPage(InventoryCheckDTO inventoryCheckDTO) {
@@ -77,5 +90,29 @@ public class InventoryCheckServiceImpl extends ServiceImpl<InventoryCheckMapper,
             }
         }
         removeBatchByIds(ids);
+    }
+
+    @Override
+    public void apply(Long checkId) {
+        // 修改库存数量
+        BaseMapper<InventoryCheckDetail> mapper = detailService.getBaseMapper();
+        LambdaQueryWrapper<InventoryCheckDetail> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(InventoryCheckDetail::getCheckId, checkId);
+        List<InventoryCheckDetail> detailList = mapper.selectList(queryWrapper);
+        for (InventoryCheckDetail checkDetail : detailList) {
+            Long recordId = checkDetail.getRecordId();
+            int nowNumber = checkDetail.getNowNumber();
+            LocalDate nowProductionDate = checkDetail.getNowProductionDate();
+            LambdaUpdateWrapper<Record> updateWrapper = new LambdaUpdateWrapper<>();
+            updateWrapper.set(Record::getNumber, nowNumber);
+            updateWrapper.set(Record::getProductionDate, nowProductionDate);
+            updateWrapper.eq(Record::getId, recordId);
+            recordService.update(updateWrapper);
+        }
+
+        // 修改盘点单状态
+        InventoryCheck inventoryCheck = inventoryCheckMapper.selectById(checkId);
+        inventoryCheck.setStatus(DictUtils.getValueByLabel("已应用", "sys_inventory_check_status"));
+        inventoryCheckMapper.updateById(inventoryCheck);
     }
 }

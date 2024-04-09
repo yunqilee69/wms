@@ -6,6 +6,8 @@ import com.yunqi.backend.model.dto.WareDTO;
 import com.yunqi.backend.model.entity.Ware;
 import com.yunqi.backend.model.entity.Ware;
 
+import java.util.List;
+
 /**
  * @author liyunqi
  */
@@ -28,4 +30,10 @@ public interface WareService extends IService<Ware> {
      * @param wareDTO
      */
     void updateWare(WareDTO wareDTO);
+
+    /**
+     * 删除货物
+     * @param wareIds
+     */
+    void deleteWare(List<Long> wareIds);
 }

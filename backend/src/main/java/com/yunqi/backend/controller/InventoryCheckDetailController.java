@@ -98,13 +98,18 @@ public class InventoryCheckDetailController {
      * @param checkId
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('inventory:check:query')")
     @GetMapping("/unCheckRecordList")
     public Result unCheckRecordList(RecordDTO recordDTO, Long checkId) {
         Page<RecordDTO> page = recordService.getUnCheckRecordList(recordDTO, checkId);
         return Result.success(PageUtils.convertPageResult(page));
     }
 
+    /**
+     * 添加库存记录
+     * @param checkId
+     * @param recordIds
+     * @return
+     */
     @PreAuthorize("@sps.hasPermi('inventory:check:edit')")
     @PutMapping("/addCheckRecordAll")
     public Result addCheckRecordAll(Long checkId, Long[] recordIds) {

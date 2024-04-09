@@ -83,4 +83,10 @@ public interface RecordService extends IService<Record> {
      * @return
      */
     List<RecordDTO> getAlarmExp();
+
+    /**
+     * 删除库存记录
+     * @param ids
+     */
+    void deleteRecord(List<Long> ids);
 }

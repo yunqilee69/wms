@@ -135,4 +135,15 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
     public List<RecordDTO> getAlarmExp() {
         return recordMapper.getAlarmExp(alarmMonth);
     }
+
+    @Override
+    public void deleteRecord(List<Long> ids) {
+        for (Long id : ids) {
+            Record record = recordMapper.selectById(id);
+            if (record.getNumber() != 0) {
+                throw new BizException(RecordError.NUMBER_NOT_ZERO);
+            }
+        }
+        removeBatchByIds(ids);
+    }
 }

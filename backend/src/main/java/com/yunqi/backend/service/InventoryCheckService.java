@@ -37,4 +37,10 @@ public interface InventoryCheckService extends IService<InventoryCheck> {
      * @param ids
      */
     void deleteInventoryCheck(List<Long> ids);
+
+    /**
+     * 应用盘点单，将数据库的数据进行修改
+     * @param checkId
+     */
+    void apply(Long checkId);
 }

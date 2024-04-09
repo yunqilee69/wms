@@ -34,7 +34,7 @@ public class OrderSaleDetailController {
      * @param orderSaleDetailDTO
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('sale:order:list')")
+    @PreAuthorize("@sps.hasPermi('order:sale:query')")
     @GetMapping("/list")
     public Result getList(OrderSaleDetailDTO orderSaleDetailDTO) {
         Page<OrderSaleDetail> page = orderSaleDetailService.getOrderSaleDetailPage(orderSaleDetailDTO);
@@ -46,7 +46,7 @@ public class OrderSaleDetailController {
      * @param orderSaleDetailId
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('sale:order:query')")
+    @PreAuthorize("@sps.hasPermi('order:sale:query')")
     @GetMapping("/{orderSaleDetailId}")
     public Result getOne(@PathVariable Long orderSaleDetailId) {
         OrderSaleDetail orderSaleDetail = orderSaleDetailService.getById(orderSaleDetailId);
@@ -58,7 +58,7 @@ public class OrderSaleDetailController {
      * @param orderSaleDetailIds
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('sale:order:delete')")
+    @PreAuthorize("@sps.hasPermi('order:sale:edit')")
     @DeleteMapping("/{orderSaleDetailIds}")
     public Result delete(@PathVariable List<Long> orderSaleDetailIds) {
         if (orderSaleDetailIds == null || orderSaleDetailIds.size() == 0) {
@@ -74,6 +74,7 @@ public class OrderSaleDetailController {
      * @param number
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('order:sale:edit')")
     @PutMapping("/setNumber")
     public Result setNumber(Long[] detailIds, Integer number) {
         orderSaleDetailService.setNumber(detailIds, number);
@@ -86,6 +87,7 @@ public class OrderSaleDetailController {
      * @param number
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('order:sale:edit')")
     @PutMapping("/setAmount")
     public Result setAmount(Long[] detailIds, BigDecimal amount) {
         orderSaleDetailService.setAmount(detailIds, amount);
@@ -98,7 +100,6 @@ public class OrderSaleDetailController {
      * @param checkId
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('inventory:check:query')")
     @GetMapping("/getUnSaleRecordList")
     public Result getUnSaleRecordList(RecordDTO recordDTO, Long orderId, String detailType) {
         if (detailType != null && detailType.equals("退货")) {
@@ -116,7 +117,7 @@ public class OrderSaleDetailController {
      * @param detailType
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('inventory:check:edit')")
+    @PreAuthorize("@sps.hasPermi('order:sale:edit')")
     @PutMapping("/addUnSaleRecord")
     public Result addUnSaleRecord(Long orderId, Long[] recordIds, String detailType) {
         orderSaleDetailService.addUnSaleRecord(orderId, recordIds, detailType);

@@ -2,6 +2,7 @@ package com.yunqi.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunqi.backend.common.util.PageUtils;
@@ -13,8 +14,10 @@ import com.yunqi.backend.model.dto.RoleOptionDTO;
 import com.yunqi.backend.model.entity.Role;
 import com.yunqi.backend.model.entity.RoleMenu;
 import com.yunqi.backend.model.entity.User;
+import com.yunqi.backend.model.entity.UserRole;
 import com.yunqi.backend.service.RoleMenuService;
 import com.yunqi.backend.service.RoleService;
+import com.yunqi.backend.service.UserRoleService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -38,6 +41,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Resource
     RoleMenuService roleMenuService;
+
+    @Resource
+    UserRoleService userRoleService;
 
     @Override
     public Page<Role> getRolePage(RoleDTO roleDTO) {
@@ -160,6 +166,15 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public void deleteRoleByIds(List<Long> roleIds) {
+        for (Long roleId : roleIds) {
+            BaseMapper<UserRole> mapper = userRoleService.getBaseMapper();
+            LambdaQueryWrapper<UserRole> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(UserRole::getRoleId, roleId);
+            List<UserRole> userRoles = mapper.selectList(wrapper);
+            if (userRoles.size() != 0) {
+                throw new BizException(RoleError.ROLE_IS_USING);
+            }
+        }
         removeByIds(roleIds);
     }
 

@@ -96,7 +96,6 @@ public class RoleController {
     @PreAuthorize("@sps.hasPermi('system:role:delete')")
     @DeleteMapping("/{roleIds}")
     public Result deleteRoleByIds(@PathVariable List<Long> roleIds) {
-        // TODO 删除角色前进行校验，确保该角色已经无用户使用
         roleService.deleteRoleByIds(roleIds);
         return Result.success();
     }

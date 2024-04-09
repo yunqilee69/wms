@@ -7,7 +7,8 @@ import com.yunqi.backend.common.base.BaseError;
  */
 public enum RecordError implements BaseError {
     RECORD_ID_IS_EMPTY(50001, "库存记录ID为空"),
-    ALARM_THRESHOLD_LT_0(50002, "库存报警阈值必须大于等于0");
+    ALARM_THRESHOLD_LT_0(50002, "库存报警阈值必须大于等于0"),
+    NUMBER_NOT_ZERO(50003, "库存记录的货物数量不为0");
     private int code;
     private String msg;
 

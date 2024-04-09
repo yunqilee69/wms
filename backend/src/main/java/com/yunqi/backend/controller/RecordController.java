@@ -70,14 +70,13 @@ public class RecordController {
      * @param ids
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('inventory:record:remove')")
+    @PreAuthorize("@sps.hasPermi('inventory:record:delete')")
     @DeleteMapping
     public Result delete(List<Long> ids) {
         if (ids.size() == 0) {
             return Result.fail("库存id为空");
         }
-        //TODO 删除校验
-        recordService.removeBatchByIds(ids);
+        recordService.deleteRecord(ids);
         return Result.success();
     }
 }

@@ -12,6 +12,7 @@ import com.yunqi.backend.service.OrderPurchaseService;
 import com.yunqi.backend.service.OrderSettlementService;
 import com.yunqi.backend.service.WareService;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -37,7 +38,7 @@ public class OrderPurchaseController {
      * @param orderPurchaseDTO
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('purchase:order:list')")
+    @PreAuthorize("@sps.hasPermi('order:purchase:list')")
     @GetMapping("/list")
     public Result getList(OrderPurchaseDTO orderPurchaseDTO) {
         Page<OrderPurchase> page = orderPurchaseService.getOrderPurchasePage(orderPurchaseDTO);
@@ -49,7 +50,7 @@ public class OrderPurchaseController {
      * @param orderPurchaseId
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('purchase:order:query')")
+    @PreAuthorize("@sps.hasPermi('order:purchase:query')")
     @GetMapping("/{orderPurchaseId}")
     public Result getOne(@PathVariable Long orderPurchaseId) {
         OrderPurchase orderPurchase = orderPurchaseService.getById(orderPurchaseId);
@@ -61,7 +62,7 @@ public class OrderPurchaseController {
      * @param supplierId
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('purchase:order:add')")
+    @PreAuthorize("@sps.hasPermi('order:purchase:add')")
     @PostMapping
     public Result add(@RequestBody Long supplierId) {
         orderPurchaseService.saveOrderPurchase(supplierId);
@@ -73,6 +74,7 @@ public class OrderPurchaseController {
      * @param orderId
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('order:purchase:takeDelivery')")
     @PutMapping("/takeDelivery")
     public Result takeDelivery(Long orderId) {
         orderPurchaseService.takeDelivery(orderId);
@@ -84,6 +86,7 @@ public class OrderPurchaseController {
      * @param settlementDTO
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('order:purchase:settlement')")
     @PutMapping("/settlement")
     public Result settlement(SettlementDTO settlementDTO) {
         orderPurchaseService.settlementOrder(settlementDTO);
@@ -95,6 +98,7 @@ public class OrderPurchaseController {
      * @param orderId
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('order:purchase:showPay')")
     @GetMapping("/pictures")
     public Result pictures(Long orderId) {
         List<String> picturesList = orderSettlementService.getPicturesByOrderId(orderId);
@@ -106,7 +110,7 @@ public class OrderPurchaseController {
      * @param orderPurchaseIds
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('purchase:order:delete')")
+    @PreAuthorize("@sps.hasPermi('order:purchase:delete')")
     @DeleteMapping("/{orderPurchaseIds}")
     public Result delete(@PathVariable List<Long> orderPurchaseIds) {
         if (orderPurchaseIds == null || orderPurchaseIds.size() == 0) {
@@ -116,5 +120,4 @@ public class OrderPurchaseController {
         return Result.success();
     }
 
-    // TODO 可以手动设置价格，默认是货物数据库中的数据
 }

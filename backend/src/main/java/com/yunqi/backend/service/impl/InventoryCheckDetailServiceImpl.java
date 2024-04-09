@@ -46,7 +46,6 @@ public class InventoryCheckDetailServiceImpl extends ServiceImpl<InventoryCheckD
     public void saveInventoryCheckDetail(InventoryCheckDetailDTO inventoryCheckDetailDTO) {
         InventoryCheckDetail inventoryCheckDetail = new InventoryCheckDetail();
         BeanUtils.copyProperties(inventoryCheckDetailDTO, inventoryCheckDetail);
-        // TODO 库存盘点细节 新增校验
         inventoryCheckDetailMapper.insert(inventoryCheckDetail);
     }
 

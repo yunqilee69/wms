@@ -43,3 +43,12 @@ export function delCheck(checkId) {
         method: 'delete'
     })
 }
+
+// 应用盘点单
+export function applyCheck(checkId) {
+    return request({
+        url: '/inventory/check/apply',
+        method: 'put',
+        data: checkId
+    })
+}

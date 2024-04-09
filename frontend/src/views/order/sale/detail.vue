@@ -123,7 +123,7 @@
             plain
             icon="Plus"
             @click="handleAdd"
-            v-hasPermi="['sale:order:add']"
+            v-hasPermi="['order:sale:edit']"
         >新增货物</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -132,7 +132,7 @@
             plain
             icon="Minus"
             @click="handleReturn"
-            v-hasPermi="['sale:order:edit']"
+            v-hasPermi="['order:sale:edit']"
         >退货</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -142,7 +142,7 @@
             icon="Edit"
             :disabled="multiple"
             @click="handleSetNumber"
-            v-hasPermi="['sale:order:edit']"
+            v-hasPermi="['order:sale:edit']"
         >设置数量</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -152,7 +152,7 @@
             icon="Edit"
             :disabled="multiple"
             @click="handleSetAmount"
-            v-hasPermi="['sale:order:edit']"
+            v-hasPermi="['order:sale:edit']"
         >设置价格</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -162,7 +162,7 @@
             icon="CircleClose"
             :disabled="multiple"
             @click="handleDelete"
-            v-hasPermi="['inventory:check:edit']"
+            v-hasPermi="['order:sale:edit']"
         >删除货物</el-button>
       </el-col>
       <el-col :span="1.5">

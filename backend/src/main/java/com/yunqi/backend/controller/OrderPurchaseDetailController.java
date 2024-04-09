@@ -36,7 +36,7 @@ public class OrderPurchaseDetailController {
      * @param orderPurchaseDetailDTO
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('purchase:order:list')")
+    @PreAuthorize("@sps.hasPermi('order:purchase:query')")
     @GetMapping("/list")
     public Result getList(OrderPurchaseDetailDTO orderPurchaseDetailDTO) {
         Page<OrderPurchaseDetail> page = orderPurchaseDetailService.getOrderPurchaseDetailPage(orderPurchaseDetailDTO);
@@ -48,7 +48,7 @@ public class OrderPurchaseDetailController {
      * @param orderPurchaseDetailId
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('purchase:order:query')")
+    @PreAuthorize("@sps.hasPermi('order:purchase:query')")
     @GetMapping("/{orderPurchaseDetailId}")
     public Result getOne(@PathVariable Long orderPurchaseDetailId) {
         OrderPurchaseDetail orderPurchaseDetail = orderPurchaseDetailService.getById(orderPurchaseDetailId);
@@ -60,7 +60,7 @@ public class OrderPurchaseDetailController {
      * @param orderPurchaseDetailIds
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('purchase:order:delete')")
+    @PreAuthorize("@sps.hasPermi('order:purchase:edit')")
     @DeleteMapping("/{orderPurchaseDetailIds}")
     public Result delete(@PathVariable List<Long> orderPurchaseDetailIds) {
         if (orderPurchaseDetailIds == null || orderPurchaseDetailIds.size() == 0) {
@@ -76,6 +76,7 @@ public class OrderPurchaseDetailController {
      * @param number
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('order:purchase:edit')")
     @PutMapping("/setNumber")
     public Result setNumber(Long[] detailIds, Integer number) {
         orderPurchaseDetailService.setNumber(detailIds, number);
@@ -88,6 +89,7 @@ public class OrderPurchaseDetailController {
      * @param number
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('order:purchase:edit')")
     @PutMapping("/setAmount")
     public Result setAmount(Long[] detailIds, BigDecimal amount) {
         orderPurchaseDetailService.setAmount(detailIds, amount);
@@ -100,7 +102,6 @@ public class OrderPurchaseDetailController {
      * @param checkId
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('inventory:check:query')")
     @GetMapping("/getUnPurchaseRecordList")
     public Result getUnPurchaseRecordList(RecordDTO recordDTO, Long orderId, String detailType) {
         if (detailType != null && detailType.equals("退货")) {
@@ -118,7 +119,7 @@ public class OrderPurchaseDetailController {
      * @param detailType
      * @return
      */
-    @PreAuthorize("@sps.hasPermi('inventory:check:edit')")
+    @PreAuthorize("@sps.hasPermi('order:purchase:edit')")
     @PutMapping("/addUnPurchaseRecord")
     public Result addUnPurchaseRecord(Long orderId, Long[] recordIds, String detailType) {
         orderPurchaseDetailService.addUnPurchaseRecord(orderId, recordIds, detailType);

@@ -83,8 +83,7 @@ public class WareController {
         if (wareIds == null || wareIds.size() == 0) {
             return Result.fail("货物id不能为空");
         }
-        // TODO 删除前需要检验，库存记录是否存在对应的货物
-        wareService.removeBatchByIds(wareIds);
+        wareService.deleteWare(wareIds);
         return Result.success();
     }
 
@@ -124,11 +123,11 @@ public class WareController {
         return Result.success(result);
     }
 
-    // TODO 需要新增一个方法，通过货物id查看货物的金额变化趋势，在表格上设计一个按钮，使用echarts进行显示，一个折线图中直接显示进价和售价
     /**
-     * 获取数据库所有的货物数据，并组装为前端select组件的数据
+     * 根据货物id，获取货物价格的变更记录，以折线图表示出来
      * @return
      */
+    @PreAuthorize("@sps.hasPermi('inventory:waresInfo:showMoney')")
     @GetMapping("/getMoneyChange")
     public Result getMoneyChange(Long id) {
         if (id == null) {
