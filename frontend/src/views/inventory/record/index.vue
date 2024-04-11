@@ -334,7 +334,7 @@
 </template>
 
 <script setup name="User">
-import { getRecordList, updateAlarmThreshold, addRecord } from "@/api/inventory/record"
+import {getRecordList, updateAlarmThreshold, addRecord, deleteRecord} from "@/api/inventory/record"
 import {addWare, getWareById, getWareSelect, updateWare} from "@/api/inventory/ware"
 import {getWareLocationSelect} from "@/api/inventory/location"
 
@@ -419,6 +419,15 @@ function showWareDetail(wareId) {
     detailShow.value = true;
   });
   console.log(wareId);
+}
+
+/**
+ * 删除库存记录
+ */
+function handleDelete() {
+  deleteRecord(ids.value.join(",")).then(res => {
+    proxy.$modal.msgSuccess("删除成功");
+  })
 }
 
 /** 设置货物阈值 */

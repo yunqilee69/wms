@@ -31,3 +31,11 @@ export function addRecord(data) {
         data: data
     })
 }
+
+// 删除库存记录
+export function deleteRecord(ids) {
+    return request({
+        url: '/inventory/record/' + ids,
+        method: 'delete'
+    })
+}

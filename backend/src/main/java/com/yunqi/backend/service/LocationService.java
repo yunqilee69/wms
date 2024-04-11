@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yunqi.backend.model.dto.LocationDTO;
 import com.yunqi.backend.model.entity.Location;
 
+import java.util.List;
+
 /**
  * @author liyunqi
  */
@@ -27,4 +29,10 @@ public interface LocationService extends IService<Location> {
      * @param locationDTO
      */
     void updateLocation(LocationDTO locationDTO);
+
+    /**
+     * 删除货位
+     * @param locationIds
+     */
+    void deleteLocation(List<Long> locationIds);
 }

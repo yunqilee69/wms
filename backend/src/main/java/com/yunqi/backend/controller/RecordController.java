@@ -71,8 +71,8 @@ public class RecordController {
      * @return
      */
     @PreAuthorize("@sps.hasPermi('inventory:record:delete')")
-    @DeleteMapping
-    public Result delete(List<Long> ids) {
+    @DeleteMapping("/{ids}")
+    public Result delete(@PathVariable List<Long> ids) {
         if (ids.size() == 0) {
             return Result.fail("库存id为空");
         }

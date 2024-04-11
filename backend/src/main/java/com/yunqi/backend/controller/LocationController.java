@@ -77,7 +77,7 @@ public class LocationController {
         if (locationIds == null || locationIds.size() == 0) {
             return Result.fail("货位id不能为空");
         }
-        locationService.removeBatchByIds(locationIds);
+        locationService.deleteLocation(locationIds);
         return Result.success();
     }
 
