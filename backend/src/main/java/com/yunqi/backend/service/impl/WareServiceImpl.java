@@ -134,6 +134,6 @@ public class WareServiceImpl extends ServiceImpl<WareMapper, Ware> implements Wa
                 throw new BizException(WareError.WARE_IS_USING_IN_RECORD);
             }
         }
-
+        removeBatchByIds(wareIds);
     }
 }

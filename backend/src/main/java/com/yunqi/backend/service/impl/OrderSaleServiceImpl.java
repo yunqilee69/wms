@@ -17,10 +17,7 @@ import com.yunqi.backend.model.dto.OrderSaleDTO;
 import com.yunqi.backend.model.dto.RecordDTO;
 import com.yunqi.backend.model.dto.SettlementDTO;
 import com.yunqi.backend.model.entity.*;
-import com.yunqi.backend.service.CustomerService;
-import com.yunqi.backend.service.OrderSaleService;
-import com.yunqi.backend.service.OrderSettlementService;
-import com.yunqi.backend.service.RecordService;
+import com.yunqi.backend.service.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +51,9 @@ public class OrderSaleServiceImpl extends ServiceImpl<OrderSaleMapper, OrderSale
 
     @Resource
     RecordService recordService;
+
+    @Resource
+    WareService wareService;
 
     @Override
     public Page<OrderSale> getOrderSalePage(OrderSaleDTO orderSaleDTO) {
@@ -120,6 +120,9 @@ public class OrderSaleServiceImpl extends ServiceImpl<OrderSaleMapper, OrderSale
                 // 退货类型，库存记录要增加
                 record.setNumber(record.getNumber() + orderSaleDetail.getWareNumber());
             }
+            // 更新价格
+            Ware ware = wareService.getById(record.getWareId());
+            record.setTotalAmount(ware.getSalePrice().multiply(BigDecimal.valueOf(record.getNumber())));
             recordService.updateById(record);
         }
     }

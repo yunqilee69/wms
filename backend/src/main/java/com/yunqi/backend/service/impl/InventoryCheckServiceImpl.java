@@ -68,9 +68,9 @@ public class InventoryCheckServiceImpl extends ServiceImpl<InventoryCheckMapper,
     public void updateInventoryCheck(InventoryCheckDTO inventoryCheckDTO) {
         // 状态为已盘点的不能进行更新
         InventoryCheck inventoryCheck = inventoryCheckMapper.selectById(inventoryCheckDTO.getId());
-        if (inventoryCheck == null || inventoryCheck.getStatus().equals("3")) {
-            // 状态为已修正，不允许进行删除
-            throw new BizException(InventoryCheckError.STATUS_IS_FIXED_UPDATE);
+        if (inventoryCheck == null || inventoryCheck.getStatus().equals(DictUtils.getValueByLabel("已应用", "sys_inventory_check_status"))) {
+            // 状态为已应用，不允许进行删除
+            throw new BizException(InventoryCheckError.STATUS_IS_APPLY_UPDATE);
         }
 
         LambdaUpdateWrapper<InventoryCheck> wrapper = new LambdaUpdateWrapper<>();
@@ -84,9 +84,9 @@ public class InventoryCheckServiceImpl extends ServiceImpl<InventoryCheckMapper,
     public void deleteInventoryCheck(List<Long> ids) {
         for (Long id : ids) {
             InventoryCheck inventoryCheck = inventoryCheckMapper.selectById(id);
-            if (inventoryCheck == null || inventoryCheck.getStatus().equals("3")) {
-                // 状态为已修正，不允许进行删除
-                throw new BizException(InventoryCheckError.STATUS_IS_FIXED_DEL);
+            if (inventoryCheck == null || inventoryCheck.getStatus().equals(DictUtils.getValueByLabel("已应用", "sys_inventory_check_status"))) {
+                // 状态为已应用，不允许进行删除
+                throw new BizException(InventoryCheckError.STATUS_IS_APPLY_DEL);
             }
         }
         removeBatchByIds(ids);

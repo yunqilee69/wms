@@ -373,11 +373,11 @@ function resetQuery() {
 function handleDelete(row) {
   const wareIds = row.id || ids.value;
   proxy.$modal.confirm('是否确认删除').then(function () {
-    return delWare(wareIds);
-  }).then(() => {
-    getList();
-    proxy.$modal.msgSuccess("删除成功");
-  }).catch(() => {});
+    return delWare(wareIds).then(res => {
+      getList();
+      proxy.$modal.msgSuccess("删除成功");
+    })
+  })
 };
 
 /** 选择条数  */

@@ -7,8 +7,8 @@ import com.yunqi.backend.common.base.BaseError;
  * @author liyunqi
  */
 public enum InventoryCheckError implements BaseError {
-    STATUS_IS_FIXED_DEL(60001, "盘点单已修正，不允许删除!"),
-    STATUS_IS_FIXED_UPDATE(60002, "盘点单已修正，不允许更新!"),
+    STATUS_IS_APPLY_DEL(60001, "盘点单已应用，不允许删除!"),
+    STATUS_IS_APPLY_UPDATE(60002, "盘点单已应用，不允许更新!"),
     ;
 
     int code;

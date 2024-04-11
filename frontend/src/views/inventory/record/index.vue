@@ -335,7 +335,7 @@
 
 <script setup name="User">
 import {getRecordList, updateAlarmThreshold, addRecord, deleteRecord} from "@/api/inventory/record"
-import {addWare, getWareById, getWareSelect, updateWare} from "@/api/inventory/ware"
+import {addWare, delWare, getWareById, getWareSelect, updateWare} from "@/api/inventory/ware"
 import {getWareLocationSelect} from "@/api/inventory/location"
 
 const { proxy } = getCurrentInstance();
@@ -425,8 +425,12 @@ function showWareDetail(wareId) {
  * 删除库存记录
  */
 function handleDelete() {
-  deleteRecord(ids.value.join(",")).then(res => {
-    proxy.$modal.msgSuccess("删除成功");
+
+  proxy.$modal.confirm('是否确认删除').then(function () {
+    deleteRecord(ids.value.join(",")).then(res => {
+      proxy.$modal.msgSuccess("删除成功");
+      getList();
+    })
   })
 }
 
