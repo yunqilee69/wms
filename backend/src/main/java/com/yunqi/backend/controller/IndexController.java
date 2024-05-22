@@ -45,7 +45,7 @@ public class IndexController {
     }
 
     /**
-     * 获取订单状态为已收款或已付款的订单
+     * 获取订单状态为未收款或未付款的订单
      * @return
      */
     @GetMapping("/getAlarmOrder")

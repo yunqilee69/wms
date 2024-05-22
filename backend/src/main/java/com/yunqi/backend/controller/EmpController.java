@@ -89,7 +89,7 @@ public class EmpController {
 
     /**
      * 根据用户id删除员工
-     * @param userId
+     * @param userIds
      * @return
      */
     @PreAuthorize("@sps.hasPermi('user:emp:delete')")

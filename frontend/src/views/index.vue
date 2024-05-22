@@ -30,21 +30,25 @@
       >
         <el-descriptions-item
           label="货位名称"
+          width="150px"
         >
           {{ item.locationName }}
         </el-descriptions-item>
         <el-descriptions-item
           label="货物名称"
+          width="150px"
         >
           {{ item.wareName }}
         </el-descriptions-item>
         <el-descriptions-item
             label="库存数量"
+            width="150px"
         >
           {{ item.number }}
         </el-descriptions-item>
         <el-descriptions-item
           label="报警阈值"
+          width="150px"
         >
           {{ item.alarmThreshold }}
         </el-descriptions-item>
@@ -81,21 +85,25 @@
       >
         <el-descriptions-item
             label="单据号"
+            width="150px"
         >
           {{ item.documentCode }}
         </el-descriptions-item>
         <el-descriptions-item
             label="订单类型"
+            width="125px"
         >
           {{ item.orderName }}
         </el-descriptions-item>
         <el-descriptions-item
             label="应支付/收款"
+            width="125px"
         >
           {{ item.amount }}
         </el-descriptions-item>
         <el-descriptions-item
             label="收货/送货时间"
+            width="200px"
         >
           {{ item.wareTime }}
         </el-descriptions-item>
@@ -105,7 +113,7 @@
     <el-card class="box-card">
       <template #header>
         <div class="card-header">
-          <span>货物有效期预警</span>
+          <span>库存有效期预警</span>
         </div>
       </template>
       <el-alert
@@ -132,21 +140,25 @@
       >
         <el-descriptions-item
             label="货位名称"
+            width="150px"
         >
           {{ item.locationName }}
         </el-descriptions-item>
         <el-descriptions-item
             label="货物名称"
+            width="150px"
         >
           {{ item.wareName }}
         </el-descriptions-item>
         <el-descriptions-item
             label="保质期(月)"
+            width="150px"
         >
           {{ item.qualityMonth }}
         </el-descriptions-item>
         <el-descriptions-item
             label="有效期"
+            width="150px"
         >
           {{ item.guaranteeDate }}
         </el-descriptions-item>

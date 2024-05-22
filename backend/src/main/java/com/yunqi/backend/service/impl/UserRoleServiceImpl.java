@@ -87,7 +87,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
             return;
         }
         LambdaQueryWrapper<UserRole> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(userId != null ,UserRole::getUserId, userId);
+        wrapper.eq(userId != null, UserRole::getUserId, userId);
         remove(wrapper);
     }
 

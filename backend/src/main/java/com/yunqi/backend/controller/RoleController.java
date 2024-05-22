@@ -151,7 +151,7 @@ public class RoleController {
      */
     @PreAuthorize("@sps.hasPermi('system:role:edit')")
     @PutMapping("/authUser/selectAll")
-    public Result selectAuthUserAll(Long roleId, Long[] userIds) {
+    public Result addAuthUserAll(Long roleId, Long[] userIds) {
         userRoleService.insertUserRole(roleId, Arrays.asList(userIds));
         return Result.success();
     }

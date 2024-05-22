@@ -185,7 +185,7 @@ public class OrderSaleServiceImpl extends ServiceImpl<OrderSaleMapper, OrderSale
 
         for (OrderSaleDetail orderSaleDetail : orderSaleDetails) {
             BigDecimal temp = new BigDecimal(0);
-            if (orderSaleDetail.getType().equals(DictUtils.getValueByLabel("进货", "order_detail_type"))) {
+            if (orderSaleDetail.getType().equals(DictUtils.getValueByLabel("送货", "order_detail_type"))) {
                 temp = temp.add(orderSaleDetail.getWareSalePrice()).multiply(BigDecimal.valueOf(orderSaleDetail.getWareNumber()));
                 // 进货
                 originAmount = originAmount.add(temp);

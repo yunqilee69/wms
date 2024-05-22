@@ -68,7 +68,7 @@ public class SupplierController {
     @DeleteMapping("/{supplierIds}")
     public Result delete(@PathVariable List<Long> supplierIds) {
         if (supplierIds == null || supplierIds.size() == 0) {
-            return Result.fail("货物id不能为空");
+            return Result.fail("供应商id不能为空");
         }
         supplierService.removeBatchByIds(supplierIds);
         return Result.success();

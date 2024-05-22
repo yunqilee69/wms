@@ -1,6 +1,7 @@
 package com.yunqi.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunqi.backend.common.util.PageUtils;
@@ -135,5 +136,9 @@ public class WareServiceImpl extends ServiceImpl<WareMapper, Ware> implements Wa
             }
         }
         removeBatchByIds(wareIds);
+        // 删除金额记录表的数据
+        LambdaQueryWrapper<WareMoney> wrapper = new LambdaQueryWrapper<>();
+        wrapper.in(WareMoney::getWareId, wareIds);
+        wareMoneyMapper.delete(wrapper);
     }
 }

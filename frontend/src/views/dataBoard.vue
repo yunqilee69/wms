@@ -166,7 +166,8 @@ function initBarChart(id, data) {
         length: 8, // 设置刻度的长度
       },
       axisLabel: {
-        interval: 'auto', // 设置为 0 表示全部显示，也可以设置为其他值，如2，表示间隔显示
+        interval: '0', // 设置为 0 表示全部显示，也可以设置为其他值，如2，表示间隔显示
+        rotate: 20
         //rotate: data.xAxis.length > 10 ? -25 : 0
       }
     },
